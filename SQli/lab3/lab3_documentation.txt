@@ -1,0 +1,556 @@
+================================================================================
+                   LAB 3: SQL INJECTION UNION ATTACK DOCUMENTATION
+                        Column Discovery Vulnerability Lab
+================================================================================
+
+1. LAB OVERVIEW
+===============
+
+1.1 Purpose
+-----------
+This lab demonstrates a SQL injection vulnerability in a product category filter
+that allows attackers to determine the number of columns returned by a SQL query
+using UNION-based injection attacks. This is the first crucial step in exploiting
+UNION-based SQL injection vulnerabilities.
+
+1.2 Attack Surface
+------------------
+- Vulnerable Parameter: 'category' in GET request
+- Vulnerable Endpoint: index.php
+- Attack Vector: SQL Injection via UNION SELECT
+- Database: MySQL
+- Backend: PHP with PDO
+
+1.3 Backend Logic
+-----------------
+The application uses a product catalog system where:
+- Products are categorized and stored in a MySQL database
+- Users can filter products by category using a GET parameter
+- The category filter directly concatenates user input into SQL queries
+- Query results are displayed on the webpage, making UNION attacks visible
+- The application uses a JOIN query that returns 5 columns: id, name, description, price, category_name
+
+1.4 Database Structure
+----------------------
+Three main tables:
+- products: Contains product information (id, name, description, price, category_id, image_url, stock_quantity)
+- categories: Contains category information (id, name, description)
+- users: Contains sensitive user data (id, username, email, password_hash, role, created_at)
+
+The vulnerable query joins products and categories tables, returning 5 columns.
+
+
+2. WALKTHROUGH / STEP-BY-STEP SOLUTION
+=======================================
+
+2.1 Initial Reconnaissance
+--------------------------
+
+Step 1: Identify the injection point
+- Navigate to: http://localhost/lab3/index.php
+- Click on any category (e.g., "Electronics")
+- Observe URL: http://localhost/lab3/index.php?category=Electronics
+- Note that the category parameter controls the displayed products
+
+Step 2: Test for SQL injection
+- Try a basic injection: http://localhost/lab3/index.php?category=Electronics'
+- Result: SQL syntax error appears, confirming SQL injection vulnerability
+- Error message reveals MySQL syntax error, confirming database type
+
+2.2 UNION Attack - Column Discovery
+------------------------------------
+
+Step 3: Start UNION SELECT with one column
+Payload: Electronics' UNION SELECT NULL--
+URL: http://localhost/lab3/index.php?category=Electronics' UNION SELECT NULL--
+Server Response: SQL error - "The used SELECT statements have a different number of columns"
+What attacker learns: The original query returns more than 1 column
+
+Step 4: Try with two columns
+Payload: Electronics' UNION SELECT NULL,NULL--
+URL: http://localhost/lab3/index.php?category=Electronics' UNION SELECT NULL,NULL--
+Server Response: SQL error - "The used SELECT statements have a different number of columns"
+What attacker learns: The original query returns more than 2 columns
+
+Step 5: Try with three columns
+Payload: Electronics' UNION SELECT NULL,NULL,NULL--
+URL: http://localhost/lab3/index.php?category=Electronics' UNION SELECT NULL,NULL,NULL--
+Server Response: SQL error - "The used SELECT statements have a different number of columns"
+What attacker learns: The original query returns more than 3 columns
+
+Step 6: Try with four columns
+Payload: Electronics' UNION SELECT NULL,NULL,NULL,NULL--
+URL: http://localhost/lab3/index.php?category=Electronics' UNION SELECT NULL,NULL,NULL,NULL--
+Server Response: SQL error - "The used SELECT statements have a different number of columns"
+What attacker learns: The original query returns more than 4 columns
+
+Step 7: Try with five columns (SUCCESS!)
+Payload: Electronics' UNION SELECT NULL,NULL,NULL,NULL,NULL--
+URL: http://localhost/lab3/index.php?category=Electronics'+UNION+SELECT+NULL,NULL,NULL,NULL,NULL--
+Server Response: No error! Page loads successfully with additional empty product entry
+What attacker learns: The original query returns exactly 5 columns
+
+2.3 Verification
+----------------
+
+Step 8: Confirm the discovery
+- The page now displays normal Electronics products
+- Plus one additional "product" entry with empty/null values
+- This confirms that the UNION worked and 5 columns is correct
+- The attacker now knows the query structure for future exploitation
+
+2.4 URL Encoding Considerations
+-------------------------------
+For real-world scenarios, the payload might need URL encoding:
+- Space (" ") becomes "+" or "%20"
+- Plus ("+") becomes "%2B"
+- Hash ("#") becomes "%23"
+- Single quote ("'") becomes "%27"
+
+Example encoded payload:
+Electronics%27+UNION+SELECT+NULL,NULL,NULL,NULL,NULL--
+
+
+3. WHY THE EXPLOIT WORKS
+========================
+
+3.1 SQL UNION Operator Fundamentals
+------------------------------------
+The UNION operator combines results from two or more SELECT statements:
+- Both SELECT statements must return the same number of columns
+- Columns must be of compatible data types
+- Results are combined into a single result set
+
+3.2 The Vulnerable Query Structure
+----------------------------------
+Original query:
+SELECT p.id, p.name, p.description, p.price, c.name as category_name 
+FROM products p 
+JOIN categories c ON p.category_id = c.id 
+WHERE c.name = 'USER_INPUT'
+
+This query returns 5 columns: id, name, description, price, category_name
+
+3.3 How Input Processing Fails
+------------------------------
+1. User input is directly concatenated into the SQL string
+2. No validation or sanitization occurs
+3. The application trusts user input completely
+4. Special SQL characters like quotes and comments are not filtered
+
+3.4 The Injection Process
+-------------------------
+When the attacker injects: Electronics' UNION SELECT NULL,NULL,NULL,NULL,NULL--
+
+The resulting query becomes:
+SELECT p.id, p.name, p.description, p.price, c.name as category_name 
+FROM products p 
+JOIN categories c ON p.category_id = c.id 
+WHERE c.name = 'Electronics' UNION SELECT NULL,NULL,NULL,NULL,NULL--'
+
+Breaking it down:
+- 'Electronics' - Completes the original WHERE condition
+- ' (single quote) - Terminates the string in the WHERE clause
+- UNION SELECT NULL,NULL,NULL,NULL,NULL - Adds a second SELECT statement
+- -- (double dash) - Comments out the remaining query (the trailing quote)
+
+3.5 Why Column Counting Works
+-----------------------------
+- MySQL enforces that UNION statements have matching column counts
+- If column counts don't match, MySQL throws an error
+- The error disappears when column counts match exactly
+- This gives attackers a binary feedback mechanism (error/no error)
+- NULL values are used because they're compatible with any data type
+
+3.6 Root Cause Analysis
+-----------------------
+The fundamental flaw is the lack of input validation and parameterization:
+- Direct string concatenation creates injection opportunities
+- No type checking or validation occurs
+- The application assumes all input is benign
+- Error messages reveal too much information about the database structure
+- No logging or monitoring of suspicious queries
+
+
+4. WRONG (VULNERABLE) CODE EXPLANATION
+=======================================
+
+4.1 The Flawed Code
+-------------------
+```php
+// Get category parameter - VULNERABLE TO SQL INJECTION
+$category = isset($_GET['category']) ? $_GET['category'] : '';
+
+// Vulnerable SQL query - directly concatenating user input
+if (!empty($category)) {
+    // VULNERABLE CODE: Direct string concatenation without sanitization
+    $sql = "SELECT p.id, p.name, p.description, p.price, c.name as category_name 
+            FROM products p 
+            JOIN categories c ON p.category_id = c.id 
+            WHERE c.name = '" . $category . "'";
+    
+    try {
+        $stmt = $pdo->query($sql);
+        $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        $error_message = "Database error: " . $e->getMessage();
+        $products = [];
+    }
+}
+```
+
+4.2 Line-by-Line Analysis
+--------------------------
+
+Line 1-2: Input Retrieval
+```php
+$category = isset($_GET['category']) ? $_GET['category'] : '';
+```
+Problems:
+- No input validation whatsoever
+- No sanitization of special characters
+- No type checking (should be string matching known categories)
+- No length limits
+- No encoding validation
+
+Line 4-8: Query Construction
+```php
+$sql = "SELECT p.id, p.name, p.description, p.price, c.name as category_name 
+        FROM products p 
+        JOIN categories c ON p.category_id = c.id 
+        WHERE c.name = '" . $category . "'";
+```
+Problems:
+- Direct string concatenation with user input
+- No parameterized queries
+- No escaping of special characters
+- No validation that $category is a legitimate category name
+- The query structure is visible and predictable
+
+Line 10-13: Query Execution
+```php
+try {
+    $stmt = $pdo->query($sql);
+    $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+```
+Problems:
+- Using query() instead of prepare() and execute()
+- No input binding
+- Error handling reveals too much information
+- No logging of suspicious queries
+
+4.3 Developer Assumptions (All Wrong)
+--------------------------------------
+1. "Users will only click on the provided category links"
+   - Reality: Attackers can manipulate URLs directly
+
+2. "Input from GET parameters is safe"
+   - Reality: All user input should be considered malicious
+
+3. "String concatenation is simpler than parameterized queries"
+   - Reality: Parameterized queries prevent injection and are not complex
+
+4. "Basic error handling is sufficient"
+   - Reality: Error messages help attackers understand the database structure
+
+5. "Category names are simple strings, so no special handling needed"
+   - Reality: Any user input can contain malicious SQL code
+
+4.4 How It Leads to Exploitation
+---------------------------------
+1. Attacker identifies the vulnerable parameter
+2. Tests for SQL injection with single quotes
+3. Confirms vulnerability through error messages
+4. Uses UNION SELECT to determine column structure
+5. Can now proceed to extract sensitive data from other tables
+6. Potential for complete database compromise
+
+
+5. CORRECT MITIGATION (SECURE CODE)
+===================================
+
+5.1 Secure Implementation
+-------------------------
+```php
+<?php
+require_once 'config.php';
+
+// Input validation and sanitization
+$category = '';
+$products = [];
+$error_message = '';
+
+// Validate and sanitize category input
+if (isset($_GET['category'])) {
+    $input_category = trim($_GET['category']);
+    
+    // Validate input length
+    if (strlen($input_category) > 100) {
+        $error_message = "Invalid category name length.";
+    } else {
+        // Whitelist validation: check if category exists in database
+        $category_check_sql = "SELECT name FROM categories WHERE name = :category_name";
+        $category_stmt = $pdo->prepare($category_check_sql);
+        $category_stmt->bindParam(':category_name', $input_category, PDO::PARAM_STR);
+        $category_stmt->execute();
+        
+        if ($category_stmt->rowCount() > 0) {
+            $category = $input_category;
+        } else {
+            $error_message = "Invalid category selected.";
+        }
+    }
+}
+
+// Secure parameterized query
+if (!empty($category) && empty($error_message)) {
+    $sql = "SELECT p.id, p.name, p.description, p.price, c.name as category_name 
+            FROM products p 
+            JOIN categories c ON p.category_id = c.id 
+            WHERE c.name = :category";
+    
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':category', $category, PDO::PARAM_STR);
+        $stmt->execute();
+        $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Log successful queries for monitoring
+        error_log("Category filter accessed: " . $category . " from IP: " . $_SERVER['REMOTE_ADDR']);
+        
+    } catch (PDOException $e) {
+        // Secure error handling - don't expose database details
+        $error_message = "An error occurred while retrieving products. Please try again.";
+        
+        // Log detailed error securely
+        error_log("Database error in category filter: " . $e->getMessage() . 
+                 " - IP: " . $_SERVER['REMOTE_ADDR'] . 
+                 " - Category: " . $category);
+    }
+} elseif (empty($error_message)) {
+    // Show all products if no category selected (with pagination for performance)
+    $sql = "SELECT p.id, p.name, p.description, p.price, c.name as category_name 
+            FROM products p 
+            JOIN categories c ON p.category_id = c.id 
+            LIMIT 50";
+    
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        $error_message = "An error occurred while retrieving products.";
+        error_log("Database error in product listing: " . $e->getMessage());
+    }
+}
+
+// Get categories securely
+$categories = [];
+try {
+    $categories_sql = "SELECT id, name, description FROM categories ORDER BY name";
+    $categories_stmt = $pdo->prepare($categories_sql);
+    $categories_stmt->execute();
+    $categories = $categories_stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    error_log("Error loading categories: " . $e->getMessage());
+}
+?>
+```
+
+5.2 Security Measures Explained
+--------------------------------
+
+5.2.1 Input Validation
+```php
+// Validate input length
+if (strlen($input_category) > 100) {
+    $error_message = "Invalid category name length.";
+}
+```
+- Prevents buffer overflow attacks
+- Limits resource consumption
+- Establishes reasonable input boundaries
+
+5.2.2 Whitelist Validation
+```php
+// Whitelist validation: check if category exists in database
+$category_check_sql = "SELECT name FROM categories WHERE name = :category_name";
+$category_stmt = $pdo->prepare($category_check_sql);
+$category_stmt->bindParam(':category_name', $input_category, PDO::PARAM_STR);
+```
+- Only allows known, valid category names
+- Uses parameterized query even for validation
+- Prevents injection in validation step
+
+5.2.3 Parameterized Queries
+```php
+$stmt = $pdo->prepare($sql);
+$stmt->bindParam(':category', $category, PDO::PARAM_STR);
+$stmt->execute();
+```
+- Separates SQL structure from data
+- Database treats parameters as data, not executable code
+- Prevents all forms of SQL injection
+
+5.2.4 Secure Error Handling
+```php
+$error_message = "An error occurred while retrieving products. Please try again.";
+
+// Log detailed error securely
+error_log("Database error in category filter: " . $e->getMessage());
+```
+- Generic error messages to users
+- Detailed logging for administrators
+- No database structure information leaked
+
+5.2.5 Security Logging
+```php
+error_log("Category filter accessed: " . $category . " from IP: " . $_SERVER['REMOTE_ADDR']);
+```
+- Tracks all database access
+- Helps detect attack patterns
+- Enables forensic analysis
+
+5.2.6 Performance Considerations
+```php
+$sql = "SELECT p.id, p.name, p.description, p.price, c.name as category_name 
+        FROM products p 
+        JOIN categories c ON p.category_id = c.id 
+        LIMIT 50";
+```
+- Prevents DoS through large result sets
+- Improves application performance
+- Reduces server resource consumption
+
+
+6. COMPARISON (WRONG CODE vs FIXED CODE)
+========================================
+
+6.1 Side-by-Side Comparison
+---------------------------
+
+| Aspect | Vulnerable Code | Secure Code |
+|--------|-----------------|-------------|
+| Input Handling | Direct use of $_GET | Validation + Sanitization |
+| Query Construction | String concatenation | Parameterized queries |
+| SQL Injection | Vulnerable | Protected |
+| Error Messages | Detailed database errors | Generic user messages |
+| Logging | None | Comprehensive logging |
+| Input Validation | None | Length + Whitelist |
+| Performance | Unlimited results | Pagination/Limits |
+| Monitoring | None | Access tracking |
+
+6.2 Key Differences
+-------------------
+
+6.2.1 Input Processing
+Vulnerable:
+```php
+$category = isset($_GET['category']) ? $_GET['category'] : '';
+```
+Secure:
+```php
+$input_category = trim($_GET['category']);
+// Followed by validation, length checks, and whitelist verification
+```
+
+6.2.2 Query Construction
+Vulnerable:
+```php
+$sql = "SELECT ... WHERE c.name = '" . $category . "'";
+$stmt = $pdo->query($sql);
+```
+Secure:
+```php
+$sql = "SELECT ... WHERE c.name = :category";
+$stmt = $pdo->prepare($sql);
+$stmt->bindParam(':category', $category, PDO::PARAM_STR);
+$stmt->execute();
+```
+
+6.2.3 Error Handling
+Vulnerable:
+```php
+catch (PDOException $e) {
+    $error_message = "Database error: " . $e->getMessage();
+}
+```
+Secure:
+```php
+catch (PDOException $e) {
+    $error_message = "An error occurred while retrieving products.";
+    error_log("Database error: " . $e->getMessage() . " - IP: " . $_SERVER['REMOTE_ADDR']);
+}
+```
+
+6.3 Why These Changes Matter
+----------------------------
+
+6.3.1 Parameterized Queries
+- Completely eliminates SQL injection vulnerabilities
+- Database treats parameters as data, never as executable code
+- Industry standard best practice
+- Performance benefits through query plan caching
+
+6.3.2 Input Validation
+- Reduces attack surface significantly
+- Prevents many types of attacks beyond SQL injection
+- Improves data quality and application stability
+- Provides clear error messages for legitimate users
+
+6.3.3 Secure Error Handling
+- Prevents information disclosure to attackers
+- Maintains detailed logs for security teams
+- Improves user experience with meaningful messages
+- Enables proper incident response
+
+6.3.4 Security Monitoring
+- Enables detection of attack attempts
+- Provides audit trail for compliance
+- Helps identify attack patterns
+- Supports forensic investigations
+
+6.4 Impact Assessment
+---------------------
+
+6.4.1 Security Impact
+Vulnerable Code:
+- Complete database compromise possible
+- Sensitive user data exposure
+- Potential for privilege escalation
+- No attack detection
+
+Secure Code:
+- SQL injection completely prevented
+- Minimal information disclosure
+- Strong input validation
+- Comprehensive monitoring
+
+6.4.2 Performance Impact
+Vulnerable Code:
+- Potential for DoS through large queries
+- No result limiting
+- Unpredictable resource usage
+
+Secure Code:
+- Controlled resource usage
+- Query plan optimization through parameterization
+- Result limiting prevents DoS
+- Better caching behavior
+
+6.4.3 Maintenance Impact
+Vulnerable Code:
+- High security maintenance burden
+- Frequent security patches needed
+- Difficult to audit and secure
+
+Secure Code:
+- Lower security maintenance
+- Easier to audit and verify
+- Follows security best practices
+- More predictable behavior
+
+================================================================================
+                                  END OF DOCUMENTATION
+================================================================================
