@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /administrator-panel
+Disallow: /admin
+Disallow: /backup
+Disallow: /logs
+Disallow: /private
