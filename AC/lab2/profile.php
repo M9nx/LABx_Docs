@@ -26,165 +26,296 @@ if (!$user) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - TechCorp</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        * {
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 100%);
+            color: #ffffff;
             min-height: 100vh;
+            padding: 20px;
         }
-        .header {
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px);
-            padding: 1rem;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
-        }
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #333;
-            text-decoration: none;
-        }
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-        }
-        .nav-links a {
-            color: #333;
-            text-decoration: none;
-            font-weight: 500;
-        }
+
         .container {
             max-width: 1000px;
             margin: 0 auto;
-            padding: 2rem;
         }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 68, 68, 0.2);
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ff4444;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #cccccc;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #ff4444;
+            background: rgba(255, 68, 68, 0.1);
+        }
+
         .profile-card {
-            background: rgba(255,255,255,0.95);
-            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 68, 68, 0.2);
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            backdrop-filter: blur(20px);
-            margin-bottom: 2rem;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
         }
+
         .profile-header {
             text-align: center;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid rgba(255, 68, 68, 0.2);
         }
+
         .profile-avatar {
             width: 100px;
             height: 100px;
             border-radius: 50%;
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: linear-gradient(45deg, #ff4444, #cc0000);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3rem;
+            font-size: 2.5rem;
             color: white;
-            margin: 0 auto 1rem auto;
+            margin: 0 auto 20px auto;
+            box-shadow: 0 10px 30px rgba(255, 68, 68, 0.3);
         }
-        .profile-info {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
+
+        .profile-header h1 {
+            color: #ffffff;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
         }
-        .info-section {
-            background: rgba(102, 126, 234, 0.05);
-            padding: 1.5rem;
-            border-radius: 15px;
-            border: 1px solid rgba(102, 126, 234, 0.1);
-        }
-        .info-section h3 {
-            margin: 0 0 1rem 0;
-            color: #333;
-            border-bottom: 2px solid #667eea;
-            padding-bottom: 0.5rem;
-        }
-        .info-item {
-            margin-bottom: 1rem;
-        }
-        .info-item label {
-            font-weight: 600;
-            color: #333;
-            display: block;
-            margin-bottom: 0.3rem;
-        }
-        .info-item span {
-            color: #666;
-        }
+
         .role-badge {
             display: inline-block;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
+            padding: 8px 20px;
+            border-radius: 25px;
             font-size: 0.9rem;
             font-weight: 600;
             text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-right: 10px;
         }
+
         .role-admin {
-            background: linear-gradient(45deg, #dc3545, #ff6b6b);
+            background: linear-gradient(45deg, #ff4444, #cc0000);
             color: white;
+            box-shadow: 0 4px 15px rgba(255, 68, 68, 0.4);
         }
+
         .role-manager {
             background: linear-gradient(45deg, #fd7e14, #ffc107);
             color: white;
+            box-shadow: 0 4px 15px rgba(253, 126, 20, 0.4);
         }
+
         .role-user {
             background: linear-gradient(45deg, #28a745, #20c997);
             color: white;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
         }
+
         .clearance-badge {
             display: inline-block;
-            padding: 0.4rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.75rem;
             font-weight: 600;
             text-transform: uppercase;
-            margin-top: 0.5rem;
+            letter-spacing: 0.5px;
         }
+
         .clearance-top-secret {
             background: #dc3545;
             color: white;
         }
+
         .clearance-secret {
             background: #fd7e14;
             color: white;
         }
+
         .clearance-confidential {
             background: #ffc107;
             color: #333;
         }
+
         .clearance-basic {
             background: #28a745;
             color: white;
         }
+
         .clearance-none {
             background: #6c757d;
             color: white;
         }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .info-section {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 4px solid #ff4444;
+        }
+
+        .info-section h3 {
+            color: #ff6666;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid rgba(255, 68, 68, 0.2);
+            padding-bottom: 10px;
+        }
+
+        .info-item {
+            margin-bottom: 15px;
+        }
+
+        .info-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-item label {
+            display: block;
+            font-weight: 600;
+            color: #888;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-item span {
+            color: #ffffff;
+            font-size: 1rem;
+        }
+
+        .salary {
+            font-size: 1.3rem !important;
+            font-weight: bold;
+            color: #28a745 !important;
+        }
+
         .full-width {
             grid-column: 1 / -1;
         }
-        .salary {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #28a745;
+
+        .hint-box {
+            background: rgba(0, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .hint-box h4 {
+            color: #00ffff;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .hint-box p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff4444, #cc0000);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 68, 68, 0.4);
+        }
+
+        .btn-secondary {
+            display: inline-block;
+            background: transparent;
+            color: #ff4444;
+            padding: 12px 25px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            border: 2px solid #ff4444;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 68, 68, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="nav-container">
-            <a href="index.php" class="logo">TechCorp</a>
+    <div class="container">
+        <div class="header">
+            <a href="index.php" class="logo">🏢 TechCorp</a>
             <div class="nav-links">
                 <a href="index.php">Home</a>
                 <a href="solutions.php">Solutions</a>
@@ -195,9 +326,7 @@ if (!$user) {
                 <a href="logout.php">Logout</a>
             </div>
         </div>
-    </div>
 
-    <div class="container">
         <div class="profile-card">
             <div class="profile-header">
                 <div class="profile-avatar">
@@ -207,38 +336,37 @@ if (!$user) {
                 <span class="role-badge role-<?php echo $user['role']; ?>">
                     <?php echo strtoupper($user['role']); ?>
                 </span>
-                <br>
                 <span class="clearance-badge clearance-<?php echo str_replace('-', '-', $user['security_clearance']); ?>">
                     <?php echo strtoupper(str_replace('-', ' ', $user['security_clearance'])) . ' CLEARANCE'; ?>
                 </span>
             </div>
             
-            <div class="profile-info">
+            <div class="info-grid">
                 <div class="info-section">
                     <h3>👤 Personal Information</h3>
                     
                     <div class="info-item">
-                        <label>Employee ID:</label>
+                        <label>Employee ID</label>
                         <span><?php echo htmlspecialchars($user['id']); ?></span>
                     </div>
                     
                     <div class="info-item">
-                        <label>Username:</label>
+                        <label>Username</label>
                         <span><?php echo htmlspecialchars($user['username']); ?></span>
                     </div>
                     
                     <div class="info-item">
-                        <label>Email:</label>
+                        <label>Email</label>
                         <span><?php echo htmlspecialchars($user['email']); ?></span>
                     </div>
                     
                     <div class="info-item">
-                        <label>Phone:</label>
+                        <label>Phone</label>
                         <span><?php echo htmlspecialchars($user['phone'] ?: 'Not provided'); ?></span>
                     </div>
                     
                     <div class="info-item">
-                        <label>Emergency Contact:</label>
+                        <label>Emergency Contact</label>
                         <span><?php echo htmlspecialchars($user['emergency_contact'] ?: 'Not provided'); ?></span>
                     </div>
                 </div>
@@ -247,32 +375,32 @@ if (!$user) {
                     <h3>🏢 Professional Information</h3>
                     
                     <div class="info-item">
-                        <label>Department:</label>
+                        <label>Department</label>
                         <span><?php echo htmlspecialchars($user['department']); ?></span>
                     </div>
                     
                     <div class="info-item">
-                        <label>Position:</label>
+                        <label>Position</label>
                         <span><?php echo htmlspecialchars($user['position']); ?></span>
                     </div>
                     
                     <div class="info-item">
-                        <label>Annual Salary:</label>
+                        <label>Annual Salary</label>
                         <span class="salary">$<?php echo number_format($user['salary'], 2); ?></span>
                     </div>
                     
                     <div class="info-item">
-                        <label>Security Clearance:</label>
+                        <label>Security Clearance</label>
                         <span><?php echo ucwords(str_replace('-', ' ', $user['security_clearance'])); ?></span>
                     </div>
                     
                     <div class="info-item">
-                        <label>Member Since:</label>
+                        <label>Member Since</label>
                         <span><?php echo date('F j, Y', strtotime($user['created_at'])); ?></span>
                     </div>
                     
                     <div class="info-item">
-                        <label>Last Login:</label>
+                        <label>Last Login</label>
                         <span><?php echo $user['last_login'] ? date('F j, Y g:i A', strtotime($user['last_login'])) : 'Never'; ?></span>
                     </div>
                 </div>
@@ -281,15 +409,29 @@ if (!$user) {
                     <h3>📍 Address & Notes</h3>
                     
                     <div class="info-item">
-                        <label>Address:</label>
+                        <label>Address</label>
                         <span><?php echo htmlspecialchars($user['address'] ?: 'Not provided'); ?></span>
                     </div>
                     
                     <div class="info-item">
-                        <label>Notes:</label>
+                        <label>Notes</label>
                         <span><?php echo htmlspecialchars($user['notes'] ?: 'No notes'); ?></span>
                     </div>
                 </div>
+            </div>
+
+            <div class="hint-box">
+                <h4>💡 Lab Objective</h4>
+                <p>
+                    You are logged in as a regular user. Your goal is to find the hidden admin panel URL that is exposed somewhere in the application's client-side code. 
+                    Check the page source, JavaScript, and browser console for <code style="color: #00ffff; background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 3px;">information disclosure</code> vulnerabilities.
+                </p>
+            </div>
+
+            <div class="action-buttons">
+                <a href="index.php" class="btn-primary">🏠 Back to Home</a>
+                <a href="docs.php" class="btn-secondary">📚 View Documentation</a>
+                <a href="logout.php" class="btn-secondary">🚪 Logout</a>
             </div>
         </div>
     </div>

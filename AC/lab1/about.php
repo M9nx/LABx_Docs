@@ -6,30 +6,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About - SecureShop</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
-        .header { background-color: #333; color: white; padding: 1rem; text-align: center; }
-        .nav { background-color: #444; padding: 0.5rem; text-align: center; }
-        .nav a { color: white; text-decoration: none; margin: 0 1rem; padding: 0.5rem; }
-        .nav a:hover { background-color: #555; }
-        .container { max-width: 800px; margin: 0 auto; padding: 2rem; }
-        .content { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 100%); min-height: 100vh; color: #e0e0e0; }
+        .header { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255, 68, 68, 0.3); padding: 1rem 2rem; }
+        .header-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.8rem; font-weight: bold; color: #ff4444; text-decoration: none; }
+        .nav-links { display: flex; gap: 2rem; align-items: center; }
+        .nav-links a { color: #e0e0e0; text-decoration: none; font-weight: 500; transition: color 0.3s ease; }
+        .nav-links a:hover { color: #ff4444; }
+        .container { max-width: 900px; margin: 0 auto; padding: 3rem 2rem; }
+        .content { background: rgba(255, 255, 255, 0.05); padding: 2.5rem; border-radius: 15px; border: 1px solid rgba(255, 68, 68, 0.2); backdrop-filter: blur(10px); }
+        .content h2 { color: #ff4444; margin-bottom: 1.5rem; font-size: 2rem; }
+        .content p { color: #ccc; line-height: 1.8; margin-bottom: 1rem; }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>About SecureShop</h1>
-    </div>
-    <div class="nav">
-        <a href="index.php">Home</a>
-        <a href="products.php">Products</a>
-        <a href="about.php">About</a>
-        <a href="contact.php">Contact</a>
-        <?php if (isset($_SESSION['user_id'])): ?>
-            <a href="profile.php">My Profile</a>
-            <a href="logout.php">Logout</a>
-        <?php else: ?>
-            <a href="login.php">Login</a>
-        <?php endif; ?>
+        <div class="header-content">
+            <a href="index.php" class="logo">🛒 SecureShop</a>
+            <div class="nav-links">
+                <a href="index.php">Home</a>
+                <a href="products.php">Products</a>
+                <a href="about.php">About</a>
+                <a href="contact.php">Contact</a>
+                <?php if (isset($_SESSION['user_id'])): ?>
+                    <a href="profile.php">My Profile</a>
+                    <a href="logout.php">Logout</a>
+                <?php else: ?>
+                    <a href="login.php">Login</a>
+                <?php endif; ?>
+            </div>
+        </div>
     </div>
     <div class="container">
         <div class="content">

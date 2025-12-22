@@ -42,95 +42,179 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - SecureShop</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        * {
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 100%);
+            color: #ffffff;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            padding: 20px;
         }
+
         .login-container {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: 20px;
             width: 100%;
-            max-width: 400px;
+            max-width: 450px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
         }
-        .login-container h2 {
+
+        .login-title {
             text-align: center;
-            margin-bottom: 1.5rem;
-            color: #333;
+            margin-bottom: 30px;
         }
+
+        .login-title h1 {
+            color: #ff4444;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(255, 68, 68, 0.3);
+        }
+
+        .login-title p {
+            color: #888;
+            font-size: 1rem;
+        }
+
         .form-group {
-            margin-bottom: 1rem;
+            margin-bottom: 20px;
         }
+
         .form-group label {
             display: block;
-            margin-bottom: 0.5rem;
-            color: #333;
+            margin-bottom: 8px;
+            color: #cccccc;
+            font-weight: 600;
         }
-        .form-group input {
+
+        .form-input {
             width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            padding: 15px;
+            border: 2px solid rgba(255, 68, 68, 0.2);
+            border-radius: 10px;
             font-size: 1rem;
-            box-sizing: border-box;
+            background: rgba(0, 0, 0, 0.3);
+            color: #ffffff;
+            transition: all 0.3s ease;
         }
-        .form-group input:focus {
+
+        .form-input:focus {
             outline: none;
-            border-color: #007bff;
+            border-color: #ff4444;
+            box-shadow: 0 0 15px rgba(255, 68, 68, 0.2);
         }
-        .btn {
+
+        .form-input::placeholder {
+            color: #666;
+        }
+
+        .login-button {
             width: 100%;
-            padding: 0.75rem;
-            background-color: #007bff;
+            padding: 15px;
+            background: linear-gradient(45deg, #ff4444, #cc0000);
             color: white;
             border: none;
-            border-radius: 4px;
-            font-size: 1rem;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
             cursor: pointer;
-            margin-top: 1rem;
+            margin-top: 10px;
+            transition: all 0.3s ease;
         }
-        .btn:hover {
-            background-color: #0056b3;
+
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 68, 68, 0.4);
         }
+
         .error {
-            color: #dc3545;
-            margin-bottom: 1rem;
-            padding: 0.5rem;
-            background-color: #f8d7da;
-            border: 1px solid #f5c6cb;
-            border-radius: 4px;
+            color: #ff6b6b;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: rgba(255, 68, 68, 0.1);
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            border-radius: 10px;
+            text-align: center;
         }
+
+        .credentials-help {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px dashed rgba(255, 68, 68, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 25px;
+        }
+
+        .credentials-help h4 {
+            color: #ff9999;
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+
+        .credential-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .credential-item:last-child {
+            border-bottom: none;
+        }
+
+        .credential-item .role {
+            color: #ff6666;
+            font-weight: 600;
+        }
+
+        .credential-item .creds {
+            font-family: 'Courier New', monospace;
+        }
+
+        .credential-item .creds .user {
+            color: #66ff66;
+        }
+
+        .credential-item .creds .pass {
+            color: #ffff66;
+        }
+
         .back-link {
             text-align: center;
-            margin-top: 1rem;
+            margin-top: 25px;
         }
+
         .back-link a {
-            color: #007bff;
+            color: #ff6666;
             text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid #ff6666;
+            border-radius: 5px;
+            transition: all 0.3s ease;
         }
-        .demo-accounts {
-            background-color: #f8f9fa;
-            padding: 1rem;
-            border-radius: 4px;
-            margin-top: 1rem;
-            font-size: 0.9rem;
-        }
-        .demo-accounts h4 {
-            margin: 0 0 0.5rem 0;
-            color: #333;
+
+        .back-link a:hover {
+            background: rgba(255, 102, 102, 0.1);
         }
     </style>
 </head>
 <body>
     <div class="login-container">
-        <h2>Login to SecureShop</h2>
+        <div class="login-title">
+            <h1>🔐 SecureShop</h1>
+            <p>Login to your account</p>
+        </div>
         
         <?php if ($error): ?>
             <div class="error"><?php echo htmlspecialchars($error); ?></div>
@@ -138,23 +222,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         <form method="POST">
             <div class="form-group">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" class="form-input" placeholder="Enter your username" required>
             </div>
             
             <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" class="form-input" placeholder="Enter your password" required>
             </div>
             
-            <button type="submit" class="btn">Login</button>
+            <button type="submit" class="login-button">Login</button>
         </form>
         
-        <div class="demo-accounts">
-            <h4>Demo Accounts:</h4>
-            <strong>Admin:</strong> admin / admin123<br>
-            <strong>User:</strong> carlos / carlos123<br>
-            <strong>User:</strong> alice / alice123
+        <div class="credentials-help">
+            <h4>🔑 Demo Credentials</h4>
+            <div class="credential-item">
+                <span class="role">Admin</span>
+                <span class="creds"><span class="user">admin</span> / <span class="pass">admin123</span></span>
+            </div>
+            <div class="credential-item">
+                <span class="role">User</span>
+                <span class="creds"><span class="user">carlos</span> / <span class="pass">carlos123</span></span>
+            </div>
+            <div class="credential-item">
+                <span class="role">User</span>
+                <span class="creds"><span class="user">alice</span> / <span class="pass">alice123</span></span>
+            </div>
         </div>
         
         <div class="back-link">

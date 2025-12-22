@@ -289,10 +289,26 @@
                 </div>
                 <a href="lab3/lab-description.php" class="lab-button">Start Lab 3</a>
             </div>
+
+            <div class="lab-card">
+                <div class="lab-header">
+                    <span class="lab-badge intermediate">APPRENTICE</span>
+                    <h3 class="lab-title">Lab 4: User role can be modified in user profile</h3>
+                </div>
+                <p class="lab-description">
+                    This lab demonstrates privilege escalation through mass assignment vulnerability where the server accepts role parameters in profile update requests.
+                </p>
+                <div class="lab-objective">
+                    <h4>Objective</h4>
+                    <p>Escalate to admin by modifying roleid in JSON request and delete user carlos.</p>
+                </div>
+                <a href="lab4/lab-description.php" class="lab-button">Start Lab 4</a>
+            </div>
+        </div>
             
         <div class="stats">
             <div class="stat-card">
-                <div class="stat-number">3</div>
+                <div class="stat-number">4</div>
                 <div class="stat-label">Active Labs</div>
             </div>
 

@@ -47,139 +47,177 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - TechCorp</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        * {
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 100%);
+            color: #ffffff;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 20px;
         }
+
         .login-container {
-            background: rgba(255,255,255,0.95);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 68, 68, 0.3);
             backdrop-filter: blur(20px);
-            padding: 3rem;
+            padding: 40px;
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             width: 100%;
             max-width: 450px;
-            border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
         }
-        .logo {
+
+        .login-title {
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 30px;
         }
-        .logo h1 {
-            font-size: 2.5rem;
-            margin: 0;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+
+        .login-title h1 {
+            color: #ff4444;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(255, 68, 68, 0.3);
         }
-        .logo p {
-            color: #666;
-            margin: 0.5rem 0 0 0;
+
+        .login-title p {
+            color: #888;
             font-size: 1rem;
         }
+
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 20px;
         }
+
         .form-group label {
             display: block;
-            margin-bottom: 0.5rem;
-            color: #333;
+            margin-bottom: 8px;
+            color: #cccccc;
             font-weight: 600;
         }
-        .form-group input {
+
+        .form-input {
             width: 100%;
-            padding: 1rem;
-            border: 2px solid #e1e5e9;
+            padding: 15px;
+            border: 2px solid rgba(255, 68, 68, 0.2);
             border-radius: 10px;
             font-size: 1rem;
-            box-sizing: border-box;
+            background: rgba(0, 0, 0, 0.3);
+            color: #ffffff;
             transition: all 0.3s ease;
         }
-        .form-group input:focus {
+
+        .form-input:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #ff4444;
+            box-shadow: 0 0 15px rgba(255, 68, 68, 0.2);
         }
-        .btn {
+
+        .form-input::placeholder {
+            color: #666;
+        }
+
+        .login-button {
             width: 100%;
-            padding: 1rem;
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            padding: 15px;
+            background: linear-gradient(45deg, #ff4444, #cc0000);
             color: white;
             border: none;
             border-radius: 10px;
             font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
-            margin-top: 1rem;
+            margin-top: 10px;
             transition: all 0.3s ease;
         }
-        .btn:hover {
+
+        .login-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 10px 30px rgba(255, 68, 68, 0.4);
         }
+
         .error {
-            color: #dc3545;
-            margin-bottom: 1rem;
-            padding: 1rem;
-            background-color: rgba(220, 53, 69, 0.1);
-            border: 1px solid rgba(220, 53, 69, 0.2);
+            color: #ff6b6b;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: rgba(255, 68, 68, 0.1);
+            border: 1px solid rgba(255, 68, 68, 0.3);
             border-radius: 10px;
             text-align: center;
         }
-        .back-link {
-            text-align: center;
-            margin-top: 1.5rem;
-        }
-        .back-link a {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        .back-link a:hover {
-            text-decoration: underline;
-        }
-        .demo-accounts {
-            background: rgba(102, 126, 234, 0.05);
-            padding: 1.5rem;
+
+        .credentials-help {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px dashed rgba(255, 68, 68, 0.3);
             border-radius: 10px;
-            margin-top: 1.5rem;
-            border: 1px solid rgba(102, 126, 234, 0.1);
+            padding: 20px;
+            margin-top: 25px;
         }
-        .demo-accounts h4 {
-            margin: 0 0 1rem 0;
-            color: #333;
+
+        .credentials-help h4 {
+            color: #ff9999;
+            margin-bottom: 15px;
             font-size: 1rem;
         }
-        .demo-accounts .account {
+
+        .credential-item {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .demo-accounts .account:last-child {
-            margin-bottom: 0;
+
+        .credential-item:last-child {
+            border-bottom: none;
         }
-        .demo-accounts .role {
+
+        .credential-item .role {
+            color: #ff6666;
             font-weight: 600;
-            color: #667eea;
         }
-        .demo-accounts .credentials {
-            color: #666;
-            font-family: monospace;
+
+        .credential-item .creds {
+            font-family: 'Courier New', monospace;
+        }
+
+        .credential-item .creds .user {
+            color: #66ff66;
+        }
+
+        .credential-item .creds .pass {
+            color: #ffff66;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .back-link a {
+            color: #ff6666;
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid #ff6666;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link a:hover {
+            background: rgba(255, 102, 102, 0.1);
         }
     </style>
 </head>
 <body>
     <div class="login-container">
-        <div class="logo">
-            <h1>TechCorp</h1>
+        <div class="login-title">
+            <h1>🏢 TechCorp</h1>
             <p>Corporate Solutions Portal</p>
         </div>
         
@@ -189,35 +227,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         <form method="POST">
             <div class="form-group">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" class="form-input" placeholder="Enter your username" required>
             </div>
             
             <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" class="form-input" placeholder="Enter your password" required>
             </div>
             
-            <button type="submit" class="btn">Login</button>
+            <button type="submit" class="login-button">Login</button>
         </form>
         
-        <div class="demo-accounts">
-            <h4>💼 Demo Accounts</h4>
-            <div class="account">
-                <span class="role">Admin:</span>
-                <span class="credentials">admin / admin123</span>
+        <div class="credentials-help">
+            <h4>🔑 Demo Credentials</h4>
+            <div class="credential-item">
+                <span class="role">Admin</span>
+                <span class="creds"><span class="user">admin</span> / <span class="pass">admin123</span></span>
             </div>
-            <div class="account">
-                <span class="role">Manager:</span>
-                <span class="credentials">sarah / sarah123</span>
+            <div class="credential-item">
+                <span class="role">Manager</span>
+                <span class="creds"><span class="user">sarah</span> / <span class="pass">sarah123</span></span>
             </div>
-            <div class="account">
-                <span class="role">User:</span>
-                <span class="credentials">carlos / carlos123</span>
+            <div class="credential-item">
+                <span class="role">User</span>
+                <span class="creds"><span class="user">carlos</span> / <span class="pass">carlos123</span></span>
             </div>
-            <div class="account">
-                <span class="role">Engineer:</span>
-                <span class="credentials">mike / mike123</span>
+            <div class="credential-item">
+                <span class="role">Engineer</span>
+                <span class="creds"><span class="user">mike</span> / <span class="pass">mike123</span></span>
             </div>
         </div>
         

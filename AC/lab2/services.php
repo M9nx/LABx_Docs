@@ -6,21 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Services - TechCorp</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
-        .header { background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); padding: 1rem; box-shadow: 0 2px 20px rgba(0,0,0,0.1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 100%); min-height: 100vh; color: #e0e0e0; }
+        .header { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255, 68, 68, 0.3); padding: 1rem 2rem; }
         .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 1.8rem; font-weight: bold; color: #333; text-decoration: none; }
+        .logo { font-size: 1.8rem; font-weight: bold; color: #ff4444; text-decoration: none; }
         .nav-links { display: flex; gap: 2rem; align-items: center; }
-        .nav-links a { color: #333; text-decoration: none; font-weight: 500; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
-        .content { background: rgba(255,255,255,0.95); padding: 3rem; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); backdrop-filter: blur(20px); }
-        h1 { color: #333; text-align: center; margin-bottom: 2rem; }
+        .nav-links a { color: #e0e0e0; text-decoration: none; font-weight: 500; transition: color 0.3s ease; }
+        .nav-links a:hover { color: #ff4444; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem; }
+        .content { background: rgba(255, 255, 255, 0.05); padding: 3rem; border-radius: 20px; border: 1px solid rgba(255, 68, 68, 0.2); backdrop-filter: blur(20px); }
+        h1 { color: #ff4444; text-align: center; margin-bottom: 2rem; }
+        p { color: #ccc; line-height: 1.8; margin-bottom: 1rem; }
     </style>
 </head>
 <body>
     <div class="header">
         <div class="nav-container">
-            <a href="index.php" class="logo">TechCorp</a>
+            <a href="index.php" class="logo">🏢 TechCorp</a>
             <div class="nav-links">
                 <a href="index.php">Home</a>
                 <a href="solutions.php">Solutions</a>

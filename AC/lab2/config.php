@@ -2,7 +2,7 @@
 // Database configuration for TechCorp Lab2
 define('DB_HOST', 'localhost');
 define('DB_USERNAME', 'root');
-define('DB_PASSWORD', '');
+define('DB_PASSWORD', 'root');
 define('DB_NAME', 'techcorp_lab2');
 
 // Create database connection

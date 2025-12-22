@@ -102,18 +102,22 @@ $stats = $statsStmt->fetch();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TechCorp Admin Panel - Secure Management Console</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        * {
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 100%);
             min-height: 100vh;
+            color: #e0e0e0;
         }
         .header {
-            background: rgba(255,255,255,0.95);
+            background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
-            padding: 1rem;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            border-bottom: 1px solid rgba(255, 68, 68, 0.3);
+            padding: 1rem 2rem;
         }
         .header-content {
             max-width: 1400px;
@@ -129,11 +133,11 @@ $stats = $statsStmt->fetch();
         }
         .logo h1 {
             margin: 0;
-            color: #333;
+            color: #ff4444;
             font-size: 1.8rem;
         }
         .admin-badge {
-            background: linear-gradient(45deg, #dc3545, #ff6b6b);
+            background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%);
             color: white;
             padding: 0.5rem 1rem;
             border-radius: 20px;
@@ -146,9 +150,9 @@ $stats = $statsStmt->fetch();
             padding: 2rem;
         }
         .warning {
-            background: rgba(255, 193, 7, 0.9);
-            border: 1px solid #ffc107;
-            color: #856404;
+            background: rgba(255, 193, 7, 0.15);
+            border: 1px solid rgba(255, 193, 7, 0.5);
+            color: #ffc107;
             padding: 1rem;
             border-radius: 10px;
             margin-bottom: 2rem;
@@ -161,21 +165,21 @@ $stats = $statsStmt->fetch();
             margin-bottom: 2rem;
         }
         .stat-card {
-            background: rgba(255,255,255,0.95);
+            background: rgba(255, 255, 255, 0.05);
             padding: 1.5rem;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 68, 68, 0.2);
             backdrop-filter: blur(10px);
             text-align: center;
         }
         .stat-card h3 {
             margin: 0 0 0.5rem 0;
-            color: #333;
+            color: #ff4444;
             font-size: 2rem;
         }
         .stat-card p {
             margin: 0;
-            color: #666;
+            color: #aaa;
             font-weight: 500;
         }
         .alert {
@@ -185,30 +189,34 @@ $stats = $statsStmt->fetch();
             backdrop-filter: blur(10px);
         }
         .alert-success {
-            background: rgba(40, 167, 69, 0.9);
+            background: rgba(40, 167, 69, 0.2);
             border: 1px solid #28a745;
-            color: white;
+            color: #28a745;
         }
         .alert-danger {
-            background: rgba(220, 53, 69, 0.9);
+            background: rgba(220, 53, 69, 0.2);
             border: 1px solid #dc3545;
-            color: white;
+            color: #ff6b6b;
         }
         .users-table {
-            background: rgba(255,255,255,0.95);
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 68, 68, 0.2);
             backdrop-filter: blur(10px);
         }
         .table-header {
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%);
             color: white;
             padding: 1.5rem;
         }
         .table-header h2 {
             margin: 0;
             font-size: 1.5rem;
+        }
+        .table-header p {
+            margin: 0.5rem 0 0 0;
+            opacity: 0.9;
         }
         table {
             width: 100%;
@@ -217,12 +225,15 @@ $stats = $statsStmt->fetch();
         th, td {
             padding: 1rem;
             text-align: left;
-            border-bottom: 1px solid #e1e5e9;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
         th {
-            background: rgba(102, 126, 234, 0.1);
+            background: rgba(255, 68, 68, 0.1);
             font-weight: 600;
-            color: #333;
+            color: #ff4444;
+        }
+        tr:hover {
+            background: rgba(255, 68, 68, 0.05);
         }
         .role-badge {
             padding: 0.3rem 0.8rem;
@@ -283,36 +294,39 @@ $stats = $statsStmt->fetch();
             transition: all 0.3s ease;
         }
         .btn-danger {
-            background: linear-gradient(45deg, #dc3545, #c82333);
+            background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%);
             color: white;
         }
         .btn-danger:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 68, 68, 0.4);
         }
         .btn-warning {
             background: linear-gradient(45deg, #ffc107, #e0a800);
             color: #333;
         }
         .btn-warning:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 193, 7, 0.4);
         }
         .btn-info {
             background: linear-gradient(45deg, #17a2b8, #138496);
             color: white;
         }
         .btn-info:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(23, 162, 184, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(23, 162, 184, 0.4);
         }
         .btn-secondary {
-            background: linear-gradient(45deg, #6c757d, #545b62);
-            color: white;
+            background: transparent;
+            border: 2px solid #ff4444;
+            color: #ff4444;
         }
         .btn-secondary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
+            background: #ff4444;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 68, 68, 0.4);
         }
         .actions {
             white-space: nowrap;
@@ -323,18 +337,19 @@ $stats = $statsStmt->fetch();
         }
         .sensitive-data {
             font-size: 0.9rem;
-            color: #666;
+            color: #888;
         }
         .quick-actions {
-            background: rgba(255,255,255,0.95);
+            background: rgba(255, 255, 255, 0.05);
             padding: 1rem;
             border-radius: 10px;
             margin-bottom: 2rem;
+            border: 1px solid rgba(255, 68, 68, 0.2);
             backdrop-filter: blur(10px);
         }
         .quick-actions h3 {
             margin: 0 0 1rem 0;
-            color: #333;
+            color: #ff4444;
         }
         .action-buttons {
             display: flex;
@@ -349,27 +364,32 @@ $stats = $statsStmt->fetch();
             top: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(5px);
         }
         .modal-content {
-            background: white;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
             margin: 15% auto;
             padding: 2rem;
             border-radius: 15px;
             width: 90%;
             max-width: 500px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+        .modal-content h3 {
+            color: #ff4444;
+            margin-bottom: 1rem;
         }
         .close {
             float: right;
             font-size: 2rem;
             font-weight: bold;
             cursor: pointer;
-            color: #999;
+            color: #888;
         }
         .close:hover {
-            color: #333;
+            color: #ff4444;
         }
         .form-group {
             margin-bottom: 1rem;
@@ -378,13 +398,24 @@ $stats = $statsStmt->fetch();
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 600;
+            color: #ccc;
         }
         .form-group input, .form-group select {
             width: 100%;
             padding: 0.8rem;
-            border: 2px solid #e1e5e9;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 68, 68, 0.3);
             border-radius: 8px;
             box-sizing: border-box;
+            color: #e0e0e0;
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #ff4444;
+        }
+        .form-group select option {
+            background: #1a1a1a;
+            color: #e0e0e0;
         }
     </style>
 </head>

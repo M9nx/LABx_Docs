@@ -1,15 +1,18 @@
 <?php
 /**
- * Lab 1 Documentation - Markdown Parser with Dark Theme
+ * Lab 4 Documentation - Markdown Parser with Dark Theme
  * Reads LAB_DOCUMENTATION.md and renders it with proper styling
  */
+session_start();
 
-// Improved Markdown parser that handles indented code blocks
+// Improved Markdown parser that handles indented code blocks and tables
 function parseMarkdown($text) {
     $lines = explode("\n", $text);
     $html = '';
     $inCodeBlock = false;
     $codeBuffer = '';
+    $inTable = false;
+    $tableRows = [];
     $i = 0;
     $count = count($lines);
     
@@ -33,10 +36,43 @@ function parseMarkdown($text) {
         }
         
         if ($inCodeBlock) {
-            // Remove common leading whitespace for indented code blocks
             $codeBuffer .= $line . "\n";
             $i++;
             continue;
+        }
+        
+        // Handle tables
+        if (preg_match('/^\|(.+)\|$/', $trimmedLine)) {
+            if (!$inTable) {
+                $inTable = true;
+                $tableRows = [];
+            }
+            
+            // Skip separator row
+            if (preg_match('/^\|[\s\-:|]+\|$/', $trimmedLine)) {
+                $i++;
+                continue;
+            }
+            
+            $tableRows[] = $trimmedLine;
+            $i++;
+            continue;
+        } else if ($inTable) {
+            // End table
+            $html .= '<div class="table-wrapper"><table class="doc-table">';
+            foreach ($tableRows as $idx => $row) {
+                $cells = array_map('trim', explode('|', trim($row, '|')));
+                $tag = $idx === 0 ? 'th' : 'td';
+                $rowHtml = $idx === 0 ? '<thead><tr>' : '<tr>';
+                foreach ($cells as $cell) {
+                    $rowHtml .= "<{$tag}>" . formatInline($cell) . "</{$tag}>";
+                }
+                $rowHtml .= $idx === 0 ? '</tr></thead><tbody>' : '</tr>';
+                $html .= $rowHtml;
+            }
+            $html .= '</tbody></table></div>';
+            $inTable = false;
+            $tableRows = [];
         }
         
         // Empty lines - just skip
@@ -133,6 +169,22 @@ function parseMarkdown($text) {
         $i++;
     }
     
+    // Handle unclosed table
+    if ($inTable && !empty($tableRows)) {
+        $html .= '<div class="table-wrapper"><table class="doc-table">';
+        foreach ($tableRows as $idx => $row) {
+            $cells = array_map('trim', explode('|', trim($row, '|')));
+            $tag = $idx === 0 ? 'th' : 'td';
+            $rowHtml = $idx === 0 ? '<thead><tr>' : '<tr>';
+            foreach ($cells as $cell) {
+                $rowHtml .= "<{$tag}>" . formatInline($cell) . "</{$tag}>";
+            }
+            $rowHtml .= $idx === 0 ? '</tr></thead><tbody>' : '</tr>';
+            $html .= $rowHtml;
+        }
+        $html .= '</tbody></table></div>';
+    }
+    
     return $html;
 }
 
@@ -144,7 +196,7 @@ function formatInline($text) {
     $text = preg_replace('/\*\*(.+?)\*\*/', '<strong>$1</strong>', $text);
     $text = preg_replace('/\*(.+?)\*/', '<em>$1</em>', $text);
     // Links
-    $text = preg_replace('/\[([^\]]+)\]\(([^)]+)\)/', '<a href="$2">$1</a>', $text);
+    $text = preg_replace('/\[([^\]]+)\]\(([^)]+)\)/', '<a href="$2" target="_blank">$1</a>', $text);
     
     return $text;
 }
@@ -161,7 +213,7 @@ $htmlContent = parseMarkdown($markdownContent);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lab 1 Documentation - Unprotected Admin Functionality</title>
+    <title>Lab 4 Documentation - User Role Modification</title>
     <style>
         * {
             margin: 0;
@@ -205,6 +257,7 @@ $htmlContent = parseMarkdown($markdownContent);
         .nav-links {
             display: flex;
             gap: 1.5rem;
+            align-items: center;
         }
 
         .nav-links a {
@@ -215,6 +268,27 @@ $htmlContent = parseMarkdown($markdownContent);
         }
 
         .nav-links a:hover {
+            color: #ff4444;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            color: #e0e0e0;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .btn-back:hover {
+            background: rgba(255, 68, 68, 0.2);
+            border-color: #ff4444;
             color: #ff4444;
         }
 
@@ -339,6 +413,43 @@ $htmlContent = parseMarkdown($markdownContent);
             color: #ff6666;
         }
 
+        /* Tables */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        .doc-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .doc-table th {
+            background: rgba(255, 68, 68, 0.2);
+            color: #ff6666;
+            padding: 0.8rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #ff4444;
+        }
+
+        .doc-table td {
+            padding: 0.7rem 1rem;
+            border-bottom: 1px solid rgba(255, 68, 68, 0.1);
+            color: #ccc;
+        }
+
+        .doc-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .doc-table tr:hover td {
+            background: rgba(255, 68, 68, 0.05);
+        }
+
         /* Footer */
         .footer {
             text-align: center;
@@ -388,12 +499,18 @@ $htmlContent = parseMarkdown($markdownContent);
 <body>
     <nav class="nav-bar">
         <div class="nav-content">
-            <a href="index.php" class="nav-brand">🛒 SecureShop - Lab 1</a>
+            <a href="index.php" class="nav-brand">🔐 RoleLab - Lab 4</a>
             <div class="nav-links">
+                <a href="../index.php" class="btn-back">← All Labs</a>
                 <a href="index.php">Home</a>
                 <a href="lab-description.php">Lab Info</a>
                 <a href="docs.php">Documentation</a>
-                <a href="login.php">Login</a>
+                <?php if (isset($_SESSION['user_id'])): ?>
+                    <a href="profile.php">Profile</a>
+                    <a href="logout.php">Logout</a>
+                <?php else: ?>
+                    <a href="login.php">Login</a>
+                <?php endif; ?>
             </div>
         </div>
     </nav>
@@ -409,7 +526,7 @@ $htmlContent = parseMarkdown($markdownContent);
     </div>
 
     <footer class="footer">
-        <p>Lab 1: Unprotected Admin Functionality | Access Control Vulnerabilities</p>
+        <p>Lab 4: User Role Can Be Modified in User Profile | Access Control Vulnerabilities</p>
     </footer>
 </body>
 </html>
