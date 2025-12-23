@@ -6,7 +6,7 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documentation - Mass Assignment Vulnerability</title>
+    <title>Documentation - Data Leakage in Redirect</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -242,13 +242,13 @@ session_start();
 <body>
     <header class="header">
         <div class="header-content">
-            <a href="index.php" class="logo">📝 Lab 4</a>
+            <a href="index.php" class="logo">🔄 Lab 7</a>
             <nav class="nav-links">
                 <a href="../index.php" class="btn-nav">← All Labs</a>
                 <a href="index.php">Home</a>
                 <a href="lab-description.php">Lab Info</a>
                 <?php if (isset($_SESSION['user_id'])): ?>
-                    <a href="profile.php">Profile</a>
+                    <a href="profile.php?id=<?php echo $_SESSION['user_id']; ?>">Profile</a>
                     <a href="logout.php">Logout</a>
                 <?php else: ?>
                     <a href="login.php">Login</a>
@@ -279,23 +279,25 @@ session_start();
 
         <main class="main-content">
             <section id="overview" class="doc-section">
-                <h1>📝 User Role Modified via Profile Update</h1>
+                <h1>🔄 Data Leakage in Redirect Response</h1>
                 <p>
-                    This lab demonstrates a mass assignment vulnerability where the application 
-                    blindly accepts and processes all JSON parameters in a profile update request, 
-                    including the <span class="code-inline">roleid</span> field that determines admin status.
+                    This lab demonstrates a vulnerability where sensitive data is included in the 
+                    response body of a redirect. While browsers automatically follow redirects 
+                    and don't display the intermediate response, tools like Burp Suite can capture 
+                    and view this leaked data.
                 </p>
 
                 <div class="alert alert-info">
                     <h4>💡 Lab Objective</h4>
-                    <p>Exploit mass assignment to change your roleid to 2 (admin) and delete user "carlos".</p>
+                    <p>Access another user's profile and capture their API key from the redirect response body using Burp Suite.</p>
                 </div>
 
-                <h2>What is Mass Assignment?</h2>
+                <h2>Understanding HTTP Redirects</h2>
                 <p>
-                    Mass assignment occurs when an application automatically binds user input to object 
-                    properties without proper filtering. If the application accepts all JSON fields and 
-                    updates them in the database, attackers can modify fields they shouldn't have access to.
+                    When a server sends a 302 redirect response, browsers automatically follow the 
+                    <span class="code-inline">Location</span> header to the new URL. Users never see 
+                    the body content of the redirect response - but it's still transmitted and can 
+                    be intercepted.
                 </p>
 
                 <h2>Lab Credentials</h2>
@@ -305,39 +307,19 @@ session_start();
                             <tr>
                                 <th>Username</th>
                                 <th>Password</th>
-                                <th>Role ID</th>
+                                <th>Role</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td><span class="code-inline">wiener</span></td>
                                 <td><span class="code-inline">peter</span></td>
-                                <td>1 (User)</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <h2>Role IDs</h2>
-                <div class="table-container">
-                    <table class="doc-table">
-                        <thead>
-                            <tr>
-                                <th>Role ID</th>
-                                <th>Role Name</th>
-                                <th>Permissions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><span class="code-inline">1</span></td>
-                                <td>User</td>
-                                <td>Basic access</td>
+                                <td>Regular User</td>
                             </tr>
                             <tr>
-                                <td><span class="code-inline">2</span></td>
-                                <td>Admin</td>
-                                <td>Full access + user management</td>
+                                <td><span class="code-inline">carlos</span></td>
+                                <td>Unknown</td>
+                                <td>Target User</td>
                             </tr>
                         </tbody>
                     </table>
@@ -347,38 +329,38 @@ session_start();
             <section id="vulnerability" class="doc-section">
                 <h1>🔍 Vulnerability Details</h1>
                 
-                <h2>How Mass Assignment Works</h2>
+                <h2>The Redirect Behavior</h2>
                 <p>
-                    The profile update endpoint accepts JSON data and updates all provided fields 
-                    without validating which fields the user should be allowed to modify.
+                    When you try to access another user's profile without authorization, the server 
+                    performs an access check and redirects you to the login page. However, before 
+                    the redirect happens, the server has already loaded and rendered the user data.
                 </p>
 
-                <h2>Normal Profile Update</h2>
                 <div class="code-block">
-                    <pre>POST /profile.php
-Content-Type: application/json
+                    <pre>HTTP/1.1 302 Found
+Location: /login.php
+Content-Type: text/html
 
-{
-    "email": "wiener@example.com",
-    "name": "Peter Wiener"
-}</pre>
+&lt;!-- This body content is sent BEFORE the redirect! --&gt;
+&lt;html&gt;
+&lt;body&gt;
+    &lt;h1&gt;Profile: carlos&lt;/h1&gt;
+    &lt;p&gt;API Key: secret-api-key-here&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
                 </div>
 
-                <h2>Malicious Profile Update</h2>
-                <div class="code-block">
-                    <pre>POST /profile.php
-Content-Type: application/json
-
-{
-    "email": "wiener@example.com",
-    "name": "Peter Wiener",
-    "roleid": 2    // ADDED: Escalate to admin!
-}</pre>
-                </div>
+                <h2>Why This Happens</h2>
+                <ul>
+                    <li><strong>Order of operations</strong> - Data is loaded before authorization check</li>
+                    <li><strong>Redirect doesn't exit</strong> - Script continues after sending redirect header</li>
+                    <li><strong>Browser behavior</strong> - Users don't see the body, creating false sense of security</li>
+                    <li><strong>Incomplete access control</strong> - Authorization check doesn't stop data from being sent</li>
+                </ul>
 
                 <div class="alert alert-warning">
-                    <h4>⚠️ Hidden Field Injection</h4>
-                    <p>The server response often reveals additional fields that can be exploited in requests.</p>
+                    <h4>⚠️ Hidden Data Exposure</h4>
+                    <p>The sensitive data is transmitted even though the browser doesn't display it to the user.</p>
                 </div>
             </section>
 
@@ -388,44 +370,35 @@ Content-Type: application/json
                 <h2>Attack Flow</h2>
                 <div class="code-block">
                     <pre>1. Login as wiener:peter
-2. Go to Profile page
-3. Submit normal profile update
-4. Observe response contains "roleid": 1
-5. Intercept next request with Burp
-6. Add "roleid": 2 to JSON body
-7. Submit modified request
-8. Refresh - now you're admin!
-9. Delete carlos</pre>
+2. Note your profile URL structure
+3. Configure Burp Suite to intercept responses
+4. Try to access carlos's profile (change user ID)
+5. Browser gets redirected, but...
+6. Burp captures the response body with the API key!</pre>
                 </div>
 
-                <h2>Using Browser DevTools</h2>
+                <h2>Burp Suite Setup</h2>
                 <div class="code-block">
-                    <pre>// In browser console
-fetch('/profile.php', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-        email: 'wiener@example.com',
-        roleid: 2  // Escalate privileges
-    })
-});</pre>
+                    <pre>1. Open Burp Suite
+2. Go to Proxy → Options
+3. Enable "Intercept Server Responses"
+4. Or: Disable interception and check HTTP history
+5. Send request to carlos's profile
+6. View the response in HTTP history</pre>
                 </div>
 
-                <h2>Using Burp Suite</h2>
+                <h2>Using cURL to Capture</h2>
                 <div class="code-block">
-                    <pre>1. Intercept profile update request
-2. Original body:
-   {"email":"test@test.com"}
-   
-3. Modified body:
-   {"email":"test@test.com","roleid":2}
-   
-4. Forward request</pre>
+                    <pre># Don't follow redirects (-L is not used)
+curl -i "http://localhost/AC/lab7/profile.php?id=carlos" \
+  -H "Cookie: PHPSESSID=your-session-cookie"
+
+# Response shows 302 redirect BUT also the body content!</pre>
                 </div>
 
                 <div class="alert alert-danger">
-                    <h4>🚫 Privilege Escalation</h4>
-                    <p>By adding a single field to the JSON, any user can become an administrator.</p>
+                    <h4>🚫 Invisible Data Leak</h4>
+                    <p>The API key is transmitted to the attacker even though they're "blocked" by the redirect.</p>
                 </div>
             </section>
 
@@ -435,30 +408,27 @@ fetch('/profile.php', {
                 <p><span class="step-number">1</span><strong>Login to the application</strong></p>
                 <p>Use credentials <span class="code-inline">wiener:peter</span></p>
 
-                <p><span class="step-number">2</span><strong>Navigate to your profile</strong></p>
-                <p>Click on "Profile" or "My Account" in the navigation</p>
+                <p><span class="step-number">2</span><strong>Go to your profile</strong></p>
+                <p>Navigate to your profile and note the URL structure (e.g., <span class="code-inline">profile.php?id=3</span>)</p>
 
-                <p><span class="step-number">3</span><strong>Update your email</strong></p>
-                <p>Change your email and submit the form to observe normal behavior</p>
+                <p><span class="step-number">3</span><strong>Configure Burp Suite</strong></p>
+                <p>Enable response interception or prepare to view HTTP history</p>
 
-                <p><span class="step-number">4</span><strong>Check the response</strong></p>
-                <p>In DevTools (F12) → Network tab, look at the response JSON. Notice it includes <span class="code-inline">roleid</span></p>
+                <p><span class="step-number">4</span><strong>Access carlos's profile</strong></p>
+                <p>Change the ID parameter to access another user's profile</p>
 
-                <p><span class="step-number">5</span><strong>Prepare the exploit</strong></p>
-                <p>Open Burp Suite or use browser DevTools to intercept the next request</p>
+                <p><span class="step-number">5</span><strong>Observe the redirect</strong></p>
+                <p>Your browser will be redirected to the login page</p>
 
-                <p><span class="step-number">6</span><strong>Add roleid to request</strong></p>
-                <p>Add <span class="code-inline">"roleid": 2</span> to the JSON body of the profile update request</p>
+                <p><span class="step-number">6</span><strong>Check Burp's HTTP history</strong></p>
+                <p>Look at the response for the profile request - the body contains the API key!</p>
 
-                <p><span class="step-number">7</span><strong>Submit and verify</strong></p>
-                <p>Submit the request and refresh the page. You should now have admin access.</p>
-
-                <p><span class="step-number">8</span><strong>Delete carlos</strong></p>
-                <p>Access the admin panel and delete user "carlos"</p>
+                <p><span class="step-number">7</span><strong>Extract the API key</strong></p>
+                <p>Copy the API key from the response body</p>
 
                 <div class="alert alert-success">
                     <h4>✅ Success Criteria</h4>
-                    <p>The lab is completed when you escalate to admin via mass assignment and delete "carlos".</p>
+                    <p>The lab is completed when you capture carlos's API key from the redirect response body.</p>
                 </div>
             </section>
 
@@ -468,79 +438,111 @@ fetch('/profile.php', {
                 <h2>Vulnerable Code Pattern</h2>
                 <div class="code-block">
                     <pre>&lt;?php
-// VULNERABLE: Accepting all JSON fields
-$data = json_decode(file_get_contents('php://input'), true);
+session_start();
 
-// Directly updating all provided fields
-$sql = "UPDATE users SET ";
-$updates = [];
-foreach ($data as $key => $value) {
-    $updates[] = "$key = ?";  // BAD: No field validation!
+$userId = $_GET['id'];
+
+// Load user data FIRST (wrong order!)
+$stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
+$stmt->bind_param("i", $userId);
+$stmt->execute();
+$user = $stmt->get_result()->fetch_assoc();
+
+// Check authorization AFTER loading data
+if ($userId != $_SESSION['user_id']) {
+    header("Location: login.php");
+    // VULNERABILITY: No exit! Script continues...
 }
-$sql .= implode(', ', $updates);
-$sql .= " WHERE id = ?";
-?&gt;</pre>
+
+// This still gets executed and sent!
+?&gt;
+&lt;html&gt;
+&lt;body&gt;
+    &lt;h1&gt;Profile: &lt;?= $user['username'] ?&gt;&lt;/h1&gt;
+    &lt;p&gt;API Key: &lt;?= $user['api_key'] ?&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
                 </div>
 
-                <h2>Why This Is Dangerous</h2>
-                <ul>
-                    <li><strong>No allowlist</strong> - All fields accepted without filtering</li>
-                    <li><strong>Direct binding</strong> - User input directly updates database</li>
-                    <li><strong>Information disclosure</strong> - Response reveals internal field names</li>
-                    <li><strong>No authorization check</strong> - Doesn't verify if user can modify field</li>
-                </ul>
+                <h2>The Critical Bug</h2>
+                <p>
+                    The <span class="code-inline">header("Location: ...")</span> function only sends 
+                    an HTTP header - it does NOT stop script execution. Without 
+                    <span class="code-inline">exit()</span> or <span class="code-inline">die()</span>, 
+                    the rest of the page is still rendered and sent.
+                </p>
+
+                <div class="alert alert-danger">
+                    <h4>🐛 Common Mistake</h4>
+                    <p>Many developers assume header() stops execution - it doesn't!</p>
+                </div>
             </section>
 
             <section id="prevention" class="doc-section">
                 <h1>🛡️ Prevention</h1>
 
-                <h2>Secure Code Pattern</h2>
+                <h2>Fix 1: Exit After Redirect</h2>
                 <div class="code-block">
                     <pre>&lt;?php
-// SECURE: Whitelist allowed fields
-$allowedFields = ['email', 'name', 'phone'];
-
-$data = json_decode(file_get_contents('php://input'), true);
-
-// Only process allowed fields
-$safeData = array_intersect_key($data, array_flip($allowedFields));
-
-// Now update only safe fields
-foreach ($safeData as $field => $value) {
-    // Process update...
+// Check authorization FIRST
+if ($userId != $_SESSION['user_id']) {
+    header("Location: login.php");
+    exit();  // CRITICAL: Stop script execution!
 }
 
-// Never allow roleid, is_admin, etc. from user input
+// Only load data AFTER authorization passes
+$stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
+// ... rest of code
+?&gt;</pre>
+                </div>
+
+                <h2>Fix 2: Check Before Loading Data</h2>
+                <div class="code-block">
+                    <pre>&lt;?php
+session_start();
+
+$userId = $_GET['id'];
+
+// Authorization check BEFORE any data loading
+if ($userId != $_SESSION['user_id']) {
+    header("Location: login.php");
+    exit();
+}
+
+// Safe: Only reached if authorized
+$stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
+// ... load and display data
+?&gt;</pre>
+                </div>
+
+                <h2>Fix 3: Don't Send Body with Redirect</h2>
+                <div class="code-block">
+                    <pre>&lt;?php
+function redirect($url) {
+    // Send redirect with no body
+    header("Location: " . $url);
+    header("Content-Length: 0");
+    exit();
+}
+
+// Usage
+if (!authorized()) {
+    redirect("login.php");
+}
 ?&gt;</pre>
                 </div>
 
                 <h2>Best Practices</h2>
                 <ul>
-                    <li><strong>Whitelist fields</strong> - Only accept explicitly allowed parameters</li>
-                    <li><strong>Use DTOs</strong> - Data Transfer Objects that define allowed fields</li>
-                    <li><strong>Separate endpoints</strong> - Different endpoints for user vs admin actions</li>
-                    <li><strong>Server-side validation</strong> - Always validate on the server</li>
-                    <li><strong>Audit logging</strong> - Log all field modification attempts</li>
+                    <li><strong>Always exit after redirect</strong> - Use <span class="code-inline">exit()</span> immediately after <span class="code-inline">header("Location: ...")</span></li>
+                    <li><strong>Check before load</strong> - Perform authorization before loading sensitive data</li>
+                    <li><strong>Security testing</strong> - Test redirects by examining raw HTTP responses</li>
+                    <li><strong>Code review</strong> - Check all redirects for missing exit statements</li>
                 </ul>
 
-                <h2>Framework-Specific Solutions</h2>
-                <div class="code-block">
-                    <pre># Laravel - Use $fillable property
-class User extends Model {
-    protected $fillable = ['email', 'name'];
-    protected $guarded = ['roleid', 'is_admin'];
-}
-
-# Django - Use serializer fields
-class UserSerializer(serializers.Serializer):
-    email = serializers.EmailField()
-    name = serializers.CharField()
-    # roleid intentionally NOT included</pre>
-                </div>
-
                 <div class="alert alert-info">
-                    <h4>💡 Defense in Depth</h4>
-                    <p>Even with whitelisting, verify the user has permission to modify each specific field.</p>
+                    <h4>💡 Golden Rule</h4>
+                    <p>Every header("Location: ...") should be followed by exit() or die().</p>
                 </div>
             </section>
 
@@ -549,15 +551,15 @@ class UserSerializer(serializers.Serializer):
 
                 <h2>Related Resources</h2>
                 <ul>
-                    <li><a href="https://owasp.org/API-Security/editions/2023/en/0xa3-broken-object-property-level-authorization/" style="color: #ff4444;">OWASP API3 - Broken Object Property Level Authorization</a></li>
-                    <li><a href="https://cwe.mitre.org/data/definitions/915.html" style="color: #ff4444;">CWE-915: Improperly Controlled Modification of Dynamically-Determined Object Attributes</a></li>
-                    <li><a href="https://cheatsheetseries.owasp.org/cheatsheets/Mass_Assignment_Cheat_Sheet.html" style="color: #ff4444;">OWASP Mass Assignment Cheat Sheet</a></li>
+                    <li><a href="https://cwe.mitre.org/data/definitions/200.html" style="color: #ff4444;">CWE-200: Information Exposure</a></li>
+                    <li><a href="https://cwe.mitre.org/data/definitions/698.html" style="color: #ff4444;">CWE-698: Execution After Redirect (EAR)</a></li>
+                    <li><a href="https://owasp.org/www-community/vulnerabilities/Execution_After_Redirect_(EAR)" style="color: #ff4444;">OWASP - Execution After Redirect</a></li>
                 </ul>
 
                 <h2>Further Reading</h2>
                 <ul>
-                    <li><a href="https://portswigger.net/web-security/access-control" style="color: #ff4444;">PortSwigger - Access Control</a></li>
-                    <li><a href="https://github.com/OWASP/API-Security" style="color: #ff4444;">OWASP API Security Project</a></li>
+                    <li><a href="https://www.php.net/manual/en/function.header.php" style="color: #ff4444;">PHP header() Function Documentation</a></li>
+                    <li><a href="https://portswigger.net/web-security/information-disclosure" style="color: #ff4444;">PortSwigger - Information Disclosure</a></li>
                 </ul>
             </section>
         </main>

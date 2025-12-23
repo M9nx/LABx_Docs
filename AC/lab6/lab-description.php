@@ -6,7 +6,7 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lab Description - TechCorp</title>
+    <title>Lab Description - GUIDLab</title>
     <style>
         * {
             margin: 0;
@@ -242,15 +242,15 @@ session_start();
 <body>
     <header class="header">
         <div class="header-content">
-            <a href="index.php" class="logo">🏢 TechCorp</a>
+            <a href="index.php" class="logo">🔐 GUIDLab</a>
             <nav class="nav-links">
                 <a href="../index.php" class="btn-back">← All Labs</a>
                 <a href="index.php">Home</a>
-                <a href="services.php">Services</a>
+                <a href="blog.php">Blog</a>
                 <a href="lab-description.php">Lab Info</a>
                 <a href="docs.php">Documentation</a>
                 <?php if (isset($_SESSION['user_id'])): ?>
-                    <a href="profile.php">My Account</a>
+                    <a href="profile.php?id=<?php echo $_SESSION['user_guid']; ?>">My Account</a>
                     <a href="logout.php">Logout</a>
                 <?php else: ?>
                     <a href="login.php">Login</a>
@@ -261,80 +261,84 @@ session_start();
 
     <div class="container">
         <div class="content-card">
-            <span class="lab-badge">CLIENT-SIDE DISCLOSURE</span>
-            <h1 class="page-title">Lab 2: Unprotected Admin with Unpredictable URL</h1>
+            <span class="lab-badge">HORIZONTAL PRIVILEGE ESCALATION</span>
+            <h1 class="page-title">Lab 6: User ID Controlled by Request Parameter with Unpredictable User IDs</h1>
 
             <div class="section">
                 <h2 class="section-title">📋 Lab Overview</h2>
                 <p>
-                    This lab demonstrates <strong>information disclosure through client-side code</strong> 
-                    where the admin panel has an unpredictable URL that cannot be easily guessed.
+                    This lab demonstrates a <strong>horizontal privilege escalation</strong> vulnerability 
+                    where the application uses user-controllable parameters to access user account pages.
                 </p>
                 <p>
-                    However, the application includes JavaScript code that reveals the admin panel 
-                    location. Even though the URL is complex and unpredictable, it's exposed in 
-                    the page source code.
+                    Unlike labs with predictable sequential IDs, this application uses <strong>GUIDs 
+                    (Globally Unique Identifiers)</strong> which are theoretically unpredictable. However, 
+                    the application <strong>leaks user GUIDs</strong> through blog post author links, 
+                    allowing attackers to discover and use them.
                 </p>
             </div>
 
             <div class="section">
                 <h2 class="section-title">🎯 Objective</h2>
                 <p>
-                    Find the hidden admin panel URL by <strong>analyzing JavaScript code</strong> in the 
-                    page source, then use it to delete the user <strong>carlos</strong>.
+                    Find the <strong>GUID</strong> for the user <strong>carlos</strong> by exploring the 
+                    application, then use it to access his profile and obtain his <strong>API key</strong>.
                 </p>
                 <div class="info-box">
-                    <h4>🔍 Discovery Method</h4>
-                    <p>View Page Source (Ctrl+U) or DevTools (F12)</p>
+                    <h4>🔑 Provided Credentials</h4>
+                    <p>Username: <code>wiener</code> &nbsp;|&nbsp; Password: <code>peter</code></p>
                 </div>
             </div>
 
             <div class="section">
                 <h2 class="section-title">🔍 Vulnerability Type</h2>
                 <p>
-                    <strong>Security Through Obscurity Failure</strong> - The developers relied on the 
-                    unpredictable URL to protect the admin panel, but exposed it in client-side code.
+                    <strong>IDOR with Information Disclosure</strong> - While GUIDs make direct enumeration 
+                    impractical, the application's design flaw of exposing GUIDs in blog author links creates 
+                    an information disclosure vulnerability that enables the IDOR attack.
                 </p>
                 <p>
-                    This demonstrates why unpredictable URLs alone are not a valid security control. 
-                    Any information in client-side code is visible to attackers.
+                    This demonstrates that <strong>"security through obscurity"</strong> (using unpredictable 
+                    IDs) is not a valid security control when the IDs are leaked elsewhere in the application.
                 </p>
             </div>
 
             <div class="section">
                 <h2 class="section-title">📝 Steps to Solve</h2>
                 <ol class="step-list">
-                    <li><strong>Open</strong> the main page and view the page source (Ctrl+U)</li>
-                    <li><strong>Search</strong> for JavaScript code or look at &lt;script&gt; tags</li>
-                    <li><strong>Find</strong> the admin panel URL in the JavaScript</li>
-                    <li><strong>Navigate</strong> to the discovered admin panel URL</li>
-                    <li><strong>Delete</strong> the user carlos to complete the lab</li>
+                    <li><strong>Browse the blog</strong> - Visit the blog page and look at the posts</li>
+                    <li><strong>Find carlos's post</strong> - Locate a blog post written by carlos</li>
+                    <li><strong>Discover the GUID</strong> - Click on carlos's name and note the GUID in the URL</li>
+                    <li><strong>Login</strong> to the application with your credentials (wiener:peter)</li>
+                    <li><strong>Access your profile</strong> and observe the URL structure with your GUID</li>
+                    <li><strong>Replace your GUID</strong> with carlos's GUID to access his profile</li>
+                    <li><strong>Retrieve and submit</strong> carlos's API key to complete the lab</li>
                 </ol>
             </div>
 
             <div class="section">
                 <h2 class="section-title">💡 Hint</h2>
                 <div class="warning-box">
-                    <h4>JavaScript Disclosure</h4>
-                    <p>Look for JavaScript code that checks user roles:</p>
+                    <h4>Information Disclosure</h4>
+                    <p>The blog posts link to author profiles using their GUIDs:</p>
                     <div class="code-block">
-                        <code>var isAdmin = false;<br>if (isAdmin) {<br>&nbsp;&nbsp;adminPanel.href = '/admin-panel-x7k9p2m5q8w1.php';<br>}</code>
+                        <code>profile.php?id=f47ac10b-58cc-4372-a567-0e02b2c3d479</code>
                     </div>
-                    <p>The URL is visible even when the condition is false!</p>
+                    <p>Even without logging in, you can discover user GUIDs by inspecting the blog links!</p>
                 </div>
             </div>
 
             <div class="section">
                 <h2 class="section-title">⚠️ Real-World Impact</h2>
                 <p>
-                    This vulnerability pattern appears in real applications:
+                    This vulnerability pattern is common in real applications:
                 </p>
                 <ul style="margin-left: 1.5rem; color: #ccc; line-height: 2;">
-                    <li>Sensitive URLs in JavaScript files</li>
-                    <li>API endpoints exposed in client code</li>
-                    <li>Hidden features revealed through source code</li>
-                    <li>Debug information left in production</li>
-                    <li>Security decisions made client-side</li>
+                    <li>Using UUIDs without proper authorization checks</li>
+                    <li>Leaking identifiers in URLs, API responses, or HTML source</li>
+                    <li>Assuming unpredictable IDs provide security</li>
+                    <li>Exposing user identifiers in public-facing features</li>
+                    <li>Missing access control despite using "secure" ID formats</li>
                 </ul>
             </div>
 

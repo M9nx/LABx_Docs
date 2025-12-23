@@ -6,13 +6,9 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lab Description - TechCorp</title>
+    <title>Lab Description - RedirectLab</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 100%);
@@ -49,9 +45,7 @@ session_start();
             font-weight: 500;
             transition: color 0.3s;
         }
-        .nav-links a:hover {
-            color: #ff4444;
-        }
+        .nav-links a:hover { color: #ff4444; }
         .btn-back {
             display: inline-flex;
             align-items: center;
@@ -62,8 +56,6 @@ session_start();
             color: #e0e0e0;
             text-decoration: none;
             border-radius: 6px;
-            font-weight: 500;
-            font-size: 0.9rem;
             transition: all 0.3s;
         }
         .btn-back:hover {
@@ -101,9 +93,7 @@ session_start();
         .section {
             margin-bottom: 2.5rem;
         }
-        .section:last-child {
-            margin-bottom: 0;
-        }
+        .section:last-child { margin-bottom: 0; }
         .section-title {
             color: #ff6666;
             font-size: 1.3rem;
@@ -116,9 +106,7 @@ session_start();
             line-height: 1.8;
             margin-bottom: 1rem;
         }
-        .section p:last-child {
-            margin-bottom: 0;
-        }
+        .section p:last-child { margin-bottom: 0; }
         .info-box {
             background: rgba(0, 255, 0, 0.1);
             border: 1px solid rgba(0, 255, 0, 0.3);
@@ -179,9 +167,7 @@ session_start();
             font-size: 0.8rem;
             font-weight: bold;
         }
-        .step-list li strong {
-            color: #ff6666;
-        }
+        .step-list li strong { color: #ff6666; }
         .code-block {
             background: rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(255, 68, 68, 0.2);
@@ -242,15 +228,14 @@ session_start();
 <body>
     <header class="header">
         <div class="header-content">
-            <a href="index.php" class="logo">🏢 TechCorp</a>
+            <a href="index.php" class="logo">🔄 RedirectLab</a>
             <nav class="nav-links">
                 <a href="../index.php" class="btn-back">← All Labs</a>
                 <a href="index.php">Home</a>
-                <a href="services.php">Services</a>
                 <a href="lab-description.php">Lab Info</a>
                 <a href="docs.php">Documentation</a>
                 <?php if (isset($_SESSION['user_id'])): ?>
-                    <a href="profile.php">My Account</a>
+                    <a href="profile.php?id=<?php echo $_SESSION['user_id']; ?>">My Account</a>
                     <a href="logout.php">Logout</a>
                 <?php else: ?>
                     <a href="login.php">Login</a>
@@ -261,93 +246,87 @@ session_start();
 
     <div class="container">
         <div class="content-card">
-            <span class="lab-badge">CLIENT-SIDE DISCLOSURE</span>
-            <h1 class="page-title">Lab 2: Unprotected Admin with Unpredictable URL</h1>
+            <span class="lab-badge">DATA LEAKAGE IN REDIRECT</span>
+            <h1 class="page-title">Lab 7: User ID Controlled by Request Parameter with Data Leakage in Redirect</h1>
 
             <div class="section">
                 <h2 class="section-title">📋 Lab Overview</h2>
                 <p>
-                    This lab demonstrates <strong>information disclosure through client-side code</strong> 
-                    where the admin panel has an unpredictable URL that cannot be easily guessed.
+                    This lab demonstrates an <strong>access control vulnerability</strong> where sensitive 
+                    information is leaked in the body of a redirect response.
                 </p>
                 <p>
-                    However, the application includes JavaScript code that reveals the admin panel 
-                    location. Even though the URL is complex and unpredictable, it's exposed in 
-                    the page source code.
+                    When accessing another user's profile, the application sends a redirect header but 
+                    continues to output the sensitive data in the response body. This data can be captured 
+                    using tools like Burp Suite.
                 </p>
             </div>
 
             <div class="section">
                 <h2 class="section-title">🎯 Objective</h2>
                 <p>
-                    Find the hidden admin panel URL by <strong>analyzing JavaScript code</strong> in the 
-                    page source, then use it to delete the user <strong>carlos</strong>.
+                    Obtain the <strong>API key for user carlos</strong> by exploiting the data leakage 
+                    vulnerability in redirect responses, then submit it as the solution.
                 </p>
                 <div class="info-box">
-                    <h4>🔍 Discovery Method</h4>
-                    <p>View Page Source (Ctrl+U) or DevTools (F12)</p>
+                    <h4>🔑 Provided Credentials</h4>
+                    <p>Username: <code>wiener</code> &nbsp;|&nbsp; Password: <code>peter</code></p>
                 </div>
             </div>
 
             <div class="section">
                 <h2 class="section-title">🔍 Vulnerability Type</h2>
                 <p>
-                    <strong>Security Through Obscurity Failure</strong> - The developers relied on the 
-                    unpredictable URL to protect the admin panel, but exposed it in client-side code.
+                    <strong>Data Leakage in Redirect Response</strong> - The application attempts to 
+                    redirect unauthorized users but continues executing code that outputs sensitive data 
+                    in the response body.
                 </p>
                 <p>
-                    This demonstrates why unpredictable URLs alone are not a valid security control. 
-                    Any information in client-side code is visible to attackers.
+                    While browsers follow the redirect and don't display the body content, proxy tools 
+                    can capture and reveal the leaked data.
                 </p>
             </div>
 
             <div class="section">
                 <h2 class="section-title">📝 Steps to Solve</h2>
                 <ol class="step-list">
-                    <li><strong>Open</strong> the main page and view the page source (Ctrl+U)</li>
-                    <li><strong>Search</strong> for JavaScript code or look at &lt;script&gt; tags</li>
-                    <li><strong>Find</strong> the admin panel URL in the JavaScript</li>
-                    <li><strong>Navigate</strong> to the discovered admin panel URL</li>
-                    <li><strong>Delete</strong> the user carlos to complete the lab</li>
+                    <li><strong>Login</strong> to the application using credentials (wiener:peter)</li>
+                    <li><strong>Access</strong> your account page and note the URL format: <code>/profile.php?id=2</code></li>
+                    <li><strong>Configure</strong> Burp Suite to intercept requests or use Burp Repeater</li>
+                    <li><strong>Change</strong> the "id" parameter to carlos's ID (id=3)</li>
+                    <li><strong>Observe</strong> that although the response has a redirect header, the body contains carlos's API key</li>
+                    <li><strong>Submit</strong> the API key at the submit page to complete the lab</li>
                 </ol>
             </div>
 
             <div class="section">
                 <h2 class="section-title">💡 Hint</h2>
                 <div class="warning-box">
-                    <h4>JavaScript Disclosure</h4>
-                    <p>Look for JavaScript code that checks user roles:</p>
+                    <h4>Intercepting Redirect Responses</h4>
+                    <p>The redirect header tells the browser to go elsewhere, but the response body still contains data:</p>
                     <div class="code-block">
-                        <code>var isAdmin = false;<br>if (isAdmin) {<br>&nbsp;&nbsp;adminPanel.href = '/admin-panel-x7k9p2m5q8w1.php';<br>}</code>
+                        <code>HTTP/1.1 302 Found<br>Location: index.php<br><br>&lt;!-- Response body still contains user data! --&gt;</code>
                     </div>
-                    <p>The URL is visible even when the condition is false!</p>
+                    <p>Use Burp Suite's Repeater to see the full response without following redirects!</p>
                 </div>
             </div>
 
             <div class="section">
                 <h2 class="section-title">⚠️ Real-World Impact</h2>
-                <p>
-                    This vulnerability pattern appears in real applications:
-                </p>
+                <p>This vulnerability pattern is dangerous in real applications:</p>
                 <ul style="margin-left: 1.5rem; color: #ccc; line-height: 2;">
-                    <li>Sensitive URLs in JavaScript files</li>
-                    <li>API endpoints exposed in client code</li>
-                    <li>Hidden features revealed through source code</li>
-                    <li>Debug information left in production</li>
-                    <li>Security decisions made client-side</li>
+                    <li>Sensitive data exposure (API keys, tokens, personal info)</li>
+                    <li>Authentication bypass through information disclosure</li>
+                    <li>Account takeover using leaked credentials or tokens</li>
+                    <li>Privacy violations and data breaches</li>
+                    <li>Compliance failures (GDPR, PCI-DSS)</li>
                 </ul>
             </div>
 
             <div class="action-buttons">
-                <a href="setup_db.php" target="_blank" class="btn btn-primary">
-                    🗄️ Setup Database
-                </a>
-                <a href="index.php" class="btn btn-info">
-                    🚀 Access Lab
-                </a>
-                <a href="docs.php" class="btn btn-secondary">
-                    📚 View Documentation
-                </a>
+                <a href="setup_db.php" class="btn btn-primary">🗄️ Setup Database</a>
+                <a href="login.php" class="btn btn-info">🚀 Access Lab</a>
+                <a href="docs.php" class="btn btn-secondary">📚 View Documentation</a>
             </div>
         </div>
     </div>

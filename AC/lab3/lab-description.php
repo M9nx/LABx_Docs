@@ -1,402 +1,356 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lab 3: User role controlled by request parameter</title>
+    <title>Lab Description - CookieAuth</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 100%);
-            color: #ffffff;
             min-height: 100vh;
-            padding: 20px;
+            color: #e0e0e0;
         }
-
-        .container {
+        .header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 68, 68, 0.3);
+            padding: 1rem 2rem;
+        }
+        .header-content {
             max-width: 1200px;
             margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 30px 0;
-        }
-
-        .lab-title {
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
             color: #ff4444;
-            font-size: 3rem;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 4px rgba(255, 68, 68, 0.3);
+            text-decoration: none;
         }
-
-        .lab-subtitle {
-            color: #cccccc;
-            font-size: 1.3rem;
-            margin-bottom: 20px;
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
         }
-
-        .difficulty-badge {
-            display: inline-block;
-            background: linear-gradient(45deg, #ff4444, #cc0000);
-            color: white;
-            padding: 8px 20px;
-            border-radius: 25px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 15px rgba(255, 68, 68, 0.3);
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
         }
-
-        .description-card {
+        .nav-links a:hover {
+            color: #ff4444;
+        }
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            color: #e0e0e0;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        .btn-back:hover {
+            background: rgba(255, 68, 68, 0.2);
+            border-color: #ff4444;
+            color: #ff4444;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+        .content-card {
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 0, 0, 0.2);
+            border: 1px solid rgba(255, 68, 68, 0.2);
             border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 30px;
+            padding: 2.5rem;
             backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
-
+        .lab-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff4444, #cc0000);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .page-title {
+            font-size: 2rem;
+            color: #ff4444;
+            margin-bottom: 1.5rem;
+        }
+        .section {
+            margin-bottom: 2.5rem;
+        }
+        .section:last-child {
+            margin-bottom: 0;
+        }
         .section-title {
             color: #ff6666;
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #333;
-            padding-bottom: 10px;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255, 68, 68, 0.2);
         }
-
-        .vulnerability-info {
-            background: linear-gradient(45deg, rgba(255, 193, 7, 0.1), rgba(255, 152, 0, 0.1));
-            border: 1px solid #ffc107;
+        .section p {
+            color: #ccc;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .section p:last-child {
+            margin-bottom: 0;
+        }
+        .info-box {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid rgba(0, 255, 0, 0.3);
             border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
         }
-
-        .vulnerability-info h4 {
-            color: #ffd54f;
-            margin-bottom: 15px;
-            font-size: 1.2rem;
+        .info-box h4 {
+            color: #00ff00;
+            margin-bottom: 0.8rem;
         }
-
-        .vulnerability-info p {
-            color: #fff3cd;
-            line-height: 1.6;
-            margin: 10px 0;
+        .info-box code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            color: #00ff00;
+            font-family: 'Consolas', monospace;
         }
-
-        .setup-steps {
-            background: rgba(0, 123, 255, 0.1);
-            border: 1px solid #007bff;
+        .warning-box {
+            background: rgba(255, 165, 0, 0.1);
+            border: 1px solid rgba(255, 165, 0, 0.3);
             border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
         }
-
-        .setup-steps h4 {
-            color: #66ccff;
-            margin-bottom: 15px;
-            font-size: 1.2rem;
+        .warning-box h4 {
+            color: #ffa500;
+            margin-bottom: 0.8rem;
         }
-
         .step-list {
             list-style: none;
-            padding: 0;
-            counter-reset: step-counter;
+            counter-reset: step;
         }
-
         .step-list li {
-            counter-increment: step-counter;
-            background: rgba(0, 0, 0, 0.2);
-            margin: 10px 0;
-            padding: 15px 20px;
-            border-left: 4px solid #007bff;
-            border-radius: 5px;
+            counter-increment: step;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 68, 68, 0.1);
+            border-radius: 8px;
+            margin-bottom: 0.8rem;
             position: relative;
+            padding-left: 3.5rem;
         }
-
-        .step-list li:before {
-            content: counter(step-counter);
+        .step-list li::before {
+            content: counter(step);
             position: absolute;
-            left: -15px;
+            left: 1rem;
             top: 50%;
             transform: translateY(-50%);
-            background: #007bff;
+            background: linear-gradient(135deg, #ff4444, #cc0000);
             color: white;
-            width: 30px;
-            height: 30px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
+            font-weight: bold;
         }
-
-        .credentials-box {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px dashed #666;
+        .step-list li strong {
+            color: #ff6666;
+        }
+        .code-block {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 68, 68, 0.2);
             border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
-            font-family: 'Courier New', monospace;
+            padding: 1rem;
+            margin: 1rem 0;
+            overflow-x: auto;
         }
-
-        .credentials-box h4 {
-            color: #ff9999;
-            margin-bottom: 15px;
+        .code-block code {
+            font-family: 'Consolas', 'Monaco', monospace;
+            color: #ff6666;
         }
-
-        .credential-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #333;
-        }
-
-        .credential-item:last-child {
-            border-bottom: none;
-        }
-
-        .username {
-            color: #66ff66;
-            font-weight: bold;
-        }
-
-        .password {
-            color: #ffff66;
-            font-weight: bold;
-        }
-
-        .objective-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .objective-list li {
-            background: rgba(255, 68, 68, 0.1);
-            margin: 10px 0;
-            padding: 15px 20px;
-            border-left: 4px solid #ff4444;
-            border-radius: 5px;
-            position: relative;
-        }
-
-        .objective-list li:before {
-            content: "🎯";
-            margin-right: 10px;
-        }
-
         .action-buttons {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
-        }
-
-        .btn {
             display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 68, 68, 0.2);
+        }
+        .btn {
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            padding: 15px 25px;
-            border-radius: 10px;
+            gap: 0.5rem;
+            padding: 0.9rem 1.8rem;
+            border-radius: 8px;
             text-decoration: none;
             font-weight: 600;
-            font-size: 1.1rem;
             transition: all 0.3s ease;
-            border: 2px solid transparent;
-            text-align: center;
         }
-
         .btn-primary {
-            background: linear-gradient(45deg, #ff4444, #cc0000);
+            background: linear-gradient(135deg, #ff4444, #cc0000);
             color: white;
-            border-color: #ff4444;
         }
-
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 68, 68, 0.4);
+        }
         .btn-secondary {
             background: transparent;
+            border: 2px solid #ff4444;
             color: #ff4444;
-            border-color: #ff4444;
         }
-
-        .btn-info {
-            background: linear-gradient(45deg, #17a2b8, #138496);
-            color: white;
-            border-color: #17a2b8;
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(255, 68, 68, 0.4);
-        }
-
         .btn-secondary:hover {
-            background: rgba(255, 68, 68, 0.1);
+            background: #ff4444;
+            color: white;
         }
-
+        .btn-info {
+            background: linear-gradient(135deg, #00aaff, #0077cc);
+            color: white;
+        }
         .btn-info:hover {
-            box-shadow: 0 6px 20px rgba(23, 162, 184, 0.4);
-        }
-
-        .navigation {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid #333;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .nav-link {
-            color: #ff6666;
-            text-decoration: none;
-            padding: 8px 16px;
-            border: 1px solid #ff6666;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-        }
-
-        .nav-link:hover {
-            background: rgba(255, 102, 102, 0.1);
-            transform: translateY(-1px);
-        }
-
-        @media (max-width: 768px) {
-            .lab-title {
-                font-size: 2rem;
-            }
-            
-            .action-buttons {
-                grid-template-columns: 1fr;
-            }
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 170, 255, 0.4);
         }
     </style>
 </head>
 <body>
+    <header class="header">
+        <div class="header-content">
+            <a href="index.php" class="logo">🍪 CookieAuth</a>
+            <nav class="nav-links">
+                <a href="../index.php" class="btn-back">← All Labs</a>
+                <a href="index.php">Home</a>
+                <a href="lab-description.php">Lab Info</a>
+                <a href="docs.php">Documentation</a>
+                <?php if (isset($_SESSION['user_id'])): ?>
+                    <a href="profile.php">Profile</a>
+                    <a href="admin.php">Admin</a>
+                    <a href="logout.php">Logout</a>
+                <?php else: ?>
+                    <a href="login.php">Login</a>
+                <?php endif; ?>
+            </nav>
+        </div>
+    </header>
+
     <div class="container">
-        <div class="header">
-            <h1 class="lab-title">Lab 3</h1>
-            <p class="lab-subtitle">User role controlled by request parameter</p>
-            <div class="difficulty-badge">Apprentice</div>
-        </div>
+        <div class="content-card">
+            <span class="lab-badge">COOKIE MANIPULATION</span>
+            <h1 class="page-title">Lab 3: User Role Controlled by Request Parameter</h1>
 
-        <div class="description-card">
-            <h2 class="section-title">🎯 Lab Objectives</h2>
-            <ul class="objective-list">
-                <li>Understand how client-side role parameters can be manipulated</li>
-                <li>Exploit cookie-based access control vulnerabilities</li>
-                <li>Gain unauthorized admin access by modifying browser cookies</li>
-                <li>Delete a user account using elevated privileges</li>
-            </ul>
-        </div>
-
-        <div class="vulnerability-info">
-            <h4>🔐 Vulnerability Overview</h4>
-            <p>
-                This lab contains an access control vulnerability where user roles are determined by a client-side parameter.
-                The application relies on an "Admin" cookie to determine whether a user has administrative privileges,
-                without proper server-side validation.
-            </p>
-            <p>
-                <strong>Attack Vector:</strong> Cookie manipulation to elevate privileges from regular user to administrator.
-            </p>
-        </div>
-
-        <div class="setup-steps">
-            <h4>🛠️ Setup Instructions</h4>
-            <ol class="step-list">
-                <li>Click "Setup Database" to open phpMyAdmin and create the lab database</li>
-                <li>Execute the provided SQL script to create users table and sample data</li>
-                <li>Return to this page and click "Access Lab" to start the exercise</li>
-                <li>Follow the exploitation steps to complete the lab</li>
-            </ol>
-        </div>
-
-        <div class="credentials-box">
-            <h4>🔑 Test Credentials</h4>
-            <div class="credential-item">
-                <span class="username">wiener</span>
-                <span class="password">peter</span>
+            <div class="section">
+                <h2 class="section-title">📋 Lab Overview</h2>
+                <p>
+                    This lab demonstrates a <strong>privilege escalation vulnerability</strong> where 
+                    user roles are controlled by a client-side cookie that can be manipulated.
+                </p>
+                <p>
+                    The application uses an "Admin" cookie to determine whether a user has administrative 
+                    privileges. Since cookies are client-controlled, an attacker can modify this value 
+                    to gain unauthorized access.
+                </p>
             </div>
-            <div class="credential-item">
-                <span class="username">carlos</span>
-                <span class="password">secret</span>
+
+            <div class="section">
+                <h2 class="section-title">🎯 Objective</h2>
+                <p>
+                    Escalate your privileges by <strong>modifying the Admin cookie</strong> to gain 
+                    administrative access, then delete the user <strong>carlos</strong>.
+                </p>
+                <div class="info-box">
+                    <h4>🔑 Provided Credentials</h4>
+                    <p>Username: <code>wiener</code> &nbsp;|&nbsp; Password: <code>peter</code></p>
+                </div>
             </div>
-            <div class="credential-item">
-                <span class="username">administrator</span>
-                <span class="password">admin123</span>
+
+            <div class="section">
+                <h2 class="section-title">🔍 Vulnerability Type</h2>
+                <p>
+                    <strong>Client-Side Role Control</strong> - The application trusts a client-controlled 
+                    cookie to make authorization decisions. This violates the security principle of 
+                    never trusting client-side input for security decisions.
+                </p>
+                <p>
+                    Cookies can be easily viewed and modified using browser developer tools or proxy 
+                    tools like Burp Suite.
+                </p>
             </div>
-        </div>
 
-        <div class="action-buttons">
-            <a href="http://localhost/phpmyadmin/" target="_blank" class="btn btn-primary">
-                🗄️ Setup Database
-            </a>
-            <a href="index.php" class="btn btn-info">
-                🚀 Access Lab
-            </a>
-            <a href="docs.php" class="btn btn-secondary">
-                📚 View Documentation
-            </a>
-        </div>
-
-        <div class="description-card">
-            <h2 class="section-title">📋 Database Setup SQL</h2>
-            <p style="color: #cccccc; margin-bottom: 15px;">Copy and paste this SQL script in phpMyAdmin:</p>
-            <div style="background: #1a1a1a; border: 1px solid #444; border-radius: 8px; padding: 20px; overflow-x: auto; font-family: 'Courier New', monospace; color: #f8f8f2;">
-                <pre style="margin: 0; white-space: pre-wrap;">-- Lab 3 Database Schema
-CREATE DATABASE IF NOT EXISTS lab3_db;
-USE lab3_db;
-
--- Create users table
-CREATE TABLE users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    email VARCHAR(100) NOT NULL,
-    full_name VARCHAR(100) NOT NULL,
-    role ENUM('user', 'admin') DEFAULT 'user',
-    department VARCHAR(50) DEFAULT 'General',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Insert sample users (passwords are hashed with password_hash())
-INSERT INTO users (username, password, email, full_name, role, department) VALUES
--- Test user credentials: wiener/peter
-('wiener', '$2y$10$E4.qXjbGqJ9ZK7VDtf8KLOVLsVQHGlGUXQOYjW1vNqTQk.9GBa7mG', 'wiener@example.com', 'Wiener User', 'user', 'Quality Assurance'),
-
--- Administrator credentials: administrator/admin123
-('administrator', '$2y$10$LLRuqCJLF8fLBBfGGGQGOu3E8wQf8UQz8.J7VhOZfVeH8hFgKgN5O', 'admin@company.com', 'System Administrator', 'admin', 'IT Security'),
-
--- Regular user credentials: carlos/secret
-('carlos', '$2y$10$N2.OJVxF8KJ8KbWTxWfFyOQGQ3c8q8fz9GH3Kz7.L8d6cE4.aB2OG', 'carlos@example.com', 'Carlos Rodriguez', 'user', 'Marketing'),
-
--- Additional test users
-('alice', '$2y$10$8.3f3C9q2A1kJfDGHhGJBu7r6f8g1f9E3qWrTyUqWE4d5cF6gH1.B', 'alice@company.com', 'Alice Johnson', 'user', 'Human Resources'),
-('bob', '$2y$10$F9.2g4B8r5C6dEgHJhBKCv2s7g9h2e0D4pQwRtYuIE5e6dF7gI1.A', 'bob@company.com', 'Bob Wilson', 'user', 'Finance'),
-('eve', '$2y$10$G1.4h5C9s6D7eHjKkCLDx3t8h0i3f1E5qXyStZvJF6f7eG8hJ2.C', 'eve@company.com', 'Eve Thompson', 'user', 'Research');
-
--- Display the created users
-SELECT 'Database setup completed successfully!' as status;
-SELECT id, username, email, full_name, role, department FROM users ORDER BY id;</pre>
+            <div class="section">
+                <h2 class="section-title">📝 Steps to Solve</h2>
+                <ol class="step-list">
+                    <li><strong>Login</strong> to the application with credentials (wiener:peter)</li>
+                    <li><strong>Open</strong> browser DevTools (F12) → Application tab → Cookies</li>
+                    <li><strong>Find</strong> the "Admin" cookie with value "false"</li>
+                    <li><strong>Change</strong> the cookie value from "false" to "true"</li>
+                    <li><strong>Navigate</strong> to the admin panel at <code>/admin.php</code></li>
+                    <li><strong>Delete</strong> the user carlos to complete the lab</li>
+                </ol>
             </div>
-        </div>
 
-        <div class="navigation">
-            <a href="../lab2/" class="nav-link">← Lab 2</a>
-            <a href="../" class="nav-link">🏠 AC Labs Home</a>
-            <a href="#" class="nav-link" style="color: #666; border-color: #666;">Lab 4 →</a>
+            <div class="section">
+                <h2 class="section-title">💡 Hint</h2>
+                <div class="warning-box">
+                    <h4>Cookie Manipulation</h4>
+                    <p>Look for a cookie that controls admin access:</p>
+                    <div class="code-block">
+                        <code>Admin=false &nbsp;→&nbsp; Admin=true</code>
+                    </div>
+                    <p>Use DevTools: Application → Cookies → Double-click to edit!</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">⚠️ Real-World Impact</h2>
+                <p>
+                    This vulnerability pattern is dangerous in real applications:
+                </p>
+                <ul style="margin-left: 1.5rem; color: #ccc; line-height: 2;">
+                    <li>Privilege escalation from user to admin</li>
+                    <li>Bypassing role-based access control</li>
+                    <li>Trusting client-side input for security</li>
+                    <li>Authentication bypass vulnerabilities</li>
+                    <li>Complete compromise of application security</li>
+                </ul>
+            </div>
+
+            <div class="action-buttons">
+                <a href="setup_db.php" target="_blank" class="btn btn-primary">
+                    🗄️ Setup Database
+                </a>
+                <a href="index.php" class="btn btn-info">
+                    🚀 Access Lab
+                </a>
+                <a href="docs.php" class="btn btn-secondary">
+                    📚 View Documentation
+                </a>
+            </div>
         </div>
     </div>
 </body>

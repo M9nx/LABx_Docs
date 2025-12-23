@@ -6,7 +6,7 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documentation - Mass Assignment Vulnerability</title>
+    <title>Documentation - IDOR with GUID Leak</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -242,11 +242,12 @@ session_start();
 <body>
     <header class="header">
         <div class="header-content">
-            <a href="index.php" class="logo">📝 Lab 4</a>
+            <a href="index.php" class="logo">📰 Lab 6</a>
             <nav class="nav-links">
                 <a href="../index.php" class="btn-nav">← All Labs</a>
                 <a href="index.php">Home</a>
                 <a href="lab-description.php">Lab Info</a>
+                <a href="blog.php">Blog</a>
                 <?php if (isset($_SESSION['user_id'])): ?>
                     <a href="profile.php">Profile</a>
                     <a href="logout.php">Logout</a>
@@ -272,6 +273,7 @@ session_start();
             <h3 style="margin-top: 2rem;">Quick Links</h3>
             <ul class="sidebar-nav">
                 <li><a href="index.php">🏠 Lab Home</a></li>
+                <li><a href="blog.php">📰 Blog Posts</a></li>
                 <li><a href="login.php">🔐 Login Page</a></li>
                 <li><a href="lab-description.php">📋 Lab Description</a></li>
             </ul>
@@ -279,23 +281,23 @@ session_start();
 
         <main class="main-content">
             <section id="overview" class="doc-section">
-                <h1>📝 User Role Modified via Profile Update</h1>
+                <h1>📰 IDOR with Unpredictable GUIDs</h1>
                 <p>
-                    This lab demonstrates a mass assignment vulnerability where the application 
-                    blindly accepts and processes all JSON parameters in a profile update request, 
-                    including the <span class="code-inline">roleid</span> field that determines admin status.
+                    This lab demonstrates that using unpredictable identifiers (GUIDs/UUIDs) alone 
+                    doesn't protect against IDOR if those identifiers are leaked elsewhere in the 
+                    application - in this case, through blog post author information.
                 </p>
 
                 <div class="alert alert-info">
                     <h4>💡 Lab Objective</h4>
-                    <p>Exploit mass assignment to change your roleid to 2 (admin) and delete user "carlos".</p>
+                    <p>Find carlos's GUID in the blog section and use it to access his profile and retrieve his API key.</p>
                 </div>
 
-                <h2>What is Mass Assignment?</h2>
+                <h2>The False Security of GUIDs</h2>
                 <p>
-                    Mass assignment occurs when an application automatically binds user input to object 
-                    properties without proper filtering. If the application accepts all JSON fields and 
-                    updates them in the database, attackers can modify fields they shouldn't have access to.
+                    Many developers believe that using UUIDs/GUIDs instead of sequential IDs prevents 
+                    IDOR attacks because the identifiers can't be guessed. However, if these identifiers 
+                    are leaked through other parts of the application, they become just as vulnerable.
                 </p>
 
                 <h2>Lab Credentials</h2>
@@ -305,39 +307,19 @@ session_start();
                             <tr>
                                 <th>Username</th>
                                 <th>Password</th>
-                                <th>Role ID</th>
+                                <th>Role</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td><span class="code-inline">wiener</span></td>
                                 <td><span class="code-inline">peter</span></td>
-                                <td>1 (User)</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <h2>Role IDs</h2>
-                <div class="table-container">
-                    <table class="doc-table">
-                        <thead>
-                            <tr>
-                                <th>Role ID</th>
-                                <th>Role Name</th>
-                                <th>Permissions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><span class="code-inline">1</span></td>
-                                <td>User</td>
-                                <td>Basic access</td>
+                                <td>Regular User</td>
                             </tr>
                             <tr>
-                                <td><span class="code-inline">2</span></td>
-                                <td>Admin</td>
-                                <td>Full access + user management</td>
+                                <td><span class="code-inline">carlos</span></td>
+                                <td>Unknown</td>
+                                <td>Blog Author (Target)</td>
                             </tr>
                         </tbody>
                     </table>
@@ -347,38 +329,35 @@ session_start();
             <section id="vulnerability" class="doc-section">
                 <h1>🔍 Vulnerability Details</h1>
                 
-                <h2>How Mass Assignment Works</h2>
+                <h2>GUID in Profile URLs</h2>
                 <p>
-                    The profile update endpoint accepts JSON data and updates all provided fields 
-                    without validating which fields the user should be allowed to modify.
+                    The application uses GUIDs for user profile URLs, which appears secure at first:
                 </p>
 
-                <h2>Normal Profile Update</h2>
                 <div class="code-block">
-                    <pre>POST /profile.php
-Content-Type: application/json
+                    <pre># Profile URL with GUID
+profile.php?id=550e8400-e29b-41d4-a716-446655440000
 
-{
-    "email": "wiener@example.com",
-    "name": "Peter Wiener"
-}</pre>
+# This GUID cannot be guessed... but can it be found?</pre>
                 </div>
 
-                <h2>Malicious Profile Update</h2>
-                <div class="code-block">
-                    <pre>POST /profile.php
-Content-Type: application/json
+                <h2>The Information Leak</h2>
+                <p>
+                    The blog section reveals author information including their user GUID. When viewing 
+                    a blog post, the author's GUID is exposed either in the HTML source or in links.
+                </p>
 
-{
-    "email": "wiener@example.com",
-    "name": "Peter Wiener",
-    "roleid": 2    // ADDED: Escalate to admin!
-}</pre>
+                <div class="code-block">
+                    <pre>&lt;!-- Blog post by carlos --&gt;
+&lt;article&gt;
+    &lt;h2&gt;My Blog Post&lt;/h2&gt;
+    &lt;p&gt;By &lt;a href="profile.php?id=carlos-guid-here"&gt;carlos&lt;/a&gt;&lt;/p&gt;
+&lt;/article&gt;</pre>
                 </div>
 
                 <div class="alert alert-warning">
-                    <h4>⚠️ Hidden Field Injection</h4>
-                    <p>The server response often reveals additional fields that can be exploited in requests.</p>
+                    <h4>⚠️ Information Correlation</h4>
+                    <p>Even "unpredictable" identifiers become vulnerable when leaked through other features.</p>
                 </div>
             </section>
 
@@ -388,44 +367,42 @@ Content-Type: application/json
                 <h2>Attack Flow</h2>
                 <div class="code-block">
                     <pre>1. Login as wiener:peter
-2. Go to Profile page
-3. Submit normal profile update
-4. Observe response contains "roleid": 1
-5. Intercept next request with Burp
-6. Add "roleid": 2 to JSON body
-7. Submit modified request
-8. Refresh - now you're admin!
-9. Delete carlos</pre>
+2. Browse to the blog section
+3. Find a post written by carlos
+4. Extract carlos's GUID from the author link/source
+5. Navigate to profile.php?id=[carlos-guid]
+6. Retrieve carlos's API key</pre>
                 </div>
 
-                <h2>Using Browser DevTools</h2>
+                <h2>Finding the GUID</h2>
+                
+                <h3>Method 1: Inspect Element</h3>
                 <div class="code-block">
-                    <pre>// In browser console
-fetch('/profile.php', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-        email: 'wiener@example.com',
-        roleid: 2  // Escalate privileges
-    })
-});</pre>
+                    <pre>1. Go to blog section
+2. Right-click on carlos's name
+3. Select "Inspect Element"
+4. Find the href attribute with the GUID</pre>
                 </div>
 
-                <h2>Using Burp Suite</h2>
+                <h3>Method 2: View Page Source</h3>
                 <div class="code-block">
-                    <pre>1. Intercept profile update request
-2. Original body:
-   {"email":"test@test.com"}
-   
-3. Modified body:
-   {"email":"test@test.com","roleid":2}
-   
-4. Forward request</pre>
+                    <pre>1. Go to blog section
+2. View page source (Ctrl+U)
+3. Search for "carlos"
+4. Find associated GUID in URL</pre>
+                </div>
+
+                <h3>Method 3: Network Tab</h3>
+                <div class="code-block">
+                    <pre>1. Open DevTools (F12)
+2. Go to Network tab
+3. Click on carlos's profile link
+4. Observe the GUID in the request URL</pre>
                 </div>
 
                 <div class="alert alert-danger">
-                    <h4>🚫 Privilege Escalation</h4>
-                    <p>By adding a single field to the JSON, any user can become an administrator.</p>
+                    <h4>🚫 GUID Protection Bypassed</h4>
+                    <p>The "unpredictable" GUID is rendered useless because it's leaked in the blog feature.</p>
                 </div>
             </section>
 
@@ -435,112 +412,118 @@ fetch('/profile.php', {
                 <p><span class="step-number">1</span><strong>Login to the application</strong></p>
                 <p>Use credentials <span class="code-inline">wiener:peter</span></p>
 
-                <p><span class="step-number">2</span><strong>Navigate to your profile</strong></p>
-                <p>Click on "Profile" or "My Account" in the navigation</p>
+                <p><span class="step-number">2</span><strong>Navigate to the blog section</strong></p>
+                <p>Click on "Blog" in the navigation menu</p>
 
-                <p><span class="step-number">3</span><strong>Update your email</strong></p>
-                <p>Change your email and submit the form to observe normal behavior</p>
+                <p><span class="step-number">3</span><strong>Find a post by carlos</strong></p>
+                <p>Look through the blog posts for one authored by "carlos"</p>
 
-                <p><span class="step-number">4</span><strong>Check the response</strong></p>
-                <p>In DevTools (F12) → Network tab, look at the response JSON. Notice it includes <span class="code-inline">roleid</span></p>
+                <p><span class="step-number">4</span><strong>Inspect the author link</strong></p>
+                <p>Right-click on carlos's name and inspect the element or hover to see the URL</p>
 
-                <p><span class="step-number">5</span><strong>Prepare the exploit</strong></p>
-                <p>Open Burp Suite or use browser DevTools to intercept the next request</p>
+                <p><span class="step-number">5</span><strong>Extract the GUID</strong></p>
+                <p>Copy the GUID from the profile URL in the href attribute</p>
 
-                <p><span class="step-number">6</span><strong>Add roleid to request</strong></p>
-                <p>Add <span class="code-inline">"roleid": 2</span> to the JSON body of the profile update request</p>
+                <p><span class="step-number">6</span><strong>Access carlos's profile</strong></p>
+                <p>Navigate to <span class="code-inline">profile.php?id=[carlos-guid]</span></p>
 
-                <p><span class="step-number">7</span><strong>Submit and verify</strong></p>
-                <p>Submit the request and refresh the page. You should now have admin access.</p>
-
-                <p><span class="step-number">8</span><strong>Delete carlos</strong></p>
-                <p>Access the admin panel and delete user "carlos"</p>
+                <p><span class="step-number">7</span><strong>Retrieve the API key</strong></p>
+                <p>Copy carlos's API key from his profile page</p>
 
                 <div class="alert alert-success">
                     <h4>✅ Success Criteria</h4>
-                    <p>The lab is completed when you escalate to admin via mass assignment and delete "carlos".</p>
+                    <p>The lab is completed when you find carlos's GUID through the blog and retrieve his API key.</p>
                 </div>
             </section>
 
             <section id="code-analysis" class="doc-section">
                 <h1>🔬 Code Analysis</h1>
 
-                <h2>Vulnerable Code Pattern</h2>
+                <h2>The Information Leak</h2>
                 <div class="code-block">
                     <pre>&lt;?php
-// VULNERABLE: Accepting all JSON fields
-$data = json_decode(file_get_contents('php://input'), true);
-
-// Directly updating all provided fields
-$sql = "UPDATE users SET ";
-$updates = [];
-foreach ($data as $key => $value) {
-    $updates[] = "$key = ?";  // BAD: No field validation!
+// blog.php - Leaks user GUIDs
+foreach ($posts as $post) {
+    echo "&lt;article&gt;";
+    echo "&lt;h2&gt;" . $post['title'] . "&lt;/h2&gt;";
+    // VULNERABILITY: Exposes author's GUID!
+    echo "&lt;p&gt;By &lt;a href='profile.php?id=" . $post['author_guid'] . "'&gt;";
+    echo $post['author_name'] . "&lt;/a&gt;&lt;/p&gt;";
+    echo "&lt;/article&gt;";
 }
-$sql .= implode(', ', $updates);
-$sql .= " WHERE id = ?";
 ?&gt;</pre>
                 </div>
 
-                <h2>Why This Is Dangerous</h2>
+                <h2>Profile Page (Still Vulnerable)</h2>
+                <div class="code-block">
+                    <pre>&lt;?php
+// profile.php - No authorization check
+$guid = $_GET['id'];
+
+// Even with GUID, there's no ownership verification!
+$stmt = $conn->prepare("SELECT * FROM users WHERE guid = ?");
+$stmt->bind_param("s", $guid);
+$stmt->execute();
+$user = $stmt->get_result()->fetch_assoc();
+
+echo "API Key: " . $user['api_key'];  // Sensitive data exposed!
+?&gt;</pre>
+                </div>
+
+                <h2>The Two Problems</h2>
                 <ul>
-                    <li><strong>No allowlist</strong> - All fields accepted without filtering</li>
-                    <li><strong>Direct binding</strong> - User input directly updates database</li>
-                    <li><strong>Information disclosure</strong> - Response reveals internal field names</li>
-                    <li><strong>No authorization check</strong> - Doesn't verify if user can modify field</li>
+                    <li><strong>Information leak</strong> - GUIDs exposed in blog section</li>
+                    <li><strong>No authorization</strong> - Profile page doesn't verify access rights</li>
                 </ul>
             </section>
 
             <section id="prevention" class="doc-section">
                 <h1>🛡️ Prevention</h1>
 
-                <h2>Secure Code Pattern</h2>
+                <h2>Fix 1: Don't Leak Identifiers</h2>
                 <div class="code-block">
                     <pre>&lt;?php
-// SECURE: Whitelist allowed fields
-$allowedFields = ['email', 'name', 'phone'];
+// Use username for display, not GUID
+echo "&lt;p&gt;By &lt;a href='author.php?name=" . urlencode($post['author_name']) . "'&gt;";
+echo htmlspecialchars($post['author_name']) . "&lt;/a&gt;&lt;/p&gt;";
 
-$data = json_decode(file_get_contents('php://input'), true);
-
-// Only process allowed fields
-$safeData = array_intersect_key($data, array_flip($allowedFields));
-
-// Now update only safe fields
-foreach ($safeData as $field => $value) {
-    // Process update...
-}
-
-// Never allow roleid, is_admin, etc. from user input
+// Or don't link at all for public profiles
+echo "&lt;p&gt;By " . htmlspecialchars($post['author_name']) . "&lt;/p&gt;";
 ?&gt;</pre>
                 </div>
 
-                <h2>Best Practices</h2>
-                <ul>
-                    <li><strong>Whitelist fields</strong> - Only accept explicitly allowed parameters</li>
-                    <li><strong>Use DTOs</strong> - Data Transfer Objects that define allowed fields</li>
-                    <li><strong>Separate endpoints</strong> - Different endpoints for user vs admin actions</li>
-                    <li><strong>Server-side validation</strong> - Always validate on the server</li>
-                    <li><strong>Audit logging</strong> - Log all field modification attempts</li>
-                </ul>
-
-                <h2>Framework-Specific Solutions</h2>
+                <h2>Fix 2: Authorization Check</h2>
                 <div class="code-block">
-                    <pre># Laravel - Use $fillable property
-class User extends Model {
-    protected $fillable = ['email', 'name'];
-    protected $guarded = ['roleid', 'is_admin'];
+                    <pre>&lt;?php
+// Always verify authorization regardless of identifier type
+$requestedGuid = $_GET['id'];
+$currentUserGuid = $_SESSION['user_guid'];
+
+// Only allow viewing own profile
+if ($requestedGuid !== $currentUserGuid) {
+    http_response_code(403);
+    die("You can only view your own profile");
 }
 
-# Django - Use serializer fields
-class UserSerializer(serializers.Serializer):
-    email = serializers.EmailField()
-    name = serializers.CharField()
-    # roleid intentionally NOT included</pre>
+// Or implement proper permission system
+if (!canViewProfile($currentUserGuid, $requestedGuid)) {
+    http_response_code(403);
+    die("Access denied");
+}
+?&gt;</pre>
                 </div>
 
+                <h2>Defense in Depth</h2>
+                <ul>
+                    <li><strong>Don't expose identifiers</strong> - Avoid leaking any user identifiers</li>
+                    <li><strong>Authorization checks</strong> - Always verify permission regardless of ID type</li>
+                    <li><strong>Sensitive data protection</strong> - API keys shouldn't be visible to others</li>
+                    <li><strong>Audit identifier usage</strong> - Review where user IDs appear in the application</li>
+                </ul>
+
                 <div class="alert alert-info">
-                    <h4>💡 Defense in Depth</h4>
-                    <p>Even with whitelisting, verify the user has permission to modify each specific field.</p>
+                    <h4>💡 Key Lesson</h4>
+                    <p>GUIDs prevent enumeration but don't provide authorization. Always implement proper access controls.</p>
                 </div>
             </section>
 
@@ -549,15 +532,15 @@ class UserSerializer(serializers.Serializer):
 
                 <h2>Related Resources</h2>
                 <ul>
-                    <li><a href="https://owasp.org/API-Security/editions/2023/en/0xa3-broken-object-property-level-authorization/" style="color: #ff4444;">OWASP API3 - Broken Object Property Level Authorization</a></li>
-                    <li><a href="https://cwe.mitre.org/data/definitions/915.html" style="color: #ff4444;">CWE-915: Improperly Controlled Modification of Dynamically-Determined Object Attributes</a></li>
-                    <li><a href="https://cheatsheetseries.owasp.org/cheatsheets/Mass_Assignment_Cheat_Sheet.html" style="color: #ff4444;">OWASP Mass Assignment Cheat Sheet</a></li>
+                    <li><a href="https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/05-Authorization_Testing/04-Testing_for_Insecure_Direct_Object_References" style="color: #ff4444;">OWASP Testing for IDOR</a></li>
+                    <li><a href="https://cwe.mitre.org/data/definitions/639.html" style="color: #ff4444;">CWE-639: Authorization Bypass Through User-Controlled Key</a></li>
+                    <li><a href="https://cwe.mitre.org/data/definitions/200.html" style="color: #ff4444;">CWE-200: Exposure of Sensitive Information</a></li>
                 </ul>
 
                 <h2>Further Reading</h2>
                 <ul>
-                    <li><a href="https://portswigger.net/web-security/access-control" style="color: #ff4444;">PortSwigger - Access Control</a></li>
-                    <li><a href="https://github.com/OWASP/API-Security" style="color: #ff4444;">OWASP API Security Project</a></li>
+                    <li><a href="https://portswigger.net/web-security/access-control/idor" style="color: #ff4444;">PortSwigger - IDOR Vulnerabilities</a></li>
+                    <li><a href="https://cheatsheetseries.owasp.org/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html" style="color: #ff4444;">OWASP IDOR Prevention</a></li>
                 </ul>
             </section>
         </main>

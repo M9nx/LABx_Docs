@@ -11,307 +11,470 @@
             box-sizing: border-box;
         }
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #330000 100%);
-            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 100%);
+            color: #e0e0e0;
             min-height: 100vh;
-            margin: 0;
+        }
+        .header {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 68, 68, 0.3);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ff4444;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .header-stats {
+            display: flex;
+            gap: 2rem;
+        }
+        .header-stat {
+            text-align: center;
+        }
+        .header-stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ff4444;
+        }
+        .header-stat-label {
+            font-size: 0.75rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 4rem 2rem;
+            padding: 3rem 2rem;
         }
-        .page-header {
+        .page-title {
             text-align: center;
-            margin-bottom: 4rem;
+            margin-bottom: 3rem;
         }
-        .page-header h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(135deg, #ff0000 0%, #cc0000 50%, #990000 100%);
+        .page-title h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #ff4444, #ff6666);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-weight: 800;
-            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
         }
-        .page-header p {
-            font-size: 1.2rem;
-            color: rgba(255, 255, 255, 0.9);
-            max-width: 700px;
+        .page-title p {
+            color: #888;
+            font-size: 1.1rem;
+            max-width: 800px;
             margin: 0 auto;
-            line-height: 1.8;
-            font-weight: 300;
+            line-height: 1.7;
         }
-        .labs-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-        .lab-card {
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 0, 0, 0.3);
-            border-radius: 20px;
-            padding: 2.5rem;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-        .lab-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(255,0,0,0.1) 0%, rgba(0,0,0,0.05) 100%);
-            border-radius: 20px;
-            z-index: -1;
-        }
-        .lab-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 25px 50px rgba(255, 0, 0, 0.3);
-            border-color: rgba(255, 0, 0, 0.5);
-        }
-        .lab-header {
+        .info-banner {
+            background: rgba(255, 68, 68, 0.1);
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
             display: flex;
             align-items: center;
             gap: 1rem;
-            margin-bottom: 1rem;
         }
-        .lab-badge {
-            background: rgba(0, 0, 0, 0.8);
-            color: #ff0000;
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 0, 0, 0.5);
+        .info-banner-icon {
+            font-size: 2rem;
         }
-        .lab-badge.beginner {
-            background: linear-gradient(135deg, #cc0000, #ff0000);
-            color: white;
-            border: none;
+        .info-banner-text h3 {
+            color: #ff6666;
+            margin-bottom: 0.3rem;
         }
-        .lab-badge.intermediate {
-            background: linear-gradient(135deg, #990000, #cc0000);
-            color: white;
-            border: none;
-        }
-        .lab-title {
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin: 0;
-            color: white;
-            line-height: 1.4;
-        }
-        .lab-description {
-            color: rgba(255, 255, 255, 0.8);
-            line-height: 1.7;
-            margin-bottom: 1.5rem;
-            font-weight: 300;
-        }
-        .lab-objective {
-            background: rgba(0, 0, 0, 0.5);
-            border-left: 4px solid #ff0000;
-            padding: 1.2rem;
-            margin-bottom: 2rem;
-            border-radius: 12px;
-            backdrop-filter: blur(10px);
-        }
-        .lab-objective h4 {
-            color: #ff0000;
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .lab-objective p {
-            color: rgba(255, 255, 255, 0.9);
-            margin: 0;
+        .info-banner-text p {
+            color: #aaa;
             font-size: 0.95rem;
-            font-weight: 400;
         }
-        .lab-button {
-            background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%);
-            color: white;
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 50px;
-            text-decoration: none;
-            display: inline-block;
-            font-weight: 600;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.4);
-            position: relative;
+        
+        /* Table Styles */
+        .labs-table-container {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 68, 68, 0.2);
+            border-radius: 16px;
             overflow: hidden;
+            backdrop-filter: blur(10px);
         }
-        .lab-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
+        .labs-table {
             width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
+            border-collapse: collapse;
         }
-        .lab-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 0, 0, 0.6);
-            text-decoration: none;
-            color: white;
+        .labs-table thead {
+            background: rgba(255, 68, 68, 0.15);
         }
-        .lab-button:hover::before {
-            left: 100%;
+        .labs-table th {
+            padding: 1.2rem 1.5rem;
+            text-align: left;
+            font-weight: 600;
+            color: #ff6666;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            border-bottom: 1px solid rgba(255, 68, 68, 0.3);
         }
-        .vulnerability-info {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            padding: 2.5rem;
-            margin-bottom: 3rem;
+        .labs-table th:first-child {
+            width: 80px;
+            text-align: center;
         }
-        .vulnerability-info h2 {
-            color: white;
-            margin-bottom: 1.5rem;
-            font-size: 1.8rem;
-            font-weight: 700;
+        .labs-table tbody tr {
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .vulnerability-info p {
-            color: rgba(255, 255, 255, 0.8);
-            line-height: 1.8;
+        .labs-table tbody tr:last-child {
+            border-bottom: none;
+        }
+        .labs-table tbody tr:hover {
+            background: rgba(255, 68, 68, 0.08);
+        }
+        .labs-table td {
+            padding: 1.2rem 1.5rem;
+            vertical-align: middle;
+        }
+        .lab-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #ff4444, #cc0000);
+            border-radius: 12px;
+            font-weight: bold;
             font-size: 1.1rem;
-            font-weight: 300;
+            color: white;
+            margin: 0 auto;
         }
-        .stats {
+        .lab-info h3 {
+            color: #fff;
+            font-size: 1.1rem;
+            margin-bottom: 0.4rem;
+            font-weight: 600;
+        }
+        .lab-info p {
+            color: #888;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin: 0;
+        }
+        .difficulty-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .difficulty-badge.apprentice {
+            background: rgba(0, 200, 83, 0.2);
+            color: #00c853;
+            border: 1px solid rgba(0, 200, 83, 0.3);
+        }
+        .difficulty-badge.practitioner {
+            background: rgba(255, 170, 0, 0.2);
+            color: #ffaa00;
+            border: 1px solid rgba(255, 170, 0, 0.3);
+        }
+        .difficulty-badge.expert {
+            background: rgba(255, 68, 68, 0.2);
+            color: #ff4444;
+            border: 1px solid rgba(255, 68, 68, 0.3);
+        }
+        .vulnerability-tag {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: rgba(100, 100, 255, 0.15);
+            color: #8888ff;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .objective-text {
+            color: #aaa;
+            font-size: 0.9rem;
+            max-width: 250px;
+        }
+        .btn-start {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.5rem;
+            background: linear-gradient(135deg, #ff4444, #cc0000);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        .btn-start:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 68, 68, 0.4);
+        }
+        .btn-start svg {
+            width: 16px;
+            height: 16px;
+        }
+        
+        /* Footer Stats */
+        .footer-stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-top: 2rem;
+            gap: 1.5rem;
+            margin-top: 3rem;
         }
         .stat-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            padding: 2rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 68, 68, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
             text-align: center;
             transition: all 0.3s ease;
         }
         .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            border-color: rgba(255, 68, 68, 0.5);
+            transform: translateY(-3px);
         }
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: white;
+        .stat-card-icon {
+            font-size: 2rem;
             margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
-        .stat-label {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.9rem;
-            font-weight: 500;
+        .stat-card-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ff4444;
+        }
+        .stat-card-label {
+            color: #888;
+            font-size: 0.85rem;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .labs-table th:nth-child(4),
+            .labs-table td:nth-child(4) {
+                display: none;
+            }
+        }
+        @media (max-width: 900px) {
+            .labs-table th:nth-child(3),
+            .labs-table td:nth-child(3) {
+                display: none;
+            }
+            .header-stats {
+                display: none;
+            }
+        }
+        @media (max-width: 600px) {
+            .labs-table th:nth-child(5),
+            .labs-table td:nth-child(5) {
+                display: none;
+            }
+            .page-title h1 {
+                font-size: 1.8rem;
+            }
         }
     </style>
 </head>
 <body>
+    <header class="header">
+        <div class="header-content">
+            <a href="index.php" class="logo">🔐 AC Labs</a>
+            <div class="header-stats">
+                <div class="header-stat">
+                    <div class="header-stat-value">8</div>
+                    <div class="header-stat-label">Total Labs</div>
+                </div>
+                <div class="header-stat">
+                    <div class="header-stat-value">3</div>
+                    <div class="header-stat-label">Apprentice</div>
+                </div>
+                <div class="header-stat">
+                    <div class="header-stat-value">5</div>
+                    <div class="header-stat-label">Practitioner</div>
+                </div>
+            </div>
+        </div>
+    </header>
 
-    
     <div class="container">
-        <div class="page-header">
-            <h1>Access Control Vulnerabilities</h1>
-            <p>Learn about access control flaws and how to exploit them. These labs will teach you to identify and exploit various access control vulnerabilities in web applications.</p>
+        <div class="page-title">
+            <h1>🛡️ Access Control Vulnerabilities</h1>
+            <p>Master the art of identifying and exploiting access control flaws. These hands-on labs cover IDOR, privilege escalation, broken authentication, and more.</p>
         </div>
-        
-        <div class="vulnerability-info">
-            <h2>About Access Control Vulnerabilities</h2>
-            <p>Access control vulnerabilities occur when an application fails to properly restrict access to resources or functionality. These flaws can allow attackers to view sensitive information, modify data, or perform administrative actions without proper authorization. Understanding these vulnerabilities is crucial for both offensive and defensive security practices.</p>
-        </div>
-        
-        <div class="labs-grid">
-            <div class="lab-card">
-                <div class="lab-header">
-                    <span class="lab-badge beginner">BEGINNER</span>
-                    <h3 class="lab-title">Lab 1: Unprotected Admin Functionality</h3>
-                </div>
-                <p class="lab-description">
-                    This lab demonstrates the most basic form of access control vulnerability where administrative functionality is completely unprotected and easily discoverable.
-                </p>
-                <div class="lab-objective">
-                    <h4>Objective</h4>
-                    <p>Access the admin panel and delete the user carlos.</p>
-                </div>
-                <a href="lab1/lab-description.php" class="lab-button">Start Lab 1</a>
-            </div>
-            
-            <div class="lab-card">
-                <div class="lab-header">
-                    <span class="lab-badge intermediate">INTERMEDIATE</span>
-                    <h3 class="lab-title">Lab 2: Unprotected Admin with Unpredictable URL</h3>
-                </div>
-                <p class="lab-description">
-                    This lab shows how security through obscurity fails when sensitive information is disclosed through client-side code, even when admin URLs are unpredictable.
-                </p>
-                <div class="lab-objective">
-                    <h4>Objective</h4>
-                    <p>Find the admin panel through information disclosure and delete the user carlos.</p>
-                </div>
-                <a href="lab2/lab-description.php" class="lab-button">Start Lab 2</a>
-            </div>
 
-            <div class="lab-card">
-                <div class="lab-header">
-                    <span class="lab-badge intermediate">APPRENTICE</span>
-                    <h3 class="lab-title">Lab 3: User role controlled by request parameter</h3>
-                </div>
-                <p class="lab-description">
-                    This lab demonstrates how client-side role parameters can be manipulated to escalate privileges through cookie modification attacks.
-                </p>
-                <div class="lab-objective">
-                    <h4>Objective</h4>
-                    <p>Escalate privileges by modifying the Admin cookie and delete a user account.</p>
-                </div>
-                <a href="lab3/lab-description.php" class="lab-button">Start Lab 3</a>
-            </div>
-
-            <div class="lab-card">
-                <div class="lab-header">
-                    <span class="lab-badge intermediate">APPRENTICE</span>
-                    <h3 class="lab-title">Lab 4: User role can be modified in user profile</h3>
-                </div>
-                <p class="lab-description">
-                    This lab demonstrates privilege escalation through mass assignment vulnerability where the server accepts role parameters in profile update requests.
-                </p>
-                <div class="lab-objective">
-                    <h4>Objective</h4>
-                    <p>Escalate to admin by modifying roleid in JSON request and delete user carlos.</p>
-                </div>
-                <a href="lab4/lab-description.php" class="lab-button">Start Lab 4</a>
+        <div class="info-banner">
+            <div class="info-banner-icon">⚠️</div>
+            <div class="info-banner-text">
+                <h3>About Access Control</h3>
+                <p>Access control vulnerabilities occur when applications fail to properly restrict access to resources. Attackers can view sensitive data, modify records, or perform admin actions without authorization.</p>
             </div>
         </div>
-            
-        <div class="stats">
+
+        <div class="labs-table-container">
+            <table class="labs-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Lab Name</th>
+                        <th>Vulnerability Type</th>
+                        <th>Difficulty</th>
+                        <th>Objective</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><div class="lab-number">1</div></td>
+                        <td>
+                            <div class="lab-info">
+                                <h3>Unprotected Admin Functionality</h3>
+                                <p>Administrative panel exposed without authentication</p>
+                            </div>
+                        </td>
+                        <td><span class="vulnerability-tag">Information Disclosure</span></td>
+                        <td><span class="difficulty-badge apprentice">🟢 Apprentice</span></td>
+                        <td class="objective-text">Access admin panel via robots.txt and delete carlos</td>
+                        <td><a href="lab1/lab-description.php" class="btn-start">Start →</a></td>
+                    </tr>
+                    <tr>
+                        <td><div class="lab-number">2</div></td>
+                        <td>
+                            <div class="lab-info">
+                                <h3>Unprotected Admin with Unpredictable URL</h3>
+                                <p>Admin URL hidden but leaked in client-side code</p>
+                            </div>
+                        </td>
+                        <td><span class="vulnerability-tag">Client-Side Disclosure</span></td>
+                        <td><span class="difficulty-badge apprentice">🟢 Apprentice</span></td>
+                        <td class="objective-text">Find admin panel in JavaScript and delete carlos</td>
+                        <td><a href="lab2/lab-description.php" class="btn-start">Start →</a></td>
+                    </tr>
+                    <tr>
+                        <td><div class="lab-number">3</div></td>
+                        <td>
+                            <div class="lab-info">
+                                <h3>User Role Controlled by Request Parameter</h3>
+                                <p>Cookie-based role can be manipulated client-side</p>
+                            </div>
+                        </td>
+                        <td><span class="vulnerability-tag">Cookie Manipulation</span></td>
+                        <td><span class="difficulty-badge apprentice">🟢 Apprentice</span></td>
+                        <td class="objective-text">Modify Admin cookie to gain admin access</td>
+                        <td><a href="lab3/lab-description.php" class="btn-start">Start →</a></td>
+                    </tr>
+                    <tr>
+                        <td><div class="lab-number">4</div></td>
+                        <td>
+                            <div class="lab-info">
+                                <h3>User Role Modified in Profile</h3>
+                                <p>Mass assignment allows roleid manipulation</p>
+                            </div>
+                        </td>
+                        <td><span class="vulnerability-tag">Mass Assignment</span></td>
+                        <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
+                        <td class="objective-text">Add roleid to JSON request for admin privileges</td>
+                        <td><a href="lab4/lab-description.php" class="btn-start">Start →</a></td>
+                    </tr>
+                    <tr>
+                        <td><div class="lab-number">5</div></td>
+                        <td>
+                            <div class="lab-info">
+                                <h3>User ID Controlled by Request Parameter</h3>
+                                <p>Horizontal privilege escalation via IDOR</p>
+                            </div>
+                        </td>
+                        <td><span class="vulnerability-tag">IDOR</span></td>
+                        <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
+                        <td class="objective-text">Change user ID to access carlos's API key</td>
+                        <td><a href="lab5/lab-description.php" class="btn-start">Start →</a></td>
+                    </tr>
+                    <tr>
+                        <td><div class="lab-number">6</div></td>
+                        <td>
+                            <div class="lab-info">
+                                <h3>IDOR with Unpredictable User IDs</h3>
+                                <p>GUIDs leaked through information disclosure</p>
+                            </div>
+                        </td>
+                        <td><span class="vulnerability-tag">IDOR + GUID Leak</span></td>
+                        <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
+                        <td class="objective-text">Find carlos's GUID in blog to access profile</td>
+                        <td><a href="lab6/lab-description.php" class="btn-start">Start →</a></td>
+                    </tr>
+                    <tr>
+                        <td><div class="lab-number">7</div></td>
+                        <td>
+                            <div class="lab-info">
+                                <h3>Data Leakage in Redirect Response</h3>
+                                <p>Sensitive data exposed in redirect body</p>
+                            </div>
+                        </td>
+                        <td><span class="vulnerability-tag">Redirect Leakage</span></td>
+                        <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
+                        <td class="objective-text">Capture API key from redirect response body</td>
+                        <td><a href="lab7/lab-description.php" class="btn-start">Start →</a></td>
+                    </tr>
+                    <tr>
+                        <td><div class="lab-number">8</div></td>
+                        <td>
+                            <div class="lab-info">
+                                <h3>Password Disclosure in Account Page</h3>
+                                <p>User password exposed in masked HTML input field</p>
+                            </div>
+                        </td>
+                        <td><span class="vulnerability-tag">Password Disclosure</span></td>
+                        <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
+                        <td class="objective-text">Extract admin password from HTML source</td>
+                        <td><a href="lab8/lab-description.php" class="btn-start">Start →</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer-stats">
             <div class="stat-card">
-                <div class="stat-number">4</div>
-                <div class="stat-label">Active Labs</div>
+                <div class="stat-card-icon">🎯</div>
+                <div class="stat-card-value">8</div>
+                <div class="stat-card-label">Active Labs</div>
             </div>
-
+            <div class="stat-card">
+                <div class="stat-card-icon">🔓</div>
+                <div class="stat-card-value">6</div>
+                <div class="stat-card-label">Vulnerability Types</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-icon">📚</div>
+                <div class="stat-card-value">8</div>
+                <div class="stat-card-label">Documentation Pages</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-icon">⏱️</div>
+                <div class="stat-card-value">~2.5h</div>
+                <div class="stat-card-label">Total Duration</div>
+            </div>
         </div>
     </div>
 </body>

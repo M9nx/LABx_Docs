@@ -6,7 +6,7 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lab: Unprotected admin functionality</title>
+    <title>Lab Description - SecureShop</title>
     <style>
         * {
             margin: 0;
@@ -14,185 +14,342 @@ session_start();
             box-sizing: border-box;
         }
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #330000 100%);
-            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 100%);
             min-height: 100vh;
-            margin: 0;
+            color: #e0e0e0;
+        }
+        .header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 68, 68, 0.3);
+            padding: 1rem 2rem;
+        }
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ff4444;
+            text-decoration: none;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover {
+            color: #ff4444;
+        }
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            color: #e0e0e0;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        .btn-back:hover {
+            background: rgba(255, 68, 68, 0.2);
+            border-color: #ff4444;
+            color: #ff4444;
         }
         .container {
             max-width: 900px;
             margin: 0 auto;
-            padding: 4rem 2rem;
+            padding: 3rem 2rem;
         }
-        .lab-header {
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(20px);
+        .content-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 68, 68, 0.2);
+            border-radius: 15px;
             padding: 2.5rem;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 0, 0, 0.3);
-            margin-bottom: 2rem;
-        }
-        .lab-title {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
+            backdrop-filter: blur(10px);
         }
         .lab-badge {
-            background: linear-gradient(135deg, #cc0000, #ff0000);
+            display: inline-block;
+            background: linear-gradient(135deg, #ff4444, #cc0000);
             color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .lab-badge.not-solved {
-            background: rgba(0, 0, 0, 0.8);
-            color: #ff0000;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 0, 0, 0.5);
-        }
-        h1 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin: 0;
-            color: white;
-        }
-        .back-link {
-            color: #ff0000;
-            text-decoration: none;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-            font-weight: 500;
-        }
-        .back-link:hover {
-            text-decoration: none;
-            color: #cc0000;
-        }
-        .description-box {
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 0, 0, 0.3);
+            padding: 0.4rem 1rem;
             border-radius: 20px;
-            padding: 2.5rem;
-            margin-bottom: 2rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
         }
-        .description-box h2 {
+        .page-title {
+            font-size: 2rem;
+            color: #ff4444;
             margin-bottom: 1.5rem;
-            font-size: 1.5rem;
-            color: #ff0000;
-            font-weight: 700;
         }
-        .description-box p {
+        .section {
+            margin-bottom: 2.5rem;
+        }
+        .section:last-child {
+            margin-bottom: 0;
+        }
+        .section-title {
+            color: #ff6666;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255, 68, 68, 0.2);
+        }
+        .section p {
+            color: #ccc;
             line-height: 1.8;
             margin-bottom: 1rem;
-            color: rgba(255, 255, 255, 0.8);
-            font-weight: 300;
         }
-        .objective {
-            background: rgba(0, 0, 0, 0.5);
-            border-left: 4px solid #ff0000;
+        .section p:last-child {
+            margin-bottom: 0;
+        }
+        .info-box {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            border-radius: 10px;
             padding: 1.5rem;
-            margin: 2rem 0;
-            border-radius: 12px;
-            backdrop-filter: blur(10px);
+            margin: 1.5rem 0;
         }
-        .objective h3 {
+        .info-box h4 {
+            color: #00ff00;
             margin-bottom: 0.8rem;
-            color: #ff0000;
-            font-size: 1rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
-        .start-button {
-            background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%);
+        .info-box code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            color: #00ff00;
+            font-family: 'Consolas', monospace;
+        }
+        .warning-box {
+            background: rgba(255, 165, 0, 0.1);
+            border: 1px solid rgba(255, 165, 0, 0.3);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .warning-box h4 {
+            color: #ffa500;
+            margin-bottom: 0.8rem;
+        }
+        .step-list {
+            list-style: none;
+            counter-reset: step;
+        }
+        .step-list li {
+            counter-increment: step;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 68, 68, 0.1);
+            border-radius: 8px;
+            margin-bottom: 0.8rem;
+            position: relative;
+            padding-left: 3.5rem;
+        }
+        .step-list li::before {
+            content: counter(step);
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #ff4444, #cc0000);
             color: white;
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 50px;
-            font-size: 1rem;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 1.5rem;
-            font-weight: 600;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.4);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
         }
-        .start-button:hover {
+        .step-list li strong {
+            color: #ff6666;
+        }
+        .code-block {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 68, 68, 0.2);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'Consolas', 'Monaco', monospace;
+            color: #ff6666;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 68, 68, 0.2);
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.9rem 1.8rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #ff4444, #cc0000);
+            color: white;
+        }
+        .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 0, 0, 0.6);
-            text-decoration: none;
+            box-shadow: 0 5px 20px rgba(255, 68, 68, 0.4);
+        }
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid #ff4444;
+            color: #ff4444;
+        }
+        .btn-secondary:hover {
+            background: #ff4444;
             color: white;
         }
-        .hint-box {
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 0, 0, 0.3);
-            border-radius: 15px;
-            padding: 1.5rem;
-            margin: 2rem 0;
-            backdrop-filter: blur(10px);
+        .btn-info {
+            background: linear-gradient(135deg, #00aaff, #0077cc);
+            color: white;
         }
-        .hint-box h4 {
-            color: #ff4444;
-            margin-bottom: 0.8rem;
-            font-weight: 600;
-        }
-        .hint-box p {
-            color: rgba(255, 255, 255, 0.8);
-            margin: 0;
+        .btn-info:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 170, 255, 0.4);
         }
     </style>
 </head>
 <body>
-    
-    
-    <div class="container">
-        <div class="lab-header">
-            <a href="../" class="back-link">
-                ← Back to lab description
-            </a>
-            
-            <div class="lab-title">
-                <span class="lab-badge not-solved">LAB</span>
-                <span class="lab-badge not-solved">Not solved</span>
-                <h1>Unprotected admin functionality</h1>
-            </div>
+    <header class="header">
+        <div class="header-content">
+            <a href="index.php" class="logo">🛒 SecureShop</a>
+            <nav class="nav-links">
+                <a href="../index.php" class="btn-back">← All Labs</a>
+                <a href="index.php">Home</a>
+                <a href="products.php">Products</a>
+                <a href="lab-description.php">Lab Info</a>
+                <a href="docs.php">Documentation</a>
+                <?php if (isset($_SESSION['user_id'])): ?>
+                    <a href="profile.php">My Account</a>
+                    <a href="logout.php">Logout</a>
+                <?php else: ?>
+                    <a href="login.php">Login</a>
+                <?php endif; ?>
+            </nav>
         </div>
-        
-        <div class="description-box">
-            <h2>Lab Description</h2>
-            <p>This lab has an unprotected admin panel.</p>
-            
-            <div class="objective">
-                <h3>Lab Objective</h3>
-                <p>Solve the lab by deleting the user carlos.</p>
+    </header>
+
+    <div class="container">
+        <div class="content-card">
+            <span class="lab-badge">INFORMATION DISCLOSURE</span>
+            <h1 class="page-title">Lab 1: Unprotected Admin Functionality</h1>
+
+            <div class="section">
+                <h2 class="section-title">📋 Lab Overview</h2>
+                <p>
+                    This lab demonstrates an <strong>unprotected admin functionality</strong> vulnerability 
+                    where administrative features are accessible without any authentication or authorization.
+                </p>
+                <p>
+                    The admin panel exists but lacks any authentication mechanisms. Additionally, the 
+                    application inadvertently discloses the admin panel location through a common 
+                    website file used for SEO purposes.
+                </p>
             </div>
-            
-            <p>This lab demonstrates a common access control vulnerability where administrative functionality is left completely unprotected. The admin panel exists but lacks any authentication or authorization mechanisms.</p>
-            
-            <div class="hint-box">
-                <h4>💡 Hint</h4>
-                <p>Look for clues about the location of the admin panel. Sometimes applications inadvertently disclose the paths to administrative interfaces.</p>
+
+            <div class="section">
+                <h2 class="section-title">🎯 Objective</h2>
+                <p>
+                    Discover the admin panel through <strong>information disclosure</strong> and use it 
+                    to delete the user <strong>carlos</strong> from the system.
+                </p>
+                <div class="info-box">
+                    <h4>🔍 Discovery Target</h4>
+                    <p>Check the file: <code>robots.txt</code></p>
+                </div>
             </div>
-            
-            <p><strong>Learning Goals:</strong></p>
-            <ul style="margin-left: 2rem; margin-bottom: 1rem; color: #666;">
-                <li>Understand the risks of unprotected admin functionality</li>
-                <li>Learn about information disclosure vulnerabilities</li>
-                <li>Practice basic reconnaissance techniques</li>
-                <li>Recognize the importance of proper access controls</li>
-            </ul>
-            
-            <a href="index.php" class="start-button">Access the lab</a>
-            <a href="docs.php" class="start-button" style="margin-left: 1rem; background: linear-gradient(135deg, #666666 0%, #444444 100%); box-shadow: 0 4px 15px rgba(102, 102, 102, 0.4);">📖 View Documentation</a>
+
+            <div class="section">
+                <h2 class="section-title">🔍 Vulnerability Type</h2>
+                <p>
+                    <strong>Broken Access Control + Information Disclosure</strong> - The admin panel has 
+                    no authentication requirement, and its location is leaked through the robots.txt file 
+                    which is commonly used to instruct search engine crawlers.
+                </p>
+                <p>
+                    Many developers mistakenly believe that hiding URLs is a security control. The 
+                    robots.txt file often reveals paths that should be protected but aren't.
+                </p>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">📝 Steps to Solve</h2>
+                <ol class="step-list">
+                    <li><strong>Navigate</strong> to the robots.txt file at <code>/robots.txt</code></li>
+                    <li><strong>Identify</strong> any disallowed paths that might be admin panels</li>
+                    <li><strong>Access</strong> the admin panel URL directly in your browser</li>
+                    <li><strong>Find</strong> the user management functionality</li>
+                    <li><strong>Delete</strong> the user carlos to complete the lab</li>
+                </ol>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">💡 Hint</h2>
+                <div class="warning-box">
+                    <h4>robots.txt Structure</h4>
+                    <p>The robots.txt file typically looks like:</p>
+                    <div class="code-block">
+                        <code>User-agent: *<br>Disallow: /administrator-panel</code>
+                    </div>
+                    <p>Paths in "Disallow" are meant for crawlers, but humans can still access them!</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">⚠️ Real-World Impact</h2>
+                <p>
+                    This vulnerability pattern is common in real applications:
+                </p>
+                <ul style="margin-left: 1.5rem; color: #ccc; line-height: 2;">
+                    <li>Admin panels without authentication</li>
+                    <li>Sensitive paths disclosed in robots.txt</li>
+                    <li>Security through obscurity failures</li>
+                    <li>Directory enumeration vulnerabilities</li>
+                    <li>Full system compromise through admin access</li>
+                </ul>
+            </div>
+
+            <div class="action-buttons">
+                <a href="setup_db.php" target="_blank" class="btn btn-primary">
+                    🗄️ Setup Database
+                </a>
+                <a href="index.php" class="btn btn-info">
+                    🚀 Access Lab
+                </a>
+                <a href="docs.php" class="btn btn-secondary">
+                    📚 View Documentation
+                </a>
+            </div>
         </div>
     </div>
 </body>

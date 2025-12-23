@@ -6,7 +6,7 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documentation - Mass Assignment Vulnerability</title>
+    <title>Documentation - Password Disclosure Lab</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -242,13 +242,13 @@ session_start();
 <body>
     <header class="header">
         <div class="header-content">
-            <a href="index.php" class="logo">📝 Lab 4</a>
+            <a href="index.php" class="logo">🔑 PassLab</a>
             <nav class="nav-links">
                 <a href="../index.php" class="btn-nav">← All Labs</a>
                 <a href="index.php">Home</a>
                 <a href="lab-description.php">Lab Info</a>
                 <?php if (isset($_SESSION['user_id'])): ?>
-                    <a href="profile.php">Profile</a>
+                    <a href="profile.php?id=<?php echo htmlspecialchars($_SESSION['username']); ?>">My Account</a>
                     <a href="logout.php">Logout</a>
                 <?php else: ?>
                     <a href="login.php">Login</a>
@@ -279,24 +279,16 @@ session_start();
 
         <main class="main-content">
             <section id="overview" class="doc-section">
-                <h1>📝 User Role Modified via Profile Update</h1>
+                <h1>🔑 Password Disclosure via IDOR</h1>
                 <p>
-                    This lab demonstrates a mass assignment vulnerability where the application 
-                    blindly accepts and processes all JSON parameters in a profile update request, 
-                    including the <span class="code-inline">roleid</span> field that determines admin status.
+                    This documentation provides comprehensive information about the password disclosure vulnerability 
+                    present in this lab, including technical details, exploitation methods, and prevention techniques.
                 </p>
 
                 <div class="alert alert-info">
                     <h4>💡 Lab Objective</h4>
-                    <p>Exploit mass assignment to change your roleid to 2 (admin) and delete user "carlos".</p>
+                    <p>Retrieve the administrator's password by exploiting the IDOR vulnerability, then delete the user "carlos".</p>
                 </div>
-
-                <h2>What is Mass Assignment?</h2>
-                <p>
-                    Mass assignment occurs when an application automatically binds user input to object 
-                    properties without proper filtering. If the application accepts all JSON fields and 
-                    updates them in the database, attackers can modify fields they shouldn't have access to.
-                </p>
 
                 <h2>Lab Credentials</h2>
                 <div class="table-container">
@@ -305,39 +297,19 @@ session_start();
                             <tr>
                                 <th>Username</th>
                                 <th>Password</th>
-                                <th>Role ID</th>
+                                <th>Role</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td><span class="code-inline">wiener</span></td>
                                 <td><span class="code-inline">peter</span></td>
-                                <td>1 (User)</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <h2>Role IDs</h2>
-                <div class="table-container">
-                    <table class="doc-table">
-                        <thead>
-                            <tr>
-                                <th>Role ID</th>
-                                <th>Role Name</th>
-                                <th>Permissions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><span class="code-inline">1</span></td>
-                                <td>User</td>
-                                <td>Basic access</td>
+                                <td>Regular User</td>
                             </tr>
                             <tr>
-                                <td><span class="code-inline">2</span></td>
+                                <td><span class="code-inline">administrator</span></td>
+                                <td>??? (to discover)</td>
                                 <td>Admin</td>
-                                <td>Full access + user management</td>
                             </tr>
                         </tbody>
                     </table>
@@ -347,38 +319,36 @@ session_start();
             <section id="vulnerability" class="doc-section">
                 <h1>🔍 Vulnerability Details</h1>
                 
-                <h2>How Mass Assignment Works</h2>
+                <h2>What is Password Disclosure?</h2>
                 <p>
-                    The profile update endpoint accepts JSON data and updates all provided fields 
-                    without validating which fields the user should be allowed to modify.
+                    Password disclosure occurs when an application inadvertently exposes user passwords in a way that 
+                    can be accessed by attackers. In this lab, the password is stored in the HTML value attribute of 
+                    a password input field.
                 </p>
 
-                <h2>Normal Profile Update</h2>
+                <h2>The Two Vulnerabilities</h2>
+                <p>This lab contains two interconnected vulnerabilities:</p>
+                
+                <h3>1. IDOR (Insecure Direct Object Reference)</h3>
+                <p>
+                    The application accepts a user-controllable <span class="code-inline">id</span> parameter to determine 
+                    which user's profile to display. It does not verify that the logged-in user should have access to the 
+                    requested profile.
+                </p>
+
+                <h3>2. Password Exposure in HTML</h3>
+                <p>
+                    The profile page pre-fills a password change field with the user's current password. While displayed 
+                    as masked dots (●●●●●●), the actual password is visible in the HTML source code.
+                </p>
+
                 <div class="code-block">
-                    <pre>POST /profile.php
-Content-Type: application/json
+                    <pre>&lt;!-- Vulnerable HTML Output --&gt;
+&lt;input type="password" 
+       name="current_password" 
+       value="x4dm1n_s3cr3t_p@ss!"&gt;
 
-{
-    "email": "wiener@example.com",
-    "name": "Peter Wiener"
-}</pre>
-                </div>
-
-                <h2>Malicious Profile Update</h2>
-                <div class="code-block">
-                    <pre>POST /profile.php
-Content-Type: application/json
-
-{
-    "email": "wiener@example.com",
-    "name": "Peter Wiener",
-    "roleid": 2    // ADDED: Escalate to admin!
-}</pre>
-                </div>
-
-                <div class="alert alert-warning">
-                    <h4>⚠️ Hidden Field Injection</h4>
-                    <p>The server response often reveals additional fields that can be exploited in requests.</p>
+&lt;!-- Password visible in: value="x4dm1n_s3cr3t_p@ss!" --&gt;</pre>
                 </div>
             </section>
 
@@ -387,78 +357,60 @@ Content-Type: application/json
 
                 <h2>Attack Flow</h2>
                 <div class="code-block">
-                    <pre>1. Login as wiener:peter
-2. Go to Profile page
-3. Submit normal profile update
-4. Observe response contains "roleid": 1
-5. Intercept next request with Burp
-6. Add "roleid": 2 to JSON body
-7. Submit modified request
-8. Refresh - now you're admin!
-9. Delete carlos</pre>
+                    <pre>1. Login as wiener → Access /profile.php?id=wiener
+2. View HTML source → Find password in input value
+3. Change URL to /profile.php?id=administrator
+4. View HTML source → Extract admin password
+5. Login as administrator
+6. Access admin panel → Delete carlos</pre>
                 </div>
 
-                <h2>Using Browser DevTools</h2>
+                <h2>URL Manipulation</h2>
+                <p>The vulnerable URL structure:</p>
                 <div class="code-block">
-                    <pre>// In browser console
-fetch('/profile.php', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-        email: 'wiener@example.com',
-        roleid: 2  // Escalate privileges
-    })
-});</pre>
+                    <pre># Original URL (your profile)
+http://localhost/AC/lab8/profile.php?id=wiener
+
+# Manipulated URL (admin profile)
+http://localhost/AC/lab8/profile.php?id=administrator</pre>
                 </div>
 
-                <h2>Using Burp Suite</h2>
-                <div class="code-block">
-                    <pre>1. Intercept profile update request
-2. Original body:
-   {"email":"test@test.com"}
-   
-3. Modified body:
-   {"email":"test@test.com","roleid":2}
-   
-4. Forward request</pre>
-                </div>
-
-                <div class="alert alert-danger">
-                    <h4>🚫 Privilege Escalation</h4>
-                    <p>By adding a single field to the JSON, any user can become an administrator.</p>
+                <div class="alert alert-warning">
+                    <h4>⚠️ Important</h4>
+                    <p>The password appears masked on screen but is fully visible in the page source (Ctrl+U or View Source).</p>
                 </div>
             </section>
 
             <section id="step-by-step" class="doc-section">
                 <h1>📖 Step-by-Step Guide</h1>
 
-                <p><span class="step-number">1</span><strong>Login to the application</strong></p>
-                <p>Use credentials <span class="code-inline">wiener:peter</span></p>
+                <p><span class="step-number">1</span><strong>Login with provided credentials</strong></p>
+                <p>Navigate to the login page and enter <span class="code-inline">wiener</span> / <span class="code-inline">peter</span></p>
 
-                <p><span class="step-number">2</span><strong>Navigate to your profile</strong></p>
-                <p>Click on "Profile" or "My Account" in the navigation</p>
+                <p><span class="step-number">2</span><strong>Access your profile page</strong></p>
+                <p>Click "My Account" to navigate to your profile. Note the URL contains <span class="code-inline">?id=wiener</span></p>
 
-                <p><span class="step-number">3</span><strong>Update your email</strong></p>
-                <p>Change your email and submit the form to observe normal behavior</p>
+                <p><span class="step-number">3</span><strong>View page source</strong></p>
+                <p>Press <span class="code-inline">Ctrl+U</span> or right-click and select "View Page Source"</p>
 
-                <p><span class="step-number">4</span><strong>Check the response</strong></p>
-                <p>In DevTools (F12) → Network tab, look at the response JSON. Notice it includes <span class="code-inline">roleid</span></p>
+                <p><span class="step-number">4</span><strong>Find the password field</strong></p>
+                <p>Search for "password" in the source. You'll find your password in an input value attribute.</p>
 
-                <p><span class="step-number">5</span><strong>Prepare the exploit</strong></p>
-                <p>Open Burp Suite or use browser DevTools to intercept the next request</p>
+                <p><span class="step-number">5</span><strong>Modify the id parameter</strong></p>
+                <p>Change the URL to: <span class="code-inline">profile.php?id=administrator</span></p>
 
-                <p><span class="step-number">6</span><strong>Add roleid to request</strong></p>
-                <p>Add <span class="code-inline">"roleid": 2</span> to the JSON body of the profile update request</p>
+                <p><span class="step-number">6</span><strong>Extract administrator password</strong></p>
+                <p>View the page source again and find the administrator's password in the input field.</p>
 
-                <p><span class="step-number">7</span><strong>Submit and verify</strong></p>
-                <p>Submit the request and refresh the page. You should now have admin access.</p>
+                <p><span class="step-number">7</span><strong>Login as administrator</strong></p>
+                <p>Log out, then log back in using the administrator credentials you discovered.</p>
 
                 <p><span class="step-number">8</span><strong>Delete carlos</strong></p>
-                <p>Access the admin panel and delete user "carlos"</p>
+                <p>Access the Admin Panel and delete the user "carlos" to complete the lab.</p>
 
                 <div class="alert alert-success">
                     <h4>✅ Success Criteria</h4>
-                    <p>The lab is completed when you escalate to admin via mass assignment and delete "carlos".</p>
+                    <p>The lab is solved when you successfully delete the user "carlos" using the administrator account.</p>
                 </div>
             </section>
 
@@ -468,26 +420,26 @@ fetch('/profile.php', {
                 <h2>Vulnerable Code Pattern</h2>
                 <div class="code-block">
                     <pre>&lt;?php
-// VULNERABLE: Accepting all JSON fields
-$data = json_decode(file_get_contents('php://input'), true);
+// VULNERABLE: No authorization check!
+$requestedUser = $_GET['id'] ?? $_SESSION['username'];
 
-// Directly updating all provided fields
-$sql = "UPDATE users SET ";
-$updates = [];
-foreach ($data as $key => $value) {
-    $updates[] = "$key = ?";  // BAD: No field validation!
-}
-$sql .= implode(', ', $updates);
-$sql .= " WHERE id = ?";
-?&gt;</pre>
+// Fetches ANY user's data including password
+$stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
+$stmt->bind_param("s", $requestedUser);
+$stmt->execute();
+$user = $stmt->get_result()->fetch_assoc();
+?&gt;
+
+&lt;!-- VULNERABLE: Password exposed in HTML --&gt;
+&lt;input type="password" 
+       value="&lt;?php echo $user['password']; ?&gt;"&gt;</pre>
                 </div>
 
-                <h2>Why This Is Dangerous</h2>
+                <h2>Security Issues</h2>
                 <ul>
-                    <li><strong>No allowlist</strong> - All fields accepted without filtering</li>
-                    <li><strong>Direct binding</strong> - User input directly updates database</li>
-                    <li><strong>Information disclosure</strong> - Response reveals internal field names</li>
-                    <li><strong>No authorization check</strong> - Doesn't verify if user can modify field</li>
+                    <li><strong>No ownership verification</strong> - Any user can request any other user's profile</li>
+                    <li><strong>Password in HTML</strong> - Passwords should never be sent to the browser</li>
+                    <li><strong>Plaintext passwords</strong> - Passwords should be hashed, not stored in plaintext</li>
                 </ul>
             </section>
 
@@ -497,73 +449,59 @@ $sql .= " WHERE id = ?";
                 <h2>Secure Code Pattern</h2>
                 <div class="code-block">
                     <pre>&lt;?php
-// SECURE: Whitelist allowed fields
-$allowedFields = ['email', 'name', 'phone'];
+// SECURE: Always use session user
+$userId = $_SESSION['user_id'];  // Never from URL!
 
-$data = json_decode(file_get_contents('php://input'), true);
+// Only fetch current user's data
+$stmt = $conn->prepare("SELECT username, email FROM users WHERE id = ?");
+$stmt->bind_param("i", $userId);
 
-// Only process allowed fields
-$safeData = array_intersect_key($data, array_flip($allowedFields));
+// Never send passwords to browser
+// For password changes, verify old password server-side
+?&gt;
 
-// Now update only safe fields
-foreach ($safeData as $field => $value) {
-    // Process update...
-}
-
-// Never allow roleid, is_admin, etc. from user input
-?&gt;</pre>
+&lt;!-- SECURE: No password in HTML --&gt;
+&lt;input type="password" 
+       name="current_password" 
+       placeholder="Enter current password"&gt;</pre>
                 </div>
 
                 <h2>Best Practices</h2>
                 <ul>
-                    <li><strong>Whitelist fields</strong> - Only accept explicitly allowed parameters</li>
-                    <li><strong>Use DTOs</strong> - Data Transfer Objects that define allowed fields</li>
-                    <li><strong>Separate endpoints</strong> - Different endpoints for user vs admin actions</li>
-                    <li><strong>Server-side validation</strong> - Always validate on the server</li>
-                    <li><strong>Audit logging</strong> - Log all field modification attempts</li>
+                    <li><strong>Hash passwords</strong> - Use bcrypt or Argon2 for password storage</li>
+                    <li><strong>Session-based identity</strong> - Never rely on user-supplied ID parameters for sensitive data</li>
+                    <li><strong>Authorization checks</strong> - Verify user has permission to access requested resources</li>
+                    <li><strong>No passwords in HTML</strong> - Passwords should never be sent to the client</li>
+                    <li><strong>Re-authentication</strong> - Require password re-entry for sensitive operations</li>
                 </ul>
 
-                <h2>Framework-Specific Solutions</h2>
-                <div class="code-block">
-                    <pre># Laravel - Use $fillable property
-class User extends Model {
-    protected $fillable = ['email', 'name'];
-    protected $guarded = ['roleid', 'is_admin'];
-}
-
-# Django - Use serializer fields
-class UserSerializer(serializers.Serializer):
-    email = serializers.EmailField()
-    name = serializers.CharField()
-    # roleid intentionally NOT included</pre>
-                </div>
-
-                <div class="alert alert-info">
-                    <h4>💡 Defense in Depth</h4>
-                    <p>Even with whitelisting, verify the user has permission to modify each specific field.</p>
+                <div class="alert alert-danger">
+                    <h4>🚫 Never Do This</h4>
+                    <p>Never pre-fill password fields with actual passwords, even in masked input fields. The password will always be visible in the HTML source code.</p>
                 </div>
             </section>
 
             <section id="references" class="doc-section">
                 <h1>📚 References</h1>
 
-                <h2>Related Resources</h2>
+                <h2>Related Vulnerabilities</h2>
                 <ul>
-                    <li><a href="https://owasp.org/API-Security/editions/2023/en/0xa3-broken-object-property-level-authorization/" style="color: #ff4444;">OWASP API3 - Broken Object Property Level Authorization</a></li>
-                    <li><a href="https://cwe.mitre.org/data/definitions/915.html" style="color: #ff4444;">CWE-915: Improperly Controlled Modification of Dynamically-Determined Object Attributes</a></li>
-                    <li><a href="https://cheatsheetseries.owasp.org/cheatsheets/Mass_Assignment_Cheat_Sheet.html" style="color: #ff4444;">OWASP Mass Assignment Cheat Sheet</a></li>
+                    <li><a href="https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/05-Authorization_Testing/04-Testing_for_Insecure_Direct_Object_References" style="color: #ff4444;">OWASP - Insecure Direct Object References</a></li>
+                    <li><a href="https://cwe.mitre.org/data/definitions/639.html" style="color: #ff4444;">CWE-639: Authorization Bypass Through User-Controlled Key</a></li>
+                    <li><a href="https://cwe.mitre.org/data/definitions/200.html" style="color: #ff4444;">CWE-200: Exposure of Sensitive Information</a></li>
                 </ul>
 
                 <h2>Further Reading</h2>
                 <ul>
-                    <li><a href="https://portswigger.net/web-security/access-control" style="color: #ff4444;">PortSwigger - Access Control</a></li>
-                    <li><a href="https://github.com/OWASP/API-Security" style="color: #ff4444;">OWASP API Security Project</a></li>
+                    <li><a href="https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html" style="color: #ff4444;">OWASP Authentication Cheat Sheet</a></li>
+                    <li><a href="https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html" style="color: #ff4444;">OWASP Password Storage Cheat Sheet</a></li>
                 </ul>
             </section>
         </main>
     </div>
 
     <script>
+        // Smooth scroll for navigation
         document.querySelectorAll('.sidebar-nav a').forEach(link => {
             link.addEventListener('click', function(e) {
                 if (this.getAttribute('href').startsWith('#')) {
@@ -572,12 +510,14 @@ class UserSerializer(serializers.Serializer):
                     if (target) {
                         target.scrollIntoView({ behavior: 'smooth' });
                     }
+                    // Update active state
                     document.querySelectorAll('.sidebar-nav a').forEach(l => l.classList.remove('active'));
                     this.classList.add('active');
                 }
             });
         });
 
+        // Update active nav on scroll
         window.addEventListener('scroll', () => {
             const sections = document.querySelectorAll('.doc-section');
             let current = '';
