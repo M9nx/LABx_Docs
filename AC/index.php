@@ -304,7 +304,7 @@
             <a href="index.php" class="logo">🔐 AC Labs</a>
             <div class="header-stats">
                 <div class="header-stat">
-                    <div class="header-stat-value">8</div>
+                    <div class="header-stat-value">9</div>
                     <div class="header-stat-label">Total Labs</div>
                 </div>
                 <div class="header-stat">
@@ -312,7 +312,7 @@
                     <div class="header-stat-label">Apprentice</div>
                 </div>
                 <div class="header-stat">
-                    <div class="header-stat-value">5</div>
+                    <div class="header-stat-value">6</div>
                     <div class="header-stat-label">Practitioner</div>
                 </div>
             </div>
@@ -450,6 +450,19 @@
                         <td class="objective-text">Extract admin password from HTML source</td>
                         <td><a href="lab8/lab-description.php" class="btn-start">Start →</a></td>
                     </tr>
+                    <tr>
+                        <td><div class="lab-number">9</div></td>
+                        <td>
+                            <div class="lab-info">
+                                <h3>Insecure Direct Object References</h3>
+                                <p>Chat transcripts accessible via predictable URLs</p>
+                            </div>
+                        </td>
+                        <td><span class="vulnerability-tag">IDOR - File Access</span></td>
+                        <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
+                        <td class="objective-text">Find carlos's password in chat transcript</td>
+                        <td><a href="lab9/lab-description.php" class="btn-start">Start →</a></td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -457,22 +470,22 @@
         <div class="footer-stats">
             <div class="stat-card">
                 <div class="stat-card-icon">🎯</div>
-                <div class="stat-card-value">8</div>
+                <div class="stat-card-value">9</div>
                 <div class="stat-card-label">Active Labs</div>
             </div>
             <div class="stat-card">
                 <div class="stat-card-icon">🔓</div>
-                <div class="stat-card-value">6</div>
+                <div class="stat-card-value">7</div>
                 <div class="stat-card-label">Vulnerability Types</div>
             </div>
             <div class="stat-card">
                 <div class="stat-card-icon">📚</div>
-                <div class="stat-card-value">8</div>
+                <div class="stat-card-value">9</div>
                 <div class="stat-card-label">Documentation Pages</div>
             </div>
             <div class="stat-card">
                 <div class="stat-card-icon">⏱️</div>
-                <div class="stat-card-value">~2.5h</div>
+                <div class="stat-card-value">~3h</div>
                 <div class="stat-card-label">Total Duration</div>
             </div>
         </div>
