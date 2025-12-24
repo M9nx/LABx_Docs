@@ -1,5 +1,7 @@
 <?php
 session_start();
+require_once '../progress.php';
+$isSolved = isLabSolved(4);
 require_once 'config.php';
 
 // Check if carlos exists (lab completion check)
@@ -235,6 +237,7 @@ $carlosExists = $stmt->fetchColumn() > 0;
             border-color: #ff4444;
             color: #ff4444;
         }
+    .solved-banner { background: rgba(0, 255, 0, 0.1); border: 1px solid rgba(0, 255, 0, 0.3); border-radius: 10px; padding: 1.5rem; margin-bottom: 2rem; text-align: center; } .solved-banner h3 { color: #00ff00; margin-bottom: 0.5rem; }
     </style>
 </head>
 <body>
@@ -333,3 +336,6 @@ $carlosExists = $stmt->fetchColumn() > 0;
     </div>
 </body>
 </html>
+
+
+

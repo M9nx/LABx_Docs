@@ -1,5 +1,7 @@
 <?php
 session_start();
+require_once '../progress.php';
+$isSolved = isLabSolved(2);
 require_once 'config.php';
 $pdo = getDBConnection();
 $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE username = 'carlos'");
@@ -46,6 +48,7 @@ $carlosExists = $stmt->fetchColumn() > 0;
         .feature-icon { font-size: 2rem; margin-bottom: 1rem; }
         .feature-title { color: #ff6666; font-size: 1.1rem; margin-bottom: 0.5rem; }
         .feature-desc { color: #999; font-size: 0.9rem; }
+    .solved-banner { background: rgba(0, 255, 0, 0.1); border: 1px solid rgba(0, 255, 0, 0.3); border-radius: 10px; padding: 1.5rem; margin-bottom: 2rem; text-align: center; } .solved-banner h3 { color: #00ff00; margin-bottom: 0.5rem; }
     </style>
 </head>
 <body>
@@ -102,3 +105,5 @@ $carlosExists = $stmt->fetchColumn() > 0;
     </script>
 </body>
 </html>
+
+

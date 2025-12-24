@@ -1,4 +1,8 @@
 <?php
+// Reset lab progress
+require_once '../progress.php';
+resetLab(7);
+
 // Database setup script for Lab 7
 $host = 'localhost';
 $user = 'root';

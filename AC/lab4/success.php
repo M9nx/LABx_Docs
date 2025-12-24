@@ -1,5 +1,7 @@
 <?php
 session_start();
+require_once '../progress.php';
+markLabSolved(4);
 require_once 'config.php';
 
 // Check if carlos exists
@@ -220,3 +222,4 @@ if ($carlosExists) {
     </script>
 </body>
 </html>
+

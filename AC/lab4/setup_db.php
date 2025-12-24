@@ -1,4 +1,8 @@
 <?php
+// Reset lab progress
+require_once '../progress.php';
+resetLab(4);
+
 // Temporary file to set up the database
 $host = 'localhost';
 $user = 'root';
@@ -72,3 +76,4 @@ try {
     die("Error: " . $e->getMessage() . "\n");
 }
 ?>
+

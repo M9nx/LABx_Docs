@@ -1,5 +1,7 @@
 <?php
 session_start();
+require_once '../progress.php';
+$isSolved = isLabSolved(8);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -163,6 +165,7 @@ session_start();
             transform: translateY(-2px);
             box-shadow: 0 5px 20px rgba(0, 170, 255, 0.4);
         }
+    .solved-banner { background: rgba(0, 255, 0, 0.1); border: 1px solid rgba(0, 255, 0, 0.3); border-radius: 10px; padding: 1.5rem; margin-bottom: 2rem; text-align: center; } .solved-banner h3 { color: #00ff00; margin-bottom: 0.5rem; }
     </style>
 </head>
 <body>
@@ -188,6 +191,15 @@ session_start();
         <div class="hero">
             <h1>🔑 PassLab</h1>
             <p>Lab 8: User ID controlled by request parameter with password disclosure</p>
+        
+
+        <?php if ($isSolved): ?>
+        <div class='solved-banner'>
+            <h3>✅ Lab Already Solved!</h3>
+            <p>You've completed this lab. Run <strong>Setup Database</strong> to reset and try again.</p>
+        </div>
+        <?php endif; ?>
+
         </div>
 
         <?php if (isset($_GET['setup']) && $_GET['setup'] === 'success'): ?>
@@ -226,3 +238,5 @@ session_start();
     </div>
 </body>
 </html>
+
+

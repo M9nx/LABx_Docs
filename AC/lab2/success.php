@@ -1,5 +1,7 @@
 <?php
 session_start();
+require_once '../progress.php';
+markLabSolved(2);
 
 // Check if carlos user exists to determine if lab is solved
 require_once 'config.php';

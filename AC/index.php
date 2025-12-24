@@ -1,3 +1,8 @@
+<?php
+require_once 'progress.php';
+$solvedLabs = getAllSolvedLabs();
+$solvedCount = getSolvedCount();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -236,6 +241,28 @@
             height: 16px;
         }
         
+        /* Solved Badge */
+        .solved-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.3rem 0.8rem;
+            background: rgba(0, 255, 0, 0.2);
+            color: #00ff00;
+            border: 1px solid rgba(0, 255, 0, 0.4);
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-left: 0.5rem;
+        }
+        .lab-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
         /* Footer Stats */
         .footer-stats {
             display: grid;
@@ -304,15 +331,19 @@
             <a href="index.php" class="logo">🔐 AC Labs</a>
             <div class="header-stats">
                 <div class="header-stat">
-                    <div class="header-stat-value">9</div>
+                    <div class="header-stat-value">12</div>
                     <div class="header-stat-label">Total Labs</div>
+                </div>
+                <div class="header-stat">
+                    <div class="header-stat-value"><?php echo $solvedCount; ?></div>
+                    <div class="header-stat-label">Solved</div>
                 </div>
                 <div class="header-stat">
                     <div class="header-stat-value">3</div>
                     <div class="header-stat-label">Apprentice</div>
                 </div>
                 <div class="header-stat">
-                    <div class="header-stat-value">6</div>
+                    <div class="header-stat-value">9</div>
                     <div class="header-stat-label">Practitioner</div>
                 </div>
             </div>
@@ -350,7 +381,12 @@
                         <td><div class="lab-number">1</div></td>
                         <td>
                             <div class="lab-info">
-                                <h3>Unprotected Admin Functionality</h3>
+                                <div class="lab-status">
+                                    <h3>Unprotected Admin Functionality</h3>
+                                    <?php if (in_array(1, $solvedLabs)): ?>
+                                        <span class="solved-badge">✓ Solved</span>
+                                    <?php endif; ?>
+                                </div>
                                 <p>Administrative panel exposed without authentication</p>
                             </div>
                         </td>
@@ -363,7 +399,12 @@
                         <td><div class="lab-number">2</div></td>
                         <td>
                             <div class="lab-info">
-                                <h3>Unprotected Admin with Unpredictable URL</h3>
+                                <div class="lab-status">
+                                    <h3>Unprotected Admin with Unpredictable URL</h3>
+                                    <?php if (in_array(2, $solvedLabs)): ?>
+                                        <span class="solved-badge">✓ Solved</span>
+                                    <?php endif; ?>
+                                </div>
                                 <p>Admin URL hidden but leaked in client-side code</p>
                             </div>
                         </td>
@@ -376,7 +417,12 @@
                         <td><div class="lab-number">3</div></td>
                         <td>
                             <div class="lab-info">
-                                <h3>User Role Controlled by Request Parameter</h3>
+                                <div class="lab-status">
+                                    <h3>User Role Controlled by Request Parameter</h3>
+                                    <?php if (in_array(3, $solvedLabs)): ?>
+                                        <span class="solved-badge">✓ Solved</span>
+                                    <?php endif; ?>
+                                </div>
                                 <p>Cookie-based role can be manipulated client-side</p>
                             </div>
                         </td>
@@ -389,7 +435,12 @@
                         <td><div class="lab-number">4</div></td>
                         <td>
                             <div class="lab-info">
-                                <h3>User Role Modified in Profile</h3>
+                                <div class="lab-status">
+                                    <h3>User Role Modified in Profile</h3>
+                                    <?php if (in_array(4, $solvedLabs)): ?>
+                                        <span class="solved-badge">✓ Solved</span>
+                                    <?php endif; ?>
+                                </div>
                                 <p>Mass assignment allows roleid manipulation</p>
                             </div>
                         </td>
@@ -402,7 +453,12 @@
                         <td><div class="lab-number">5</div></td>
                         <td>
                             <div class="lab-info">
-                                <h3>User ID Controlled by Request Parameter</h3>
+                                <div class="lab-status">
+                                    <h3>User ID Controlled by Request Parameter</h3>
+                                    <?php if (in_array(5, $solvedLabs)): ?>
+                                        <span class="solved-badge">✓ Solved</span>
+                                    <?php endif; ?>
+                                </div>
                                 <p>Horizontal privilege escalation via IDOR</p>
                             </div>
                         </td>
@@ -415,7 +471,12 @@
                         <td><div class="lab-number">6</div></td>
                         <td>
                             <div class="lab-info">
-                                <h3>IDOR with Unpredictable User IDs</h3>
+                                <div class="lab-status">
+                                    <h3>IDOR with Unpredictable User IDs</h3>
+                                    <?php if (in_array(6, $solvedLabs)): ?>
+                                        <span class="solved-badge">✓ Solved</span>
+                                    <?php endif; ?>
+                                </div>
                                 <p>GUIDs leaked through information disclosure</p>
                             </div>
                         </td>
@@ -428,7 +489,12 @@
                         <td><div class="lab-number">7</div></td>
                         <td>
                             <div class="lab-info">
-                                <h3>Data Leakage in Redirect Response</h3>
+                                <div class="lab-status">
+                                    <h3>Data Leakage in Redirect Response</h3>
+                                    <?php if (in_array(7, $solvedLabs)): ?>
+                                        <span class="solved-badge">✓ Solved</span>
+                                    <?php endif; ?>
+                                </div>
                                 <p>Sensitive data exposed in redirect body</p>
                             </div>
                         </td>
@@ -441,7 +507,12 @@
                         <td><div class="lab-number">8</div></td>
                         <td>
                             <div class="lab-info">
-                                <h3>Password Disclosure in Account Page</h3>
+                                <div class="lab-status">
+                                    <h3>Password Disclosure in Account Page</h3>
+                                    <?php if (in_array(8, $solvedLabs)): ?>
+                                        <span class="solved-badge">✓ Solved</span>
+                                    <?php endif; ?>
+                                </div>
                                 <p>User password exposed in masked HTML input field</p>
                             </div>
                         </td>
@@ -454,7 +525,12 @@
                         <td><div class="lab-number">9</div></td>
                         <td>
                             <div class="lab-info">
-                                <h3>Insecure Direct Object References</h3>
+                                <div class="lab-status">
+                                    <h3>Insecure Direct Object References</h3>
+                                    <?php if (in_array(9, $solvedLabs)): ?>
+                                        <span class="solved-badge">✓ Solved</span>
+                                    <?php endif; ?>
+                                </div>
                                 <p>Chat transcripts accessible via predictable URLs</p>
                             </div>
                         </td>
@@ -463,6 +539,60 @@
                         <td class="objective-text">Find carlos's password in chat transcript</td>
                         <td><a href="lab9/lab-description.php" class="btn-start">Start →</a></td>
                     </tr>
+                    <tr>
+                        <td><div class="lab-number">10</div></td>
+                        <td>
+                            <div class="lab-info">
+                                <div class="lab-status">
+                                    <h3>URL-based Access Control Bypass</h3>
+                                    <?php if (in_array(10, $solvedLabs)): ?>
+                                        <span class="solved-badge">✓ Solved</span>
+                                    <?php endif; ?>
+                                </div>
+                                <p>X-Original-URL header bypasses front-end restrictions</p>
+                            </div>
+                        </td>
+                        <td><span class="vulnerability-tag">Header Bypass</span></td>
+                        <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
+                        <td class="objective-text">Bypass blocked /admin path and delete carlos</td>
+                        <td><a href="lab10/lab-description.php" class="btn-start">Start →</a></td>
+                    </tr>
+                    <tr>
+                        <td><div class="lab-number">11</div></td>
+                        <td>
+                            <div class="lab-info">
+                                <div class="lab-status">
+                                    <h3>Method-Based Access Control Bypass</h3>
+                                    <?php if (in_array(11, $solvedLabs)): ?>
+                                        <span class="solved-badge">✓ Solved</span>
+                                    <?php endif; ?>
+                                </div>
+                                <p>Admin action restricted on POST but not GET method</p>
+                            </div>
+                        </td>
+                        <td><span class="vulnerability-tag">HTTP Method Bypass</span></td>
+                        <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
+                        <td class="objective-text">Change HTTP method to bypass access control</td>
+                        <td><a href="lab11/lab-description.php" class="btn-start">Start →</a></td>
+                    </tr>
+                    <tr>
+                        <td><div class="lab-number">12</div></td>
+                        <td>
+                            <div class="lab-info">
+                                <div class="lab-status">
+                                    <h3>Multi-Step Process Bypass</h3>
+                                    <?php if (in_array(12, $solvedLabs)): ?>
+                                        <span class="solved-badge">✓ Solved</span>
+                                    <?php endif; ?>
+                                </div>
+                                <p>Confirmation step lacks authorization check</p>
+                            </div>
+                        </td>
+                        <td><span class="vulnerability-tag">Multi-Step Bypass</span></td>
+                        <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
+                        <td class="objective-text">Skip to unprotected confirmation step</td>
+                        <td><a href="lab12/lab-description.php" class="btn-start">Start →</a></td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -470,22 +600,22 @@
         <div class="footer-stats">
             <div class="stat-card">
                 <div class="stat-card-icon">🎯</div>
-                <div class="stat-card-value">9</div>
+                <div class="stat-card-value">12</div>
                 <div class="stat-card-label">Active Labs</div>
             </div>
             <div class="stat-card">
                 <div class="stat-card-icon">🔓</div>
-                <div class="stat-card-value">7</div>
+                <div class="stat-card-value">10</div>
                 <div class="stat-card-label">Vulnerability Types</div>
             </div>
             <div class="stat-card">
                 <div class="stat-card-icon">📚</div>
-                <div class="stat-card-value">9</div>
+                <div class="stat-card-value">12</div>
                 <div class="stat-card-label">Documentation Pages</div>
             </div>
             <div class="stat-card">
                 <div class="stat-card-icon">⏱️</div>
-                <div class="stat-card-value">~3h</div>
+                <div class="stat-card-value">~4.5h</div>
                 <div class="stat-card-label">Total Duration</div>
             </div>
         </div>

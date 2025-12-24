@@ -1,4 +1,8 @@
 <?php
+// Reset lab progress
+require_once '../progress.php';
+resetLab(9);
+
 // Lab 9 - Database Setup Script
 $db_host = 'localhost';
 $db_user = 'root';

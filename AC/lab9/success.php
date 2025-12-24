@@ -1,5 +1,7 @@
 <?php
 session_start();
+require_once '../progress.php';
+markLabSolved(9);
 
 // Check if user successfully logged in as carlos
 if (!isset($_SESSION['user_id']) || $_SESSION['username'] !== 'carlos') {

@@ -1,4 +1,8 @@
 <?php
+// Reset lab progress
+require_once '../progress.php';
+resetLab(6);
+
 /**
  * Lab 6 Database Setup Script
  * Run this file in browser to create the database
@@ -120,3 +124,4 @@ try {
     echo "<p style='color: red;'>Error: " . $e->getMessage() . "</p>";
 }
 ?>
+
