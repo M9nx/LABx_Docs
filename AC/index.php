@@ -331,7 +331,7 @@ $solvedCount = getSolvedCount();
             <a href="index.php" class="logo">🔐 AC Labs</a>
             <div class="header-stats">
                 <div class="header-stat">
-                    <div class="header-stat-value">12</div>
+                    <div class="header-stat-value">17</div>
                     <div class="header-stat-label">Total Labs</div>
                 </div>
                 <div class="header-stat">
@@ -343,7 +343,7 @@ $solvedCount = getSolvedCount();
                     <div class="header-stat-label">Apprentice</div>
                 </div>
                 <div class="header-stat">
-                    <div class="header-stat-value">9</div>
+                    <div class="header-stat-value">14</div>
                     <div class="header-stat-label">Practitioner</div>
                 </div>
             </div>
@@ -593,6 +593,96 @@ $solvedCount = getSolvedCount();
                         <td class="objective-text">Skip to unprotected confirmation step</td>
                         <td><a href="lab12/lab-description.php" class="btn-start">Start →</a></td>
                     </tr>
+                    <tr>
+                        <td><div class="lab-number">13</div></td>
+                        <td>
+                            <div class="lab-info">
+                                <div class="lab-status">
+                                    <h3>Referer-based Access Control</h3>
+                                    <?php if (in_array(13, $solvedLabs)): ?>
+                                        <span class="solved-badge">✓ Solved</span>
+                                    <?php endif; ?>
+                                </div>
+                                <p>Admin functions trust HTTP Referer header for authorization</p>
+                            </div>
+                        </td>
+                        <td><span class="vulnerability-tag">Header-based AC</span></td>
+                        <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
+                        <td class="objective-text">Spoof Referer header to gain admin privileges</td>
+                        <td><a href="lab13/lab-description.php" class="btn-start">Start →</a></td>
+                    </tr>
+                    <tr>
+                        <td><div class="lab-number">14</div></td>
+                        <td>
+                            <div class="lab-info">
+                                <div class="lab-status">
+                                    <h3>IDOR Banner Deletion</h3>
+                                    <?php if (in_array(14, $solvedLabs)): ?>
+                                        <span class="solved-badge">✓ Solved</span>
+                                    <?php endif; ?>
+                                </div>
+                                <p>Delete endpoint validates parent access but not object ownership</p>
+                            </div>
+                        </td>
+                        <td><span class="vulnerability-tag">IDOR - Object Level</span></td>
+                        <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
+                        <td class="objective-text">Delete another manager's banner via IDOR</td>
+                        <td><a href="lab14/lab-description.php" class="btn-start">Start →</a></td>
+                    </tr>
+                    <tr>
+                        <td><div class="lab-number">15</div></td>
+                        <td>
+                            <div class="lab-info">
+                                <div class="lab-status">
+                                    <h3>IDOR PII Leakage</h3>
+                                    <?php if (in_array(15, $solvedLabs)): ?>
+                                        <span class="solved-badge">✓ Solved</span>
+                                    <?php endif; ?>
+                                </div>
+                                <p>API returns any user's PII based on email parameter without authorization</p>
+                            </div>
+                        </td>
+                        <td><span class="vulnerability-tag">IDOR - PII Exposure</span></td>
+                        <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
+                        <td class="objective-text">Extract another user's phone number, address, and private notes</td>
+                        <td><a href="lab15/lab-description.php" class="btn-start">Start →</a></td>
+                    </tr>
+                    <tr>
+                        <td><div class="lab-number">16</div></td>
+                        <td>
+                            <div class="lab-info">
+                                <div class="lab-status">
+                                    <h3>IDOR Slowvote Visibility Bypass</h3>
+                                    <?php if (in_array(16, $solvedLabs)): ?>
+                                        <span class="solved-badge">✓ Solved</span>
+                                    <?php endif; ?>
+                                </div>
+                                <p>API endpoint returns poll data without checking visibility permissions</p>
+                            </div>
+                        </td>
+                        <td><span class="vulnerability-tag">IDOR - API Bypass</span></td>
+                        <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
+                        <td class="objective-text">Access restricted polls via API that bypasses UI access controls</td>
+                        <td><a href="lab16/lab-description.php" class="btn-start">Start →</a></td>
+                    </tr>
+                    <tr>
+                        <td><div class="lab-number">17</div></td>
+                        <td>
+                            <div class="lab-info">
+                                <div class="lab-status">
+                                    <h3>IDOR External Status Check Info Disclosure</h3>
+                                    <?php if (in_array(17, $solvedLabs)): ?>
+                                        <span class="solved-badge">✓ Solved</span>
+                                    <?php endif; ?>
+                                </div>
+                                <p>API returns status check data from any project without ownership validation</p>
+                            </div>
+                        </td>
+                        <td><span class="vulnerability-tag">IDOR - Status Check</span></td>
+                        <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
+                        <td class="objective-text">Access private project's external URL and API key via status check IDOR</td>
+                        <td><a href="lab17/lab-description.php" class="btn-start">Start →</a></td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -600,22 +690,22 @@ $solvedCount = getSolvedCount();
         <div class="footer-stats">
             <div class="stat-card">
                 <div class="stat-card-icon">🎯</div>
-                <div class="stat-card-value">12</div>
+                <div class="stat-card-value">17</div>
                 <div class="stat-card-label">Active Labs</div>
             </div>
             <div class="stat-card">
                 <div class="stat-card-icon">🔓</div>
-                <div class="stat-card-value">10</div>
+                <div class="stat-card-value">15</div>
                 <div class="stat-card-label">Vulnerability Types</div>
             </div>
             <div class="stat-card">
                 <div class="stat-card-icon">📚</div>
-                <div class="stat-card-value">12</div>
+                <div class="stat-card-value">17</div>
                 <div class="stat-card-label">Documentation Pages</div>
             </div>
             <div class="stat-card">
                 <div class="stat-card-icon">⏱️</div>
-                <div class="stat-card-value">~4.5h</div>
+                <div class="stat-card-value">~5h</div>
                 <div class="stat-card-label">Total Duration</div>
             </div>
         </div>
