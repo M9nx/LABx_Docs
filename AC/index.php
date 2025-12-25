@@ -331,7 +331,7 @@ $solvedCount = getSolvedCount();
             <a href="index.php" class="logo">🔐 AC Labs</a>
             <div class="header-stats">
                 <div class="header-stat">
-                    <div class="header-stat-value">22</div>
+                    <div class="header-stat-value">23</div>
                     <div class="header-stat-label">Total Labs</div>
                 </div>
                 <div class="header-stat">
@@ -343,7 +343,7 @@ $solvedCount = getSolvedCount();
                     <div class="header-stat-label">Apprentice</div>
                 </div>
                 <div class="header-stat">
-                    <div class="header-stat-value">19</div>
+                    <div class="header-stat-value">20</div>
                     <div class="header-stat-label">Practitioner</div>
                 </div>
             </div>
@@ -393,7 +393,7 @@ $solvedCount = getSolvedCount();
                         <td><span class="vulnerability-tag">Information Disclosure</span></td>
                         <td><span class="difficulty-badge apprentice">🟢 Apprentice</span></td>
                         <td class="objective-text">Access admin panel via robots.txt and delete carlos</td>
-                        <td><a href="lab1/lab-description.php" class="btn-start">Start →</a></td>
+                        <td><a href="Lab-01/lab-description.php" class="btn-start">Start →</a></td>
                     </tr>
                     <tr>
                         <td><div class="lab-number">2</div></td>
@@ -411,7 +411,7 @@ $solvedCount = getSolvedCount();
                         <td><span class="vulnerability-tag">Client-Side Disclosure</span></td>
                         <td><span class="difficulty-badge apprentice">🟢 Apprentice</span></td>
                         <td class="objective-text">Find admin panel in JavaScript and delete carlos</td>
-                        <td><a href="lab2/lab-description.php" class="btn-start">Start →</a></td>
+                        <td><a href="Lab-02/lab-description.php" class="btn-start">Start →</a></td>
                     </tr>
                     <tr>
                         <td><div class="lab-number">3</div></td>
@@ -429,7 +429,7 @@ $solvedCount = getSolvedCount();
                         <td><span class="vulnerability-tag">Cookie Manipulation</span></td>
                         <td><span class="difficulty-badge apprentice">🟢 Apprentice</span></td>
                         <td class="objective-text">Modify Admin cookie to gain admin access</td>
-                        <td><a href="lab3/lab-description.php" class="btn-start">Start →</a></td>
+                        <td><a href="Lab-03/lab-description.php" class="btn-start">Start →</a></td>
                     </tr>
                     <tr>
                         <td><div class="lab-number">4</div></td>
@@ -447,7 +447,7 @@ $solvedCount = getSolvedCount();
                         <td><span class="vulnerability-tag">Mass Assignment</span></td>
                         <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
                         <td class="objective-text">Add roleid to JSON request for admin privileges</td>
-                        <td><a href="lab4/lab-description.php" class="btn-start">Start →</a></td>
+                        <td><a href="Lab-04/lab-description.php" class="btn-start">Start →</a></td>
                     </tr>
                     <tr>
                         <td><div class="lab-number">5</div></td>
@@ -465,7 +465,7 @@ $solvedCount = getSolvedCount();
                         <td><span class="vulnerability-tag">IDOR</span></td>
                         <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
                         <td class="objective-text">Change user ID to access carlos's API key</td>
-                        <td><a href="lab5/lab-description.php" class="btn-start">Start →</a></td>
+                        <td><a href="Lab-05/lab-description.php" class="btn-start">Start →</a></td>
                     </tr>
                     <tr>
                         <td><div class="lab-number">6</div></td>
@@ -483,7 +483,7 @@ $solvedCount = getSolvedCount();
                         <td><span class="vulnerability-tag">IDOR + GUID Leak</span></td>
                         <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
                         <td class="objective-text">Find carlos's GUID in blog to access profile</td>
-                        <td><a href="lab6/lab-description.php" class="btn-start">Start →</a></td>
+                        <td><a href="Lab-06/lab-description.php" class="btn-start">Start →</a></td>
                     </tr>
                     <tr>
                         <td><div class="lab-number">7</div></td>
@@ -501,7 +501,7 @@ $solvedCount = getSolvedCount();
                         <td><span class="vulnerability-tag">Redirect Leakage</span></td>
                         <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
                         <td class="objective-text">Capture API key from redirect response body</td>
-                        <td><a href="lab7/lab-description.php" class="btn-start">Start →</a></td>
+                        <td><a href="Lab-07/lab-description.php" class="btn-start">Start →</a></td>
                     </tr>
                     <tr>
                         <td><div class="lab-number">8</div></td>
@@ -519,7 +519,7 @@ $solvedCount = getSolvedCount();
                         <td><span class="vulnerability-tag">Password Disclosure</span></td>
                         <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
                         <td class="objective-text">Extract admin password from HTML source</td>
-                        <td><a href="lab8/lab-description.php" class="btn-start">Start →</a></td>
+                        <td><a href="Lab-08/lab-description.php" class="btn-start">Start →</a></td>
                     </tr>
                     <tr>
                         <td><div class="lab-number">9</div></td>
@@ -537,7 +537,7 @@ $solvedCount = getSolvedCount();
                         <td><span class="vulnerability-tag">IDOR - File Access</span></td>
                         <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
                         <td class="objective-text">Find carlos's password in chat transcript</td>
-                        <td><a href="lab9/lab-description.php" class="btn-start">Start →</a></td>
+                        <td><a href="Lab-09/lab-description.php" class="btn-start">Start →</a></td>
                     </tr>
                     <tr>
                         <td><div class="lab-number">10</div></td>
@@ -555,7 +555,7 @@ $solvedCount = getSolvedCount();
                         <td><span class="vulnerability-tag">Header Bypass</span></td>
                         <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
                         <td class="objective-text">Bypass blocked /admin path and delete carlos</td>
-                        <td><a href="lab10/lab-description.php" class="btn-start">Start →</a></td>
+                        <td><a href="Lab-10/lab-description.php" class="btn-start">Start →</a></td>
                     </tr>
                     <tr>
                         <td><div class="lab-number">11</div></td>
@@ -573,7 +573,7 @@ $solvedCount = getSolvedCount();
                         <td><span class="vulnerability-tag">HTTP Method Bypass</span></td>
                         <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
                         <td class="objective-text">Change HTTP method to bypass access control</td>
-                        <td><a href="lab11/lab-description.php" class="btn-start">Start →</a></td>
+                        <td><a href="Lab-11/lab-description.php" class="btn-start">Start →</a></td>
                     </tr>
                     <tr>
                         <td><div class="lab-number">12</div></td>
@@ -591,7 +591,7 @@ $solvedCount = getSolvedCount();
                         <td><span class="vulnerability-tag">Multi-Step Bypass</span></td>
                         <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
                         <td class="objective-text">Skip to unprotected confirmation step</td>
-                        <td><a href="lab12/lab-description.php" class="btn-start">Start →</a></td>
+                        <td><a href="Lab-12/lab-description.php" class="btn-start">Start →</a></td>
                     </tr>
                     <tr>
                         <td><div class="lab-number">13</div></td>
@@ -609,7 +609,7 @@ $solvedCount = getSolvedCount();
                         <td><span class="vulnerability-tag">Header-based AC</span></td>
                         <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
                         <td class="objective-text">Spoof Referer header to gain admin privileges</td>
-                        <td><a href="lab13/lab-description.php" class="btn-start">Start →</a></td>
+                        <td><a href="Lab-13/lab-description.php" class="btn-start">Start →</a></td>
                     </tr>
                     <tr>
                         <td><div class="lab-number">14</div></td>
@@ -627,7 +627,7 @@ $solvedCount = getSolvedCount();
                         <td><span class="vulnerability-tag">IDOR - Object Level</span></td>
                         <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
                         <td class="objective-text">Delete another manager's banner via IDOR</td>
-                        <td><a href="lab14/lab-description.php" class="btn-start">Start →</a></td>
+                        <td><a href="Lab-14/lab-description.php" class="btn-start">Start →</a></td>
                     </tr>
                     <tr>
                         <td><div class="lab-number">15</div></td>
@@ -645,7 +645,7 @@ $solvedCount = getSolvedCount();
                         <td><span class="vulnerability-tag">IDOR - PII Exposure</span></td>
                         <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
                         <td class="objective-text">Extract another user's phone number, address, and private notes</td>
-                        <td><a href="lab15/lab-description.php" class="btn-start">Start →</a></td>
+                        <td><a href="Lab-15/lab-description.php" class="btn-start">Start →</a></td>
                     </tr>
                     <tr>
                         <td><div class="lab-number">16</div></td>
@@ -663,7 +663,7 @@ $solvedCount = getSolvedCount();
                         <td><span class="vulnerability-tag">IDOR - API Bypass</span></td>
                         <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
                         <td class="objective-text">Access restricted polls via API that bypasses UI access controls</td>
-                        <td><a href="lab16/lab-description.php" class="btn-start">Start →</a></td>
+                        <td><a href="Lab-16/lab-description.php" class="btn-start">Start →</a></td>
                     </tr>
                     <tr>
                         <td><div class="lab-number">17</div></td>
@@ -681,7 +681,7 @@ $solvedCount = getSolvedCount();
                         <td><span class="vulnerability-tag">IDOR - Status Check</span></td>
                         <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
                         <td class="objective-text">Access private project's external URL and API key via status check IDOR</td>
-                        <td><a href="lab17/lab-description.php" class="btn-start">Start →</a></td>
+                        <td><a href="Lab-17/lab-description.php" class="btn-start">Start →</a></td>
                     </tr>
                     <tr>
                         <td><div class="lab-number">18</div></td>
@@ -699,7 +699,7 @@ $solvedCount = getSolvedCount();
                         <td><span class="vulnerability-tag">IDOR - Session Mgmt</span></td>
                         <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
                         <td class="objective-text">Expire another user's sessions by manipulating account_id parameter</td>
-                        <td><a href="lab18/lab-description.php" class="btn-start">Start →</a></td>
+                        <td><a href="Lab-18/lab-description.php" class="btn-start">Start →</a></td>
                     </tr>
                     <tr>
                         <td><div class="lab-number">19</div></td>
@@ -717,7 +717,7 @@ $solvedCount = getSolvedCount();
                         <td><span class="vulnerability-tag">IDOR - Delete Action</span></td>
                         <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
                         <td class="objective-text">Delete another user's saved projects by manipulating saved_id parameter</td>
-                        <td><a href="lab19/lab-description.php" class="btn-start">Start →</a></td>
+                        <td><a href="Lab-19/lab-description.php" class="btn-start">Start →</a></td>
                     </tr>
                     <tr>
                         <td><div class="lab-number">20</div></td>
@@ -735,7 +735,7 @@ $solvedCount = getSolvedCount();
                         <td><span class="vulnerability-tag">IDOR - RBAC Bypass</span></td>
                         <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
                         <td class="objective-text">Create, view, and delete API keys as a member without admin/owner role</td>
-                        <td><a href="lab20/lab-description.php" class="btn-start">Start →</a></td>
+                        <td><a href="Lab-20/lab-description.php" class="btn-start">Start →</a></td>
                     </tr>
                     <tr>
                         <td><div class="lab-number">21</div></td>
@@ -753,7 +753,7 @@ $solvedCount = getSolvedCount();
                         <td><span class="vulnerability-tag">IDOR - Settings Bypass</span></td>
                         <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
                         <td class="objective-text">Modify another store's column visibility settings via settings_id manipulation</td>
-                        <td><a href="lab21/lab-description.php" class="btn-start">Start →</a></td>
+                        <td><a href="Lab-21/lab-description.php" class="btn-start">Start →</a></td>
                     </tr>
                     <tr>
                         <td><div class="lab-number">22</div></td>
@@ -771,7 +771,25 @@ $solvedCount = getSolvedCount();
                         <td><span class="vulnerability-tag">IDOR - Info Disclosure</span></td>
                         <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
                         <td class="objective-text">Access victim's booking details, driver bids, and sensitive location data</td>
-                        <td><a href="lab22/lab-description.php" class="btn-start">Start →</a></td>
+                        <td><a href="Lab-22/lab-description.php" class="btn-start">Start →</a></td>
+                    </tr>
+                    <tr>
+                        <td><div class="lab-number">23</div></td>
+                        <td>
+                            <div class="lab-info">
+                                <div class="lab-status">
+                                    <h3>IDOR at AddTagToAssets Operation</h3>
+                                    <?php if (in_array(23, $solvedLabs)): ?>
+                                        <span class="solved-badge">✓ Solved</span>
+                                    <?php endif; ?>
+                                </div>
+                                <p>Enumerate private custom tags via base64-encoded sequential GraphQL-style IDs</p>
+                            </div>
+                        </td>
+                        <td><span class="vulnerability-tag">IDOR - Enumeration</span></td>
+                        <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
+                        <td class="objective-text">Discover victim's private tags by bruteforcing encoded internal IDs</td>
+                        <td><a href="Lab-23/lab-description.php" class="btn-start">Start →</a></td>
                     </tr>
                 </tbody>
             </table>
@@ -780,22 +798,22 @@ $solvedCount = getSolvedCount();
         <div class="footer-stats">
             <div class="stat-card">
                 <div class="stat-card-icon">🎯</div>
-                <div class="stat-card-value">22</div>
+                <div class="stat-card-value">23</div>
                 <div class="stat-card-label">Active Labs</div>
             </div>
             <div class="stat-card">
                 <div class="stat-card-icon">🔓</div>
-                <div class="stat-card-value">20</div>
+                <div class="stat-card-value">21</div>
                 <div class="stat-card-label">Vulnerability Types</div>
             </div>
             <div class="stat-card">
                 <div class="stat-card-icon">📚</div>
-                <div class="stat-card-value">22</div>
+                <div class="stat-card-value">23</div>
                 <div class="stat-card-label">Documentation Pages</div>
             </div>
             <div class="stat-card">
                 <div class="stat-card-icon">⏱️</div>
-                <div class="stat-card-value">~12h</div>
+                <div class="stat-card-value">~13h</div>
                 <div class="stat-card-label">Total Duration</div>
             </div>
         </div>
