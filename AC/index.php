@@ -331,7 +331,7 @@ $solvedCount = getSolvedCount();
             <a href="index.php" class="logo">🔐 AC Labs</a>
             <div class="header-stats">
                 <div class="header-stat">
-                    <div class="header-stat-value">17</div>
+                    <div class="header-stat-value">22</div>
                     <div class="header-stat-label">Total Labs</div>
                 </div>
                 <div class="header-stat">
@@ -343,7 +343,7 @@ $solvedCount = getSolvedCount();
                     <div class="header-stat-label">Apprentice</div>
                 </div>
                 <div class="header-stat">
-                    <div class="header-stat-value">14</div>
+                    <div class="header-stat-value">19</div>
                     <div class="header-stat-label">Practitioner</div>
                 </div>
             </div>
@@ -683,6 +683,96 @@ $solvedCount = getSolvedCount();
                         <td class="objective-text">Access private project's external URL and API key via status check IDOR</td>
                         <td><a href="lab17/lab-description.php" class="btn-start">Start →</a></td>
                     </tr>
+                    <tr>
+                        <td><div class="lab-number">18</div></td>
+                        <td>
+                            <div class="lab-info">
+                                <div class="lab-status">
+                                    <h3>IDOR Expire Other User Sessions</h3>
+                                    <?php if (in_array(18, $solvedLabs)): ?>
+                                        <span class="solved-badge">✓ Solved</span>
+                                    <?php endif; ?>
+                                </div>
+                                <p>Session expiration endpoint accepts account_id without ownership validation</p>
+                            </div>
+                        </td>
+                        <td><span class="vulnerability-tag">IDOR - Session Mgmt</span></td>
+                        <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
+                        <td class="objective-text">Expire another user's sessions by manipulating account_id parameter</td>
+                        <td><a href="lab18/lab-description.php" class="btn-start">Start →</a></td>
+                    </tr>
+                    <tr>
+                        <td><div class="lab-number">19</div></td>
+                        <td>
+                            <div class="lab-info">
+                                <div class="lab-status">
+                                    <h3>IDOR Delete Users Saved Projects</h3>
+                                    <?php if (in_array(19, $solvedLabs)): ?>
+                                        <span class="solved-badge">✓ Solved</span>
+                                    <?php endif; ?>
+                                </div>
+                                <p>Delete endpoint accepts saved_id without checking resource ownership</p>
+                            </div>
+                        </td>
+                        <td><span class="vulnerability-tag">IDOR - Delete Action</span></td>
+                        <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
+                        <td class="objective-text">Delete another user's saved projects by manipulating saved_id parameter</td>
+                        <td><a href="lab19/lab-description.php" class="btn-start">Start →</a></td>
+                    </tr>
+                    <tr>
+                        <td><div class="lab-number">20</div></td>
+                        <td>
+                            <div class="lab-info">
+                                <div class="lab-status">
+                                    <h3>IDOR VIEW & DELETE & Create API Keys</h3>
+                                    <?php if (in_array(20, $solvedLabs)): ?>
+                                        <span class="solved-badge">✓ Solved</span>
+                                    <?php endif; ?>
+                                </div>
+                                <p>API endpoint checks membership but not role permissions for sensitive operations</p>
+                            </div>
+                        </td>
+                        <td><span class="vulnerability-tag">IDOR - RBAC Bypass</span></td>
+                        <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
+                        <td class="objective-text">Create, view, and delete API keys as a member without admin/owner role</td>
+                        <td><a href="lab20/lab-description.php" class="btn-start">Start →</a></td>
+                    </tr>
+                    <tr>
+                        <td><div class="lab-number">21</div></td>
+                        <td>
+                            <div class="lab-info">
+                                <div class="lab-status">
+                                    <h3>IDOR Stocky Low Stock Settings Columns</h3>
+                                    <?php if (in_array(21, $solvedLabs)): ?>
+                                        <span class="solved-badge">✓ Solved</span>
+                                    <?php endif; ?>
+                                </div>
+                                <p>Settings endpoint accepts settings_id without ownership verification</p>
+                            </div>
+                        </td>
+                        <td><span class="vulnerability-tag">IDOR - Settings Bypass</span></td>
+                        <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
+                        <td class="objective-text">Modify another store's column visibility settings via settings_id manipulation</td>
+                        <td><a href="lab21/lab-description.php" class="btn-start">Start →</a></td>
+                    </tr>
+                    <tr>
+                        <td><div class="lab-number">22</div></td>
+                        <td>
+                            <div class="lab-info">
+                                <div class="lab-status">
+                                    <h3>IDOR on Booking Detail & Bids</h3>
+                                    <?php if (in_array(22, $solvedLabs)): ?>
+                                        <span class="solved-badge">✓ Solved</span>
+                                    <?php endif; ?>
+                                </div>
+                                <p>Ride-sharing API returns booking details, bids, and driver info for any booking_id</p>
+                            </div>
+                        </td>
+                        <td><span class="vulnerability-tag">IDOR - Info Disclosure</span></td>
+                        <td><span class="difficulty-badge practitioner">🟠 Practitioner</span></td>
+                        <td class="objective-text">Access victim's booking details, driver bids, and sensitive location data</td>
+                        <td><a href="lab22/lab-description.php" class="btn-start">Start →</a></td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -690,22 +780,22 @@ $solvedCount = getSolvedCount();
         <div class="footer-stats">
             <div class="stat-card">
                 <div class="stat-card-icon">🎯</div>
-                <div class="stat-card-value">17</div>
+                <div class="stat-card-value">22</div>
                 <div class="stat-card-label">Active Labs</div>
             </div>
             <div class="stat-card">
                 <div class="stat-card-icon">🔓</div>
-                <div class="stat-card-value">15</div>
+                <div class="stat-card-value">20</div>
                 <div class="stat-card-label">Vulnerability Types</div>
             </div>
             <div class="stat-card">
                 <div class="stat-card-icon">📚</div>
-                <div class="stat-card-value">17</div>
+                <div class="stat-card-value">22</div>
                 <div class="stat-card-label">Documentation Pages</div>
             </div>
             <div class="stat-card">
                 <div class="stat-card-icon">⏱️</div>
-                <div class="stat-card-value">~5h</div>
+                <div class="stat-card-value">~12h</div>
                 <div class="stat-card-label">Total Duration</div>
             </div>
         </div>
