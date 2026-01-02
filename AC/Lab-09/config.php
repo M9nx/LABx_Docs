@@ -2,7 +2,7 @@
 // Database configuration for Lab 9 - Chat Log IDOR
 $db_host = 'localhost';
 $db_user = 'root';
-$db_pass = '';
+$db_pass = 'root';
 $db_name = 'ac_lab9';
 
 // Create connection

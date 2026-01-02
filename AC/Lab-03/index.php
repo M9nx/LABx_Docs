@@ -3,7 +3,7 @@ session_start();
 require_once '../progress.php';
 $isSolved = isLabSolved(3);
 require_once 'config.php';
-$pdo = getDBConnection();
+// $pdo is already created in config.php
 $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE username = 'carlos'");
 $stmt->execute();
 $carlosExists = $stmt->fetchColumn() > 0;

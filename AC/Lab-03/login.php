@@ -261,15 +261,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <h4>🔑 Test Credentials</h4>
             <div class="credential-item">
                 <span class="username">wiener</span>
-                <span class="password">peter</span>
+                <span class="password">password</span>
             </div>
             <div class="credential-item">
                 <span class="username">carlos</span>
-                <span class="password">secret</span>
+                <span class="password">password</span>
             </div>
             <div class="credential-item">
-                <span class="username">administrator</span>
-                <span class="password">admin123</span>
+                <span class="username">admin</span>
+                <span class="password">password</span>
             </div>
         </div>
 

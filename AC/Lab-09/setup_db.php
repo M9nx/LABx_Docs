@@ -6,7 +6,7 @@ resetLab(9);
 // Lab 9 - Database Setup Script
 $db_host = 'localhost';
 $db_user = 'root';
-$db_pass = '';
+$db_pass = 'root';
 
 // Connect to MySQL server
 $conn = new mysqli($db_host, $db_user, $db_pass);

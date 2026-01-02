@@ -6,7 +6,7 @@ resetLab(8);
 // Database setup script for Lab 8
 $host = 'localhost';
 $user = 'root';
-$pass = '';
+$pass = 'root';
 
 $conn = new mysqli($host, $user, $pass);
 if ($conn->connect_error) {

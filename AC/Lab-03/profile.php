@@ -11,8 +11,8 @@ if (!isset($_SESSION['user_id'])) {
 // Get current user info
 $user_id = $_SESSION['user_id'];
 $username = $_SESSION['username'];
-$full_name = $_SESSION['full_name'];
-$email = $_SESSION['email'];
+$full_name = $_SESSION['full_name'] ?? '';
+$email = $_SESSION['email'] ?? '';
 $role = $_SESSION['role'];
 
 // Check Admin cookie status
