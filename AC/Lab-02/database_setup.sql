@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 -- Insert comprehensive sample users (passwords are hashed versions of simple passwords for lab purposes)
+-- IMPORTANT: Hash below is for 'password'. Use setup_db.php for proper username123 passwords!
 INSERT INTO users (username, password, email, full_name, role, department, position, salary, address, phone, emergency_contact, security_clearance, notes) VALUES
 ('admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin@techcorp.com', 'System Administrator', 'admin', 'IT Security', 'Chief Security Officer', 125000.00, '100 Corporate Blvd, Executive Floor, Tech City', '+1-555-0001', 'Emergency: +1-555-0911', 'top-secret', 'Root administrator account with full system access. Handles security audits and compliance.'),
 ('carlos', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'carlos.rodriguez@techcorp.com', 'Carlos Rodriguez', 'user', 'Marketing', 'Marketing Specialist', 65000.00, '123 Sunset Ave, Marketing District, Tech City', '+1-555-0002', 'Maria Rodriguez: +1-555-0922', 'basic', 'Marketing team member responsible for digital campaigns. TARGET USER FOR DELETION.'),

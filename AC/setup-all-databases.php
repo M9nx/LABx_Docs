@@ -11,14 +11,14 @@ $dbPass = 'root';
 
 // Lab configurations - add new labs here
 $labs = [
-    1 => ['name' => 'Unprotected Admin', 'db' => 'ac_lab1', 'sql' => 'Lab-01/database_setup.sql'],
-    2 => ['name' => 'Unpredictable URL', 'db' => 'ac_lab2', 'sql' => 'Lab-02/database_setup.sql'],
+    1 => ['name' => 'Unprotected Admin', 'db' => 'secureshop_lab1', 'sql' => 'Lab-01/database_setup.sql'],
+    2 => ['name' => 'Unpredictable URL', 'db' => 'techcorp_lab2', 'sql' => 'Lab-02/database_setup.sql'],
     3 => ['name' => 'Cookie Manipulation', 'db' => 'lab3_db', 'sql' => 'Lab-03/database_setup.sql'],
-    4 => ['name' => 'Mass Assignment', 'db' => 'ac_lab4', 'sql' => 'Lab-04/database_setup.sql'],
-    5 => ['name' => 'IDOR User ID', 'db' => 'ac_lab5', 'sql' => 'Lab-05/database_setup.sql'],
-    6 => ['name' => 'IDOR GUID Leak', 'db' => 'ac_lab6', 'sql' => 'Lab-06/database_setup.sql'],
-    7 => ['name' => 'Redirect Data Leak', 'db' => 'ac_lab7', 'sql' => 'Lab-07/database_setup.sql'],
-    8 => ['name' => 'Multi-Step Bypass', 'db' => 'ac_lab8', 'sql' => 'Lab-08/database_setup.sql'],
+    4 => ['name' => 'Mass Assignment', 'db' => 'lab4_rolemod', 'sql' => 'Lab-04/database_setup.sql'],
+    5 => ['name' => 'IDOR User ID', 'db' => 'lab5_idor', 'sql' => 'Lab-05/database_setup.sql'],
+    6 => ['name' => 'IDOR GUID Leak', 'db' => 'lab6_guid', 'sql' => 'Lab-06/database_setup.sql'],
+    7 => ['name' => 'Redirect Data Leak', 'db' => 'lab7_redirect', 'sql' => 'Lab-07/database_setup.sql'],
+    8 => ['name' => 'Multi-Step Bypass', 'db' => 'lab8_password', 'sql' => 'Lab-08/database_setup.sql'],
     9 => ['name' => 'Referer Header', 'db' => 'ac_lab9', 'sql' => 'Lab-09/database_setup.sql'],
     10 => ['name' => 'Method Override', 'db' => 'ac_lab10', 'sql' => 'Lab-10/database_setup.sql'],
     11 => ['name' => 'URL Match Discrepancy', 'db' => 'ac_lab11', 'sql' => 'Lab-11/database_setup.sql'],

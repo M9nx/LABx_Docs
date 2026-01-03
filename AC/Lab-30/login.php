@@ -130,6 +130,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <button type="submit" class="btn-login">Sign In</button>
                 </form>
                 
+                <div style="background: #f3e8ff; border: 1px solid #c4b5fd; border-radius: 8px; padding: 1rem; margin-top: 1rem; font-size: 0.85rem;">
+                    <strong style="color: #7c3aed;">🔑 Test Accounts:</strong>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.25rem; margin-top: 0.5rem; color: #5b21b6;">
+                        <span>alice_shop</span><span>password123</span>
+                        <span>bob_tech</span><span>password123</span>
+                        <span>carol_home</span><span>password123</span>
+                    </div>
+                </div>
+                
                 <div class="nav-links">
                     <a href="index.php">← Back to Lab</a>
                     <a href="docs.php">Documentation</a>

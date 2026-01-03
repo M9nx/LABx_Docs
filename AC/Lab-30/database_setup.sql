@@ -63,7 +63,8 @@ CREATE TABLE IF NOT EXISTS activity_log (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Insert test users (password: password123)
+-- Insert test users (password: password)
+-- NOTE: Hash below is for 'password'. Use setup_db.php for password123
 INSERT INTO users (username, password, store_name, email) VALUES
 ('alice_shop', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', "Alice's Fashion Boutique", 'alice@fashion.example'),
 ('bob_tech', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', "Bob's Tech Store", 'bob@tech.example'),

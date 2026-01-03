@@ -11,7 +11,7 @@ $setupFile = __DIR__ . '/database_setup.sql';
 // Try to connect without database first
 $host = 'localhost';
 $user = 'root';
-$pass = '';
+$pass = 'root';
 
 $message = '';
 $messageType = '';

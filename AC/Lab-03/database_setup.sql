@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS users (
 DELETE FROM users;
 
 -- Insert sample users (passwords are hashed versions of simple passwords for lab purposes)
--- All passwords use: password_hash('password123', PASSWORD_DEFAULT)
+-- All passwords use: password_hash('password', PASSWORD_DEFAULT)
 INSERT INTO users (username, password, email, full_name, role) VALUES
 ('admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin@lab3.com', 'Administrator', 'admin'),
 ('carlos', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'carlos@lab3.com', 'Carlos Rodriguez', 'user'),

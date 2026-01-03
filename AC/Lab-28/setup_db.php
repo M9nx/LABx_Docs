@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['setup_db'])) {
         $pdo = new PDO(
             "mysql:host=localhost",
             "root",
-            "",
+            "root",
             [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
         );
         

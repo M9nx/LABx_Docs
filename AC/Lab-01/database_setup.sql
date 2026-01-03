@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 -- Insert sample users (passwords are hashed versions of simple passwords for lab purposes)
+-- IMPORTANT: Hash below is for 'password'. Use setup_db.php for proper username123 passwords!
 -- Password hashes generated using PHP's password_hash() function
 INSERT INTO users (username, password, email, full_name, role, address, phone, notes) VALUES
 ('admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin@secureshop.com', 'Administrator', 'admin', '123 Admin St, Admin City', '+1-555-0001', 'Super admin account with full access'),
