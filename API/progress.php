@@ -2,10 +2,20 @@
 // API Security Labs - Progress Tracking System
 // This tracks which labs have been completed
 
-$db_host = 'localhost';
-$db_user = 'root';
-$db_pass = 'root';
+// Use centralized database configuration
+require_once __DIR__ . '/../db-config.php';
+
+$creds = getDbCredentials();
+$db_host = $creds['host'];
+$db_user = $creds['user'];
+$db_pass = $creds['pass'];
 $db_name = 'api_progress';
+
+// Check if database is configured
+if (!$creds['configured']) {
+    // Silently return if not configured - let individual pages handle the error
+    return;
+}
 
 // Create connection
 $progress_conn = new mysqli($db_host, $db_user, $db_pass);

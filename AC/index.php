@@ -4,10 +4,13 @@
  * Lists all 30 Access Control labs with progress tracking
  */
 
-// Database configuration
-$db_host = 'localhost';
-$db_user = 'root';
-$db_pass = 'root';
+// Use centralized database configuration
+require_once __DIR__ . '/../db-config.php';
+
+$creds = getDbCredentials();
+$db_host = $creds['host'];
+$db_user = $creds['user'];
+$db_pass = $creds['pass'];
 $db_name = 'ac_progress';
 
 mysqli_report(MYSQLI_REPORT_OFF);

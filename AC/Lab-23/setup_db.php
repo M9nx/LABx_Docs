@@ -1,5 +1,17 @@
 <?php
 // Lab 23: Database Setup Script
+
+// Use centralized database configuration
+require_once __DIR__ . '/../../db-config.php';
+
+$creds = getDbCredentials();
+$host = $creds['host'];
+$user = $creds['user'];
+$pass = $creds['pass'];
+
+if (!$creds['configured']) {
+    die('<div style="padding:20px;background:#fee;border:1px solid #c00;margin:20px;border-radius:8px;"><strong>Database not configured.</strong><br>Please configure your database credentials on the <a href="../../index.php">main page</a>.</div>');
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -81,8 +93,8 @@
         $success = true;
         
         try {
-            // Step 1: Connect to MySQL
-            $pdo = new PDO("mysql:host=localhost", "root", "root", [
+            // Step 1: Connect to MySQL (using centralized credentials from top of file)
+            $pdo = new PDO("mysql:host=$host", $user, $pass, [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
             ]);
             $steps[] = ['icon' => '✅', 'text' => 'Connected to MySQL server', 'status' => 'done'];

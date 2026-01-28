@@ -1,12 +1,18 @@
 <?php
 // Lab 30: Stocky Inventory App - Configuration
-session_start();
 
-// Database configuration
-$host = 'localhost';
+// Uses centralized database configuration
+require_once __DIR__ . '/../../db-config.php';
+
+$creds = getDbCredentials();
+$host = $creds['host'];
+$username = $creds['user'];
+$password = $creds['pass'];
 $dbname = 'ac_lab30';
-$username = 'root';
-$password = 'root';
+
+if (!$creds['configured']) {
+    die('<div style="padding:20px;background:#fee;border:1px solid #c00;margin:20px;border-radius:8px;"><strong>Database not configured.</strong><br>Please configure your database credentials on the <a href="../../index.php">main page</a>.</div>');
+}
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);

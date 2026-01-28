@@ -4,10 +4,14 @@
  * Initialize all lab databases from one place
  */
 
-// Database connection settings
-$dbHost = 'localhost';
-$dbUser = 'root';
-$dbPass = 'root';
+// Use centralized database configuration
+require_once __DIR__ . '/../db-config.php';
+
+$creds = getDbCredentials();
+$dbHost = $creds['host'];
+$dbUser = $creds['user'];
+$dbPass = $creds['pass'];
+$dbConfigured = $creds['configured'];
 
 // Lab configurations - add new labs here
 $labs = [
@@ -47,15 +51,22 @@ $message = '';
 $messageType = '';
 $results = [];
 
-// Connect to MySQL
-try {
-    $pdo = new PDO("mysql:host=$dbHost", $dbUser, $dbPass, [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-    ]);
-} catch (PDOException $e) {
-    $message = "Database connection failed: " . $e->getMessage();
+// Check if credentials are configured
+if (!$dbConfigured) {
+    $message = "Database credentials not configured. Please configure them on the <a href='../index.php'>main page</a> first.";
     $messageType = 'error';
     $pdo = null;
+} else {
+    // Connect to MySQL
+    try {
+        $pdo = new PDO("mysql:host=$dbHost", $dbUser, $dbPass, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+        ]);
+    } catch (PDOException $e) {
+        $message = "Database connection failed: " . $e->getMessage();
+        $messageType = 'error';
+        $pdo = null;
+    }
 }
 
 // Handle form submission

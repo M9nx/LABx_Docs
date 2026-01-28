@@ -5,10 +5,15 @@
  * Dynamic integration with all category progress databases
  */
 
-// Database configuration
-$db_host = 'localhost';
-$db_user = 'root';
-$db_pass = 'root';
+// Include centralized database configuration
+require_once __DIR__ . '/db-config.php';
+
+// Get database credentials from centralized config
+$creds = getDbCredentials();
+$db_host = $creds['host'];
+$db_user = $creds['user'];
+$db_pass = $creds['pass'];
+$db_configured = $creds['configured'];
 
 // Disable mysqli exceptions to handle missing databases gracefully
 mysqli_report(MYSQLI_REPORT_OFF);
@@ -406,6 +411,62 @@ else $greeting = 'Good evening';
         .sidebar-footer {
             padding: 1rem 1.5rem;
             border-top: 1px solid var(--border-color);
+        }
+        
+        /* Sidebar DB Status Indicator */
+        .sidebar-db-status {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .sidebar-db-status:hover {
+            background: var(--bg-card-hover);
+        }
+        
+        .sidebar-db-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        .sidebar-db-led {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #666;
+            box-shadow: 0 0 0 2px rgba(102, 102, 102, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-db-led.connected {
+            background: #10b981;
+            box-shadow: 0 0 8px #10b981, 0 0 0 2px rgba(16, 185, 129, 0.2);
+            animation: sidebarPulse 2s infinite;
+        }
+        
+        .sidebar-db-led.error {
+            background: #ef4444;
+            box-shadow: 0 0 8px #ef4444, 0 0 0 2px rgba(239, 68, 68, 0.2);
+        }
+        
+        .sidebar-db-led.testing {
+            background: #f59e0b;
+            box-shadow: 0 0 8px #f59e0b, 0 0 0 2px rgba(245, 158, 11, 0.2);
+            animation: sidebarPulse 0.5s infinite;
+        }
+        
+        @keyframes sidebarPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
         }
         
         .theme-toggle {
@@ -1161,6 +1222,177 @@ else $greeting = 'Good evening';
             color: var(--text-secondary);
         }
         
+        /* Database Config Section */
+        .db-config-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .db-config-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        
+        .db-config-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .db-config-title h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+        }
+        
+        .db-led {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #666;
+            box-shadow: 0 0 6px rgba(102, 102, 102, 0.5);
+            transition: all 0.3s ease;
+        }
+        
+        .db-led.connected {
+            background: #22c55e;
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.6), 0 0 20px rgba(34, 197, 94, 0.3);
+            animation: pulse-green 2s infinite;
+        }
+        
+        .db-led.error {
+            background: #ef4444;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
+        }
+        
+        .db-led.testing {
+            background: #f59e0b;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
+            animation: pulse-orange 1s infinite;
+        }
+        
+        @keyframes pulse-green {
+            0%, 100% { box-shadow: 0 0 10px rgba(34, 197, 94, 0.6), 0 0 20px rgba(34, 197, 94, 0.3); }
+            50% { box-shadow: 0 0 15px rgba(34, 197, 94, 0.8), 0 0 30px rgba(34, 197, 94, 0.4); }
+        }
+        
+        @keyframes pulse-orange {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .db-status-text {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        
+        .db-status-text.connected { color: var(--success); }
+        .db-status-text.error { color: var(--danger); }
+        
+        .db-config-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 0.75rem;
+            align-items: end;
+        }
+        
+        .db-form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+        
+        .db-form-group label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .db-form-group input {
+            padding: 0.6rem 0.75rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            transition: border-color 0.2s ease;
+        }
+        
+        .db-form-group input:focus {
+            outline: none;
+            border-color: var(--text-muted);
+        }
+        
+        .db-form-group input::placeholder {
+            color: var(--text-muted);
+        }
+        
+        .db-test-btn {
+            padding: 0.6rem 1.25rem;
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            border: none;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+            white-space: nowrap;
+        }
+        
+        .db-test-btn:hover {
+            opacity: 0.9;
+        }
+        
+        .db-test-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .db-config-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .db-last-check {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        
+        .db-clear-btn {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        
+        .db-clear-btn:hover {
+            color: var(--danger);
+        }
+        
+        @media (max-width: 768px) {
+            .db-config-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .db-test-btn {
+                width: 100%;
+            }
+        }
+        
         /* Decorative Background */
         .hero::before {
             content: '';
@@ -1386,6 +1618,13 @@ else $greeting = 'Good evening';
         </nav>
         
         <div class="sidebar-footer">
+            <div class="sidebar-db-status" onclick="document.getElementById('dbConfigSection').scrollIntoView({behavior: 'smooth'});" title="Click to configure database">
+                <div class="sidebar-db-info">
+                    <div class="sidebar-db-led" id="sidebarDbLed"></div>
+                    <span id="sidebarDbText">Database</span>
+                </div>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity: 0.5;"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </div>
             <div class="theme-toggle" onclick="toggleTheme()">
                 <span class="theme-toggle-label">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -1419,6 +1658,36 @@ else $greeting = 'Good evening';
                         <div class="hero-stat-value"><?php echo $completion_percentage; ?>%</div>
                         <div class="hero-stat-label">Complete</div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Database Configuration Section -->
+            <div class="db-config-section" id="dbConfigSection">
+                <div class="db-config-header">
+                    <div class="db-config-title">
+                        <div class="db-led" id="dbLed"></div>
+                        <h3>Database Connection</h3>
+                    </div>
+                    <span class="db-status-text" id="dbStatusText">Checking...</span>
+                </div>
+                <form class="db-config-form" id="dbConfigForm" onsubmit="testConnection(event)">
+                    <div class="db-form-group">
+                        <label for="dbHost">Host</label>
+                        <input type="text" id="dbHost" name="host" value="<?php echo htmlspecialchars($db_host); ?>" placeholder="localhost">
+                    </div>
+                    <div class="db-form-group">
+                        <label for="dbUser">Username</label>
+                        <input type="text" id="dbUser" name="user" value="<?php echo htmlspecialchars($db_user); ?>" placeholder="root">
+                    </div>
+                    <div class="db-form-group">
+                        <label for="dbPass">Password</label>
+                        <input type="password" id="dbPass" name="pass" placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="db-test-btn" id="dbTestBtn">Test & Save</button>
+                </form>
+                <div class="db-config-footer">
+                    <span class="db-last-check" id="dbLastCheck">Auto-test every 5 minutes</span>
+                    <button class="db-clear-btn" onclick="clearCredentials()">Clear Credentials</button>
                 </div>
             </div>
 
@@ -1759,9 +2028,120 @@ else $greeting = 'Good evening';
             });
         }
         
+        // Database connection management
+        let dbCheckInterval = null;
+        
+        function updateDbStatus(status, message) {
+            const led = document.getElementById('dbLed');
+            const statusText = document.getElementById('dbStatusText');
+            const lastCheck = document.getElementById('dbLastCheck');
+            const sidebarLed = document.getElementById('sidebarDbLed');
+            const sidebarText = document.getElementById('sidebarDbText');
+            
+            led.className = 'db-led';
+            statusText.className = 'db-status-text';
+            sidebarLed.className = 'sidebar-db-led';
+            
+            if (status === 'connected') {
+                led.classList.add('connected');
+                statusText.classList.add('connected');
+                statusText.textContent = message || 'Connected';
+                sidebarLed.classList.add('connected');
+                sidebarText.textContent = 'Connected';
+            } else if (status === 'error') {
+                led.classList.add('error');
+                statusText.classList.add('error');
+                statusText.textContent = message || 'Connection failed';
+                sidebarLed.classList.add('error');
+                sidebarText.textContent = 'Error';
+            } else if (status === 'testing') {
+                led.classList.add('testing');
+                statusText.textContent = 'Testing...';
+                sidebarLed.classList.add('testing');
+                sidebarText.textContent = 'Testing...';
+            } else {
+                statusText.textContent = message || 'Not configured';
+                sidebarText.textContent = 'Not configured';
+            }
+            
+            lastCheck.textContent = 'Last check: ' + new Date().toLocaleTimeString() + ' • Auto-test every 5 min';
+        }
+        
+        function testConnection(event) {
+            if (event) event.preventDefault();
+            
+            const host = document.getElementById('dbHost').value || 'localhost';
+            const user = document.getElementById('dbUser').value;
+            const pass = document.getElementById('dbPass').value;
+            const btn = document.getElementById('dbTestBtn');
+            
+            btn.disabled = true;
+            btn.textContent = 'Testing...';
+            updateDbStatus('testing');
+            
+            const formData = new FormData();
+            formData.append('host', host);
+            formData.append('user', user);
+            formData.append('pass', pass);
+            
+            fetch('db-config.php?action=test', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    updateDbStatus('connected', data.message);
+                } else if (!data.configured) {
+                    updateDbStatus('unconfigured', data.message);
+                } else {
+                    updateDbStatus('error', data.message);
+                }
+            })
+            .catch(error => {
+                updateDbStatus('error', 'Network error');
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btn.textContent = 'Test & Save';
+            });
+        }
+        
+        function checkConnectionStatus() {
+            fetch('db-config.php?action=status')
+            .then(response => response.json())
+            .then(data => {
+                updateDbStatus(data.status, data.message);
+            })
+            .catch(error => {
+                updateDbStatus('error', 'Network error');
+            });
+        }
+        
+        function clearCredentials() {
+            if (!confirm('Clear saved database credentials?')) return;
+            
+            fetch('db-config.php?action=clear')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('dbUser').value = '';
+                document.getElementById('dbPass').value = '';
+                updateDbStatus('unconfigured', 'Credentials cleared');
+            });
+        }
+        
+        function startAutoCheck() {
+            // Check immediately on load
+            checkConnectionStatus();
+            
+            // Then check every 5 minutes (300000ms)
+            dbCheckInterval = setInterval(checkConnectionStatus, 300000);
+        }
+        
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             animateOnScroll();
+            startAutoCheck();
         });
     </script>
 </body>

@@ -1,9 +1,17 @@
 <?php
 // Database configuration for TechCorp Lab2
-define('DB_HOST', 'localhost');
-define('DB_USERNAME', 'root');
-define('DB_PASSWORD', 'root');
+// Uses centralized database configuration
+require_once __DIR__ . '/../../db-config.php';
+
+$creds = getDbCredentials();
+define('DB_HOST', $creds['host']);
+define('DB_USERNAME', $creds['user']);
+define('DB_PASSWORD', $creds['pass']);
 define('DB_NAME', 'techcorp_lab2');
+
+if (!$creds['configured']) {
+    die('<div style="padding:20px;background:#fee;border:1px solid #c00;margin:20px;border-radius:8px;"><strong>Database not configured.</strong><br>Please configure your database credentials on the <a href="../../index.php">main page</a>.</div>');
+}
 
 // Create database connection
 function getDBConnection() {

@@ -1,9 +1,17 @@
 <?php
 // Lab 18: Database Setup Script
 
-$db_host = 'localhost';
-$db_user = 'root';
-$db_pass = 'root';
+// Use centralized database configuration
+require_once __DIR__ . '/../../db-config.php';
+
+$creds = getDbCredentials();
+$db_host = $creds['host'];
+$db_user = $creds['user'];
+$db_pass = $creds['pass'];
+
+if (!$creds['configured']) {
+    die('<div style="padding:20px;background:#fee;border:1px solid #c00;margin:20px;border-radius:8px;"><strong>Database not configured.</strong><br>Please configure your database credentials on the <a href="../../index.php">main page</a>.</div>');
+}
 
 echo "<html><head><title>Lab 18 Setup</title>";
 echo "<style>
