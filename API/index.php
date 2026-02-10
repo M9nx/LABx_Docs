@@ -3,6 +3,10 @@
  * LABx_Docs - API Security Category
  * Coming Soon page with same design as main
  */
+
+// Sidebar configuration
+$basePath = '../';
+$activePage = 'api';
 ?>
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
@@ -10,6 +14,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>API Security Labs - LABx_Docs</title>
+    <link rel="stylesheet" href="../src/sidebar.css">
     <style>
         :root {
             --bg-primary: #0a0a0a;
@@ -67,160 +72,6 @@
             display: flex;
             transition: background 0.3s ease, color 0.3s ease;
         }
-        
-        /* Sidebar */
-        .sidebar {
-            width: var(--sidebar-width);
-            height: 100vh;
-            background: var(--bg-secondary);
-            border-right: 1px solid var(--border-color);
-            position: fixed;
-            left: 0;
-            top: 0;
-            display: flex;
-            flex-direction: column;
-            z-index: 1000;
-            transition: all 0.3s ease;
-        }
-        
-        .sidebar-header { padding: 1.5rem; border-bottom: 1px solid var(--border-color); }
-        
-        .logo {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .logo span { color: var(--text-muted); font-weight: 400; }
-        
-        .logo-icon {
-            width: 36px;
-            height: 36px;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 0.9rem;
-            color: var(--text-primary);
-        }
-        
-        .sidebar-nav { flex: 1; padding: 1rem 0; overflow-y: auto; }
-        .nav-section { padding: 0 1rem; margin-bottom: 1.5rem; }
-        .nav-section-title {
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-muted);
-            padding: 0 0.75rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem;
-            color: var(--text-secondary);
-            text-decoration: none;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            margin-bottom: 0.25rem;
-        }
-        
-        .nav-item:hover { background: var(--bg-card-hover); color: var(--text-primary); }
-        .nav-item.active { background: var(--bg-tertiary); color: var(--text-primary); }
-        
-        .nav-item-icon {
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0.7;
-        }
-        
-        .nav-item-icon svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2; fill: none; }
-        
-        .nav-badge {
-            margin-left: auto;
-            padding: 0.15rem 0.5rem;
-            background: var(--success-bg);
-            color: var(--success);
-            border-radius: 10px;
-            font-size: 0.7rem;
-            font-weight: 600;
-        }
-        
-        .nav-badge.coming { background: var(--bg-tertiary); color: var(--text-muted); }
-        
-        .sidebar-footer { padding: 1rem 1.5rem; border-top: 1px solid var(--border-color); }
-        
-        .theme-toggle {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.75rem;
-            background: var(--bg-tertiary);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        
-        .theme-toggle:hover { background: var(--bg-card-hover); }
-        .theme-toggle-label { font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; }
-        
-        .theme-toggle-switch {
-            width: 44px;
-            height: 24px;
-            background: var(--border-color);
-            border-radius: 12px;
-            position: relative;
-            transition: all 0.3s ease;
-        }
-        
-        .theme-toggle-switch::after {
-            content: '';
-            position: absolute;
-            width: 18px;
-            height: 18px;
-            background: var(--text-primary);
-            border-radius: 50%;
-            top: 3px;
-            left: 3px;
-            transition: all 0.3s ease;
-        }
-        
-        [data-theme="light"] .theme-toggle-switch::after { left: 23px; }
-        
-        /* Mobile */
-        .mobile-toggle {
-            display: none;
-            position: fixed;
-            top: 1rem;
-            left: 1rem;
-            z-index: 1100;
-            width: 44px;
-            height: 44px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            cursor: pointer;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .mobile-toggle svg { width: 22px; height: 22px; stroke: var(--text-primary); stroke-width: 2; fill: none; }
-        .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 999; }
         
         /* Main content */
         .main-content {
@@ -353,78 +204,7 @@
     
     <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
     
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            <a href="../index.php" class="logo">
-                <span class="logo-icon">L</span>
-                LABx<span>_Docs</span>
-            </a>
-        </div>
-        
-        <nav class="sidebar-nav">
-            <div class="nav-section">
-                <div class="nav-section-title">Overview</div>
-                <a href="../index.php" class="nav-item">
-                    <span class="nav-item-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
-                    Home
-                </a>
-            </div>
-            
-            <div class="nav-section">
-                <div class="nav-section-title">Categories</div>
-                <a href="../AC/index.php" class="nav-item">
-                    <span class="nav-item-icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
-                    Access Control
-                    <span class="nav-badge">30</span>
-                </a>
-                <a href="index.php" class="nav-item active">
-                    <span class="nav-item-icon"><svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></span>
-                    API Security
-                    <span class="nav-badge coming">Soon</span>
-                </a>
-                <a href="../Authentication/index.php" class="nav-item">
-                    <span class="nav-item-icon"><svg viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M13.8 12H3"/></svg></span>
-                    Authentication
-                    <span class="nav-badge coming">Soon</span>
-                </a>
-                <a href="../Insecure-Deserialization/index.php" class="nav-item">
-                    <span class="nav-item-icon"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span>
-                    Insecure Deserialization
-                    <span class="nav-badge">0/10</span>
-                </a>
-            </div>
-            
-            <div class="nav-section">
-                <div class="nav-section-title">Quick Actions</div>
-                <a href="../src/setup.php" class="nav-item">
-                    <span class="nav-item-icon"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></span>
-                    Setup All Databases
-                </a>
-                <a href="../src/progress.php" class="nav-item">
-                    <span class="nav-item-icon"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>
-                    View Progress
-                </a>
-            </div>
-            
-            <div class="nav-section">
-                <div class="nav-section-title">Resources</div>
-                <a href="https://github.com/M9nx/LABx_Docs" target="_blank" class="nav-item">
-                    <span class="nav-item-icon"><svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></span>
-                    GitHub
-                </a>
-            </div>
-        </nav>
-        
-        <div class="sidebar-footer">
-            <div class="theme-toggle" onclick="toggleTheme()">
-                <span class="theme-toggle-label">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-                    Dark Mode
-                </span>
-                <span class="theme-toggle-switch"></span>
-            </div>
-        </div>
-    </aside>
+    <?php include __DIR__ . '/../src/sidebar.php'; ?>
     
     <main class="main-content">
         <div class="container">
