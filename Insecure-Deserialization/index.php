@@ -421,12 +421,20 @@ $completionPercentage = round(($solvedCount / $totalLabs) * 100);
         
         /* Responsive */
         @media (max-width: 768px) {
-            .sidebar { display: none; }
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .sidebar-overlay.open { display: block; }
             .main-content { margin-left: 0; }
         }
     </style>
 </head>
 <body>
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <svg viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+    
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+    
     <?php include __DIR__ . '/../src/sidebar.php'; ?>
 
     <main class="main-content">
@@ -519,6 +527,11 @@ $completionPercentage = round(($solvedCount / $totalLabs) * 100);
     </main>
 
     <script>
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('open');
+            document.querySelector('.sidebar-overlay').classList.toggle('open');
+        }
+        
         function toggleTheme() {
             const html = document.documentElement;
             const currentTheme = html.getAttribute('data-theme');

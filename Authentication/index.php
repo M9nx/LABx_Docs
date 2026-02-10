@@ -4,6 +4,9 @@
  * Coming Soon page with same design as main
  */
 
+// Use centralized database configuration
+require_once __DIR__ . '/../db-config.php';
+
 // Sidebar configuration
 $basePath = '../';
 $activePage = 'auth';
