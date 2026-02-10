@@ -134,59 +134,29 @@ $completionPercentage = round(($solvedCount / $totalLabs) * 100);
             min-height: 100vh;
         }
         
-        .top-bar {
-            height: 60px;
-            background: var(--bg-secondary);
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+        .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
         
+        /* Breadcrumb */
         .breadcrumb {
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            margin-bottom: 2rem;
             font-size: 0.9rem;
         }
         
         .breadcrumb a {
             color: var(--text-muted);
             text-decoration: none;
-            transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            transition: color 0.2s ease;
         }
         
         .breadcrumb a:hover { color: var(--accent); }
         .breadcrumb span { color: var(--text-muted); }
-        .breadcrumb-current { color: var(--text-primary); font-weight: 500; }
-        
-        .top-bar-actions { display: flex; align-items: center; gap: 1rem; }
-        
-        .theme-toggle {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-        }
-        
-        .theme-toggle:hover {
-            background: var(--bg-card-hover);
-            border-color: var(--border-hover);
-            color: var(--text-primary);
-        }
-        
-        .content-area { padding: 2rem; }
+        .breadcrumb .current { color: var(--text-primary); font-weight: 500; }
         
         /* Category Header */
         .category-header {
@@ -438,20 +408,16 @@ $completionPercentage = round(($solvedCount / $totalLabs) * 100);
     <?php include __DIR__ . '/../src/sidebar.php'; ?>
 
     <main class="main-content">
-        <div class="top-bar">
-            <div class="breadcrumb">
-                <a href="../index.php">Home</a>
+        <div class="container">
+            <nav class="breadcrumb">
+                <a href="../index.php">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    Home
+                </a>
                 <span>/</span>
-                <span class="breadcrumb-current">Insecure Deserialization</span>
-            </div>
-            <div class="top-bar-actions">
-                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
-                    🌙
-                </button>
-            </div>
-        </div>
+                <span class="current">Insecure Deserialization</span>
+            </nav>
 
-        <div class="content-area">
             <div class="category-header">
                 <div class="category-title">
                     <div class="category-icon">📦</div>
