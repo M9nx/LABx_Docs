@@ -61,6 +61,20 @@ $categories = [
         'description' => 'Explore authentication flaws including brute force attacks, password reset poisoning, multi-factor bypass, and session vulnerabilities.',
         'link' => 'Authentication/index.php',
         'setup_link' => '#'
+    ],
+    'Insecure-Deserialization' => [
+        'name' => 'Insecure Deserialization',
+        'db' => 'id_progress',
+        'total' => 10,
+        'apprentice' => 4,
+        'practitioner' => 4,
+        'expert' => 2,
+        'solved' => 0,
+        'status' => 'active',
+        'topics' => ['PHP Serialization', 'Object Injection', 'Magic Methods', 'Gadget Chains'],
+        'description' => 'Exploit insecure deserialization vulnerabilities including PHP object injection, magic method abuse, and crafting exploitation gadget chains.',
+        'link' => 'Insecure-Deserialization/index.php',
+        'setup_link' => 'Insecure-Deserialization/setup-all-databases.php'
     ]
 ];
 
