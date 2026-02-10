@@ -1723,33 +1723,31 @@ else $greeting = 'Good evening';
             const sidebarLed = document.getElementById('sidebarDbLed');
             const sidebarText = document.getElementById('sidebarDbText');
             
-            led.className = 'db-led';
-            statusText.className = 'db-status-text';
-            sidebarLed.className = 'sidebar-db-led';
+            if (led) led.className = 'db-led';
+            if (statusText) statusText.className = 'db-status-text';
+            if (sidebarLed) sidebarLed.className = 'sidebar-db-led';
             
             if (status === 'connected') {
-                led.classList.add('connected');
-                statusText.classList.add('connected');
-                statusText.textContent = message || 'Connected';
-                sidebarLed.classList.add('connected');
-                sidebarText.textContent = 'Connected';
+                if (led) led.classList.add('connected');
+                if (statusText) { statusText.classList.add('connected'); statusText.textContent = message || 'Connected'; }
+                if (sidebarLed) sidebarLed.classList.add('connected');
+                if (sidebarText) sidebarText.textContent = 'Connected';
             } else if (status === 'error') {
-                led.classList.add('error');
-                statusText.classList.add('error');
-                statusText.textContent = message || 'Connection failed';
-                sidebarLed.classList.add('error');
-                sidebarText.textContent = 'Error';
+                if (led) led.classList.add('error');
+                if (statusText) { statusText.classList.add('error'); statusText.textContent = message || 'Connection failed'; }
+                if (sidebarLed) sidebarLed.classList.add('error');
+                if (sidebarText) sidebarText.textContent = 'Error';
             } else if (status === 'testing') {
-                led.classList.add('testing');
-                statusText.textContent = 'Testing...';
-                sidebarLed.classList.add('testing');
-                sidebarText.textContent = 'Testing...';
+                if (led) led.classList.add('testing');
+                if (statusText) statusText.textContent = 'Testing...';
+                if (sidebarLed) sidebarLed.classList.add('testing');
+                if (sidebarText) sidebarText.textContent = 'Testing...';
             } else {
-                statusText.textContent = message || 'Not configured';
-                sidebarText.textContent = 'Not configured';
+                if (statusText) statusText.textContent = message || 'Not configured';
+                if (sidebarText) sidebarText.textContent = 'Not configured';
             }
             
-            lastCheck.textContent = 'Last check: ' + new Date().toLocaleTimeString() + ' • Auto-test every 5 min';
+            if (lastCheck) lastCheck.textContent = 'Last check: ' + new Date().toLocaleTimeString() + ' • Auto-test every 5 min';
         }
         
         function testConnection(event) {

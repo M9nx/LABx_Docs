@@ -172,6 +172,11 @@ if (isset($_GET['action'])) {
             $user = $_POST['user'] ?? '';
             $pass = $_POST['pass'] ?? '';
             
+            // If password is empty, use existing saved password (user didn't change it)
+            if (empty($pass) && isset($_SESSION['db_pass'])) {
+                $pass = $_SESSION['db_pass'];
+            }
+            
             $result = testDbConnection($host, $user, $pass);
             
             // If successful, save credentials
