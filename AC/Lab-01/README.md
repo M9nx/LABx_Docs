@@ -1,194 +1,262 @@
-# Lab 1: Unprotected Admin Functionality
-## Access Control Vulnerabilities
+<p align="center">
+  <img src="https://img.shields.io/badge/Lab_01-Unprotected_Admin-FF4444?style=for-the-badge" alt="Lab 01">
+  <img src="https://img.shields.io/badge/Difficulty-Apprentice-22C55E?style=for-the-badge" alt="Apprentice">
+  <img src="https://img.shields.io/badge/Type-Access_Control-F97316?style=for-the-badge" alt="Access Control">
+</p>
 
-![Security Level: Intentionally Vulnerable](https://img.shields.io/badge/Security-Intentionally%20Vulnerable-red)
-![Lab Type: Access Control](https://img.shields.io/badge/Lab%20Type-Access%20Control-orange)
-![Difficulty: Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+<h1 align="center">🔓 Unprotected Admin Functionality</h1>
 
----
-
-## 📋 Quick Start
-
-1. **Ensure XAMPP is running** (Apache + MySQL)
-2. **Access the lab:** `http://localhost/AC/lab1/`
-3. **Check robots.txt:** `http://localhost/AC/lab1/robots.txt`
-4. **Find the admin panel:** `http://localhost/AC/lab1/administrator-panel.php`
-5. **Delete carlos** to complete the lab
+<p align="center">
+  <strong>Access Control Lab 01</strong><br>
+  <em>Discover and exploit an unprotected administrative panel</em>
+</p>
 
 ---
 
-## 🎯 Lab Objective
+## 🎯 Objective
 
-**Goal:** Delete the user "carlos" by accessing the unprotected admin panel.
+**Mission:** Delete the user `carlos` by finding and accessing the unprotected admin panel.
 
-**Learning Objective:** Understand how unprotected admin functionality can be exploited when proper access controls are not implemented.
+**Scenario:** SecureShop is an e-commerce platform that accidentally exposed their admin panel location in `robots.txt`. The admin panel has no authentication checks.
+
+---
+
+## 📋 Lab Information
+
+| Property | Value |
+|----------|-------|
+| **Difficulty** | 🟢 Apprentice (Beginner) |
+| **Category** | Access Control |
+| **Vulnerability Type** | Unprotected Functionality |
+| **OWASP Classification** | A01:2021 – Broken Access Control |
+| **Time to Complete** | 5-10 minutes |
+| **Prerequisites** | None |
+
+---
+
+## 🚀 Quick Start
+
+```bash
+# 1. Access the lab
+http://localhost/LABx_Docs/AC/Lab-01/
+
+# 2. Check robots.txt
+http://localhost/LABx_Docs/AC/Lab-01/robots.txt
+
+# 3. Access the admin panel
+http://localhost/LABx_Docs/AC/Lab-01/administrator-panel.php
+
+# 4. Delete carlos to complete the lab
+```
 
 ---
 
 ## 🗂️ Lab Structure
 
 ```
-AC/lab1/
-├── 📄 index.php                 # Main application homepage
-├── 🔐 login.php                 # User authentication page
-├── 📤 logout.php                # Session termination
-├── 👤 profile.php               # User profile page
-├── 🚨 administrator-panel.php    # VULNERABLE: Unprotected admin panel
-├── ⚙️ config.php                # Database configuration & initialization
-├── 🤖 robots.txt                # Information disclosure (reveals admin path)
-├── 🛒 products.php              # Product catalog page
-├── ℹ️ about.php                 # About page
-├── 📞 contact.php               # Contact information
-├── 🗄️ database_setup.sql        # Manual database setup script
-├── 📖 SETUP.md                  # Installation instructions
-├── 📚 LAB_DOCUMENTATION.md       # Complete vulnerability analysis
-└── 📄 README.md                 # This file
+Lab-01/
+├── 📄 index.php                  # SecureShop homepage
+├── 📄 login.php                  # User authentication
+├── 📄 logout.php                 # Session termination
+├── 📄 profile.php                # User profile page
+├── 📄 products.php               # Product catalog
+├── 📄 about.php                  # About page
+├── 📄 contact.php                # Contact information
+├── 🔴 administrator-panel.php    # VULNERABLE: Unprotected admin
+├── 🤖 robots.txt                 # Information disclosure
+├── ⚙️ config.php                 # Database configuration
+├── 🗄️ setup_db.php               # Database initialization
+├── 📊 database_setup.sql         # SQL schema
+├── ✅ success.php                # Lab completion verification
+├── 📄 docs.php                   # Technical documentation
+├── 📄 lab-description.php        # Challenge description
+└── 📄 README.md                  # This file
 ```
 
 ---
 
-## 👥 Demo Accounts
+## 👥 Test Credentials
 
-| Username | Password  | Role  | Purpose |
-|----------|-----------|-------|---------|
-| `admin`  | admin123  | admin | Administrator account |
-| `carlos` | carlos123 | user  | **🎯 TARGET for deletion** |
-| `alice`  | alice123  | user  | Regular user account |
-| `bob`    | bob123    | user  | Regular user account |
-| `eve`    | eve123    | user  | Regular user account |
-
----
-
-## 🔍 Vulnerability Details
-
-### What's Wrong?
-- ❌ **No authentication** required for admin panel access
-- ❌ **No authorization** checks for administrative functions
-- ❌ **Information disclosure** via robots.txt
-- ❌ **Direct URL access** to sensitive functionality
-- ❌ **Security through obscurity** approach
-
-### Impact
-- 🚨 **Complete admin access** without credentials
-- 🚨 **User data manipulation** (view, delete accounts)
-- 🚨 **System compromise** via administrative functions
-- 🚨 **Data breach** potential
+| Username | Password | Role | Notes |
+|----------|----------|------|-------|
+| `admin` | `admin123` | Administrator | Full access |
+| `carlos` | `carlos123` | User | 🎯 **TARGET - Delete this user** |
+| `alice` | `alice123` | User | Regular user |
+| `bob` | `bob123` | User | Regular user |
+| `eve` | `eve123` | User | Regular user |
 
 ---
 
-## 🚀 Lab Walkthrough
+## 🔍 Vulnerability Analysis
 
-### Step 1: Information Gathering
+### The Flaw
+
+The application commits several critical access control failures:
+
+1. **No Authentication on Admin Panel**
+   ```php
+   // administrator-panel.php has NO authentication check
+   // Anyone can access it directly via URL
+   ```
+
+2. **Information Disclosure via robots.txt**
+   ```
+   User-agent: *
+   Disallow: /administrator-panel.php
+   ```
+
+3. **Security Through Obscurity**
+   - Relying only on URL "obscurity" for protection
+   - No session validation
+   - No role-based access control
+
+### Impact Assessment
+
+| Impact Area | Severity | Description |
+|-------------|----------|-------------|
+| Confidentiality | 🔴 Critical | View all user data |
+| Integrity | 🔴 Critical | Modify/delete any user |
+| Availability | 🟡 High | Delete all accounts |
+| Business | 🔴 Critical | Complete system takeover |
+
+---
+
+## 💀 Exploitation Guide
+
+### Method 1: robots.txt Discovery
+
 ```bash
-# Check robots.txt for hidden paths
-curl http://localhost/AC/lab1/robots.txt
+# Step 1: Check robots.txt for disallowed paths
+curl http://localhost/LABx_Docs/AC/Lab-01/robots.txt
+
+# Output reveals:
+# Disallow: /administrator-panel.php
+
+# Step 2: Navigate directly to the admin panel
+http://localhost/LABx_Docs/AC/Lab-01/administrator-panel.php
+
+# Step 3: Delete carlos from the user management table
 ```
 
-### Step 2: Access Admin Panel
+### Method 2: Common Path Guessing
+
 ```bash
-# Navigate directly to the disclosed admin path
-http://localhost/AC/lab1/administrator-panel.php
+# Try common admin paths
+/admin
+/admin.php
+/administrator
+/administrator-panel.php  ← This one works!
+/wp-admin
+/controlpanel
 ```
 
-### Step 3: Exploit the Vulnerability
-1. Locate "carlos" in the user management table
-2. Click the "Delete" button
-3. Confirm the deletion
-4. Verify carlos is removed from the system
+### Method 3: Directory Bruteforce
+
+```bash
+# Using gobuster
+gobuster dir -u http://localhost/LABx_Docs/AC/Lab-01/ -w common.txt
+
+# Using ffuf  
+ffuf -u http://localhost/LABx_Docs/AC/Lab-01/FUZZ -w common.txt
+```
 
 ---
 
-## 🛠️ Technical Analysis
+## 🛡️ Prevention & Mitigation
 
-### Vulnerable Code Pattern
+### Secure Implementation
+
 ```php
 <?php
-// VULNERABLE: No security checks!
-require_once 'config.php';
-
-// Direct admin functionality access
-if (isset($_POST['delete_user'])) {
-    $userId = $_POST['user_id'];
-    // No authentication or authorization check
-    $stmt = $pdo->prepare("DELETE FROM users WHERE id = ?");
-    $stmt->execute([$userId]);
+// 1. ALWAYS check authentication
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit;
 }
+
+// 2. ALWAYS check authorization
+if ($_SESSION['role'] !== 'admin') {
+    http_response_code(403);
+    die('Access Denied: Admin privileges required');
+}
+
+// 3. Only then show admin functionality
 ?>
 ```
 
-### Information Disclosure
-```
-# robots.txt
+### Security Checklist
+
+- ✅ Require authentication on ALL sensitive pages
+- ✅ Implement role-based access control (RBAC)
+- ✅ Don't list sensitive paths in robots.txt
+- ✅ Use unpredictable URLs as ADDITIONAL layer only
+- ✅ Log all admin actions
+- ✅ Implement session timeout
+- ✅ Add CSRF protection
+
+### Proper robots.txt
+
+```txt
+# Don't list sensitive endpoints!
+# Use authentication instead
+
 User-agent: *
-Disallow: /administrator-panel  ← Reveals admin path!
+Disallow: /private/
+Sitemap: https://example.com/sitemap.xml
 ```
 
 ---
 
-## 🔒 Security Recommendations
+## 📚 Key Learning Points
 
-### Immediate Fixes
-1. **Implement authentication checks**
-2. **Add role-based authorization**
-3. **Remove admin paths from robots.txt**
-4. **Add CSRF protection**
-5. **Implement audit logging**
+### What This Lab Teaches
 
-### Defense in Depth
-- Multi-factor authentication for admin accounts
-- IP-based access restrictions
-- Session timeout mechanisms
-- Real-time monitoring and alerting
+1. **Never rely on obscurity for security**
+   - Hidden URLs will be discovered
+   - robots.txt is publicly readable
+   - Source code can leak paths
 
----
+2. **Every endpoint needs protection**
+   - Authentication: Is the user logged in?
+   - Authorization: Does the user have permission?
+   - Both checks are required
 
-## 📚 Learning Resources
+3. **Defense in Depth**
+   - Multiple layers of security
+   - Fail securely
+   - Assume breach will happen
 
-- **OWASP Top 10 - Broken Access Control:** https://owasp.org/Top10/A01_2021-Broken_Access_Control/
-- **OWASP Testing Guide - Access Control Testing:** https://owasp.org/www-project-web-security-testing-guide/
-- **CWE-306 - Missing Authentication:** https://cwe.mitre.org/data/definitions/306.html
+### Real-World Examples
 
----
-
-## ⚠️ Important Notes
-
-> **🚨 Educational Use Only**
-> 
-> This lab contains intentional security vulnerabilities for educational purposes. 
-> Never deploy this code in a production environment or on systems containing real data.
-
-### Responsible Disclosure
-- Only test on systems you own or have explicit permission to test
-- Respect scope and boundaries of security testing
-- Follow responsible disclosure practices for real vulnerabilities
+- **2017:** Equifax breach - Unpatched admin panel
+- **2019:** First American Financial - Direct URL to documents
+- **2020:** Multiple SaaS platforms with exposed /admin paths
 
 ---
 
-## 🤝 Lab Support
+## 🔗 Related Resources
 
-### Troubleshooting
-- **Database not created?** Check MySQL service and visit the lab URL to trigger auto-creation
-- **Access denied errors?** Verify Apache/PHP configuration and file permissions
-- **Lab not working?** Review `SETUP.md` for detailed installation instructions
-
-### Getting Help
-- Review the comprehensive documentation in `LAB_DOCUMENTATION.md`
-- Check setup instructions in `SETUP.md`
-- Verify your XAMPP installation is properly configured
+| Resource | Link |
+|----------|------|
+| OWASP Access Control | [owasp.org/Top10/A01_2021](https://owasp.org/Top10/A01_2021-Broken_Access_Control/) |
+| PortSwigger Lab | [portswigger.net/web-security/access-control](https://portswigger.net/web-security/access-control) |
+| CWE-425 | [cwe.mitre.org/data/definitions/425](https://cwe.mitre.org/data/definitions/425.html) |
 
 ---
 
-## 📝 Lab Completion
+## ✅ Completion Checklist
 
-✅ **Successfully completed when:**
-- [ ] Discovered the admin panel via robots.txt
-- [ ] Accessed the unprotected admin interface
-- [ ] Located the user "carlos" in the user management table
-- [ ] Successfully deleted the carlos account
-- [ ] Verified carlos can no longer log in
-
-**Next Steps:** Review the secure code implementation and understand the defense mechanisms that prevent this vulnerability.
+- [ ] Discovered robots.txt
+- [ ] Found administrator-panel.php path
+- [ ] Accessed admin panel without authentication
+- [ ] Located carlos in user list
+- [ ] Deleted carlos successfully
+- [ ] Reached success.php
 
 ---
 
-*Lab created for educational purposes • Part of the Access Control Vulnerability series*
+<p align="center">
+  <strong>Lab 01 of 30</strong> • Access Control Series<br>
+  <a href="../Lab-02/">Next Lab: Unpredictable Admin URL →</a>
+</p>
