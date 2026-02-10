@@ -566,7 +566,7 @@ http://localhost/LABx_Docs/AC/Lab-01/setup_db.php
 Or set up all labs at once:
 
 ```
-http://localhost/LABx_Docs/AC/setup-all-databases.php
+http://localhost/LABx_Docs/src/setup.php
 ```
 
 ![Database Setup]
@@ -903,7 +903,7 @@ git clone https://github.com/M9nx/LABx_Docs.git
 
 3. **Run setup again:**
 ```
-http://localhost/LABx_Docs/AC/setup-all-databases.php
+http://localhost/LABx_Docs/src/setup.php
 ```
 
 ---

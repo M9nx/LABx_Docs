@@ -41,7 +41,7 @@ The application uses PHP's `serialize()` function to create session data and sto
 
 ## Setup
 1. Navigate to `setup_db.php` to initialize the database
-2. Or use the parent category's `setup-all-databases.php`
+2. Or use the global `src/setup.php` page
 
 ## Key Learning Points
 - PHP serialization format

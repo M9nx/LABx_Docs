@@ -15,6 +15,14 @@ $db_name = 'id_progress';
 
 mysqli_report(MYSQLI_REPORT_OFF);
 
+// Check DB connection status for sidebar
+$dbConnected = false;
+$testConn = @new mysqli($db_host, $db_user, $db_pass);
+if (!$testConn->connect_error) {
+    $dbConnected = true;
+    $testConn->close();
+}
+
 // Get solved labs
 $solvedLabs = [];
 $solvedCount = 0;
@@ -202,6 +210,94 @@ $completionPercentage = round(($solvedCount / $totalLabs) * 100);
             justify-content: center;
             opacity: 0.7;
         }
+        
+        .nav-item-icon svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2; fill: none; }
+        
+        .nav-badge {
+            margin-left: auto;
+            padding: 0.15rem 0.5rem;
+            background: var(--success-bg);
+            color: var(--success);
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        
+        .nav-badge.coming { background: var(--bg-tertiary); color: var(--text-muted); }
+        
+        .sidebar-footer { padding: 1rem 1.5rem; border-top: 1px solid var(--border-color); }
+        
+        /* Sidebar DB Status Indicator */
+        .sidebar-db-status {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: var(--text-secondary);
+        }
+        .sidebar-db-status:hover { background: var(--bg-card-hover); }
+        .sidebar-db-info { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; }
+        .sidebar-db-led {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #666;
+            box-shadow: 0 0 0 2px rgba(102, 102, 102, 0.2);
+            transition: all 0.3s ease;
+        }
+        .sidebar-db-led.connected {
+            background: #10b981;
+            box-shadow: 0 0 8px #10b981, 0 0 0 2px rgba(16, 185, 129, 0.2);
+            animation: sidebarPulse 2s infinite;
+        }
+        .sidebar-db-led.error {
+            background: #ef4444;
+            box-shadow: 0 0 8px #ef4444, 0 0 0 2px rgba(239, 68, 68, 0.2);
+        }
+        @keyframes sidebarPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+        
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .theme-toggle:hover { background: var(--bg-card-hover); }
+        .theme-toggle-label { font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; }
+        
+        .theme-toggle-switch {
+            width: 44px;
+            height: 24px;
+            background: var(--border-color);
+            border-radius: 12px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background: var(--text-primary);
+            border-radius: 50%;
+            top: 3px;
+            left: 3px;
+            transition: all 0.3s ease;
+        }
+        
+        [data-theme="light"] .theme-toggle-switch::after { left: 23px; }
         
         /* Main Content */
         .main-content {
@@ -506,49 +602,76 @@ $completionPercentage = round(($solvedCount / $totalLabs) * 100);
     <aside class="sidebar">
         <div class="sidebar-header">
             <a href="../index.php" class="logo">
-                <div class="logo-icon">Lx</div>
+                <span class="logo-icon">L</span>
                 LABx<span>_Docs</span>
             </a>
         </div>
         <nav class="sidebar-nav">
             <div class="nav-section">
-                <div class="nav-section-title">Navigation</div>
+                <div class="nav-section-title">Overview</div>
                 <a href="../index.php" class="nav-item">
-                    <span class="nav-item-icon">🏠</span>
+                    <span class="nav-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
                     Home
                 </a>
             </div>
             <div class="nav-section">
                 <div class="nav-section-title">Categories</div>
                 <a href="../AC/index.php" class="nav-item">
-                    <span class="nav-item-icon">🔐</span>
+                    <span class="nav-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
                     Access Control
-                </a>
-                <a href="index.php" class="nav-item active">
-                    <span class="nav-item-icon">📦</span>
-                    Insecure Deserialization
+                    <span class="nav-badge">0/30</span>
                 </a>
                 <a href="../API/index.php" class="nav-item">
-                    <span class="nav-item-icon">🔌</span>
+                    <span class="nav-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></span>
                     API Security
+                    <span class="nav-badge coming">Soon</span>
                 </a>
                 <a href="../Authentication/index.php" class="nav-item">
-                    <span class="nav-item-icon">🔑</span>
+                    <span class="nav-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M13.8 12H3"/></svg></span>
                     Authentication
+                    <span class="nav-badge coming">Soon</span>
+                </a>
+                <a href="index.php" class="nav-item active">
+                    <span class="nav-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span>
+                    Insecure Deserialization
+                    <span class="nav-badge"><?php echo $solvedCount; ?>/<?php echo $totalLabs; ?></span>
                 </a>
             </div>
             <div class="nav-section">
-                <div class="nav-section-title">Progress</div>
-                <div style="padding: 0 0.75rem;">
-                    <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
-                        <?php echo $solvedCount; ?>/<?php echo $totalLabs; ?> Labs Completed
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: <?php echo $completionPercentage; ?>%"></div>
-                    </div>
-                </div>
+                <div class="nav-section-title">Quick Actions</div>
+                <a href="../src/setup.php" class="nav-item">
+                    <span class="nav-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></span>
+                    Setup All Databases
+                </a>
+                <a href="../src/progress.php" class="nav-item">
+                    <span class="nav-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>
+                    View Progress
+                </a>
+            </div>
+            <div class="nav-section">
+                <div class="nav-section-title">Resources</div>
+                <a href="https://github.com/M9nx/LABx_Docs" target="_blank" class="nav-item">
+                    <span class="nav-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></span>
+                    GitHub
+                </a>
             </div>
         </nav>
+        <div class="sidebar-footer">
+            <a href="../src/setup.php" class="sidebar-db-status" title="<?php echo $dbConnected ? 'Database Connected' : 'Click to configure database'; ?>">
+                <div class="sidebar-db-info">
+                    <div class="sidebar-db-led <?php echo $dbConnected ? 'connected' : 'error'; ?>"></div>
+                    <span><?php echo $dbConnected ? 'Connected' : 'Not Connected'; ?></span>
+                </div>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity: 0.5;"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </a>
+            <div class="theme-toggle" onclick="toggleTheme()">
+                <span class="theme-toggle-label">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    Dark Mode
+                </span>
+                <span class="theme-toggle-switch"></span>
+            </div>
+        </div>
     </aside>
 
     <main class="main-content">
@@ -633,7 +756,7 @@ $completionPercentage = round(($solvedCount / $totalLabs) * 100);
             </div>
 
             <div class="setup-section">
-                <a href="setup-all-databases.php" class="btn-setup">
+                <a href="../src/setup.php" class="btn-setup">
                     ⚙️ Setup All Databases
                 </a>
             </div>
@@ -647,13 +770,11 @@ $completionPercentage = round(($solvedCount / $totalLabs) * 100);
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
             html.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
-            document.querySelector('.theme-toggle').textContent = newTheme === 'dark' ? '🌙' : '☀️';
         }
 
         // Load saved theme
         const savedTheme = localStorage.getItem('theme') || 'dark';
         document.documentElement.setAttribute('data-theme', savedTheme);
-        document.querySelector('.theme-toggle').textContent = savedTheme === 'dark' ? '🌙' : '☀️';
     </script>
 </body>
 </html>

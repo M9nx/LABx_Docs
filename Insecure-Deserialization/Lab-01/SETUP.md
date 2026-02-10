@@ -16,7 +16,7 @@ http://localhost/LABx_Docs/Insecure-Deserialization/Lab-01/setup_db.php
 ### Option 2: Category Batch Setup
 Use the parent category setup script:
 ```
-http://localhost/LABx_Docs/Insecure-Deserialization/setup-all-databases.php
+http://localhost/LABx_Docs/src/setup.php
 ```
 
 ### Option 3: Manual SQL Import

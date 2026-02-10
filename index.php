@@ -32,7 +32,7 @@ $categories = [
         'topics' => ['IDOR', 'Privilege Escalation', 'Cookie Manipulation', 'Mass Assignment'],
         'description' => 'Master access control vulnerabilities including IDOR, privilege escalation, broken authorization, and real-world HackerOne case studies.',
         'link' => 'AC/index.php',
-        'setup_link' => 'AC/setup-all-databases.php'
+        'setup_link' => 'src/setup.php'
     ],
     'API' => [
         'name' => 'API Security',
@@ -74,7 +74,7 @@ $categories = [
         'topics' => ['PHP Serialization', 'Object Injection', 'Magic Methods', 'Gadget Chains'],
         'description' => 'Exploit insecure deserialization vulnerabilities including PHP object injection, magic method abuse, and crafting exploitation gadget chains.',
         'link' => 'Insecure-Deserialization/index.php',
-        'setup_link' => 'Insecure-Deserialization/setup-all-databases.php'
+        'setup_link' => 'src/setup.php'
     ]
 ];
 
@@ -1620,6 +1620,18 @@ else $greeting = 'Good evening';
                     <?php endif; ?>
                 </a>
                 <?php endforeach; ?>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-section-title">Quick Actions</div>
+                <a href="src/setup.php" class="nav-item">
+                    <span class="nav-item-icon"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></span>
+                    Setup Databases
+                </a>
+                <a href="src/progress.php" class="nav-item">
+                    <span class="nav-item-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
+                    View Progress
+                </a>
             </div>
             
             <div class="nav-section">

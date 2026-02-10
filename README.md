@@ -36,19 +36,25 @@ LABx_Docs/
 ├── db-config.php               # Centralized DB configuration
 ├── README.md                   # This file
 │
+├── src/                         # Shared components
+│   ├── sidebar.php             # Global sidebar component
+│   ├── sidebar.css             # Sidebar styles
+│   ├── setup.php               # Global database setup page
+│   └── progress.php            # Global progress tracker
+│
 ├── AC/                          # Access Control Labs (30 Labs)
 │   ├── index.php               # Category dashboard
-│   ├── progress.php            # Progress tracking system
-│   ├── setup-all-databases.php # Initialize all lab databases
 │   └── Lab-01 to Lab-30/       # Individual labs
 │
+├── Insecure-Deserialization/    # Insecure Deserialization Labs (10 Labs)
+│   ├── index.php               # Category dashboard
+│   └── Lab-01 to Lab-10/       # Individual labs
+│
 ├── API/                         # API Security Labs (Coming Soon)
-│   ├── index.php               # Category placeholder
-│   └── progress.php            # Progress tracking
+│   └── index.php               # Category placeholder
 │
 └── Authentication/              # Authentication Labs (Coming Soon)
-    ├── index.php               # Category placeholder
-    └── progress.php            # Progress tracking
+    └── index.php               # Category placeholder
 ```
 
 ## 🚀 Quick Start

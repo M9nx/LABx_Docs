@@ -387,13 +387,22 @@
                     Authentication
                     <span class="nav-badge coming">Soon</span>
                 </a>
+                <a href="../Insecure-Deserialization/index.php" class="nav-item">
+                    <span class="nav-item-icon"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span>
+                    Insecure Deserialization
+                    <span class="nav-badge">0/10</span>
+                </a>
             </div>
             
             <div class="nav-section">
                 <div class="nav-section-title">Quick Actions</div>
-                <a href="../AC/setup-all-databases.php" class="nav-item">
+                <a href="../src/setup.php" class="nav-item">
                     <span class="nav-item-icon"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></span>
                     Setup All Databases
+                </a>
+                <a href="../src/progress.php" class="nav-item">
+                    <span class="nav-item-icon"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>
+                    View Progress
                 </a>
             </div>
             
