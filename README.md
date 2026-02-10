@@ -1,443 +1,419 @@
-<p align="center">
-  <img src="https://img.shields.io/badge/LABx__Docs-v2.0-FF4444?style=for-the-badge&logo=openbugbounty&logoColor=white" alt="LABx_Docs v2.0">
-</p>
+# LABx_Docs
 
-<h1 align="center">🔐 LABx_Docs</h1>
+**Web Application Security Training Platform**
 
-<p align="center">
-  <strong>Comprehensive Web Security Training Platform</strong><br>
-  <em>Master OWASP Top 10 vulnerabilities through hands-on exploitation</em>
-</p>
+[![PHP 8.0+](https://img.shields.io/badge/PHP-8.0+-777BB4?style=flat-square&logo=php&logoColor=white)](https://php.net)
+[![MySQL 5.7+](https://img.shields.io/badge/MySQL-5.7+-4479A1?style=flat-square&logo=mysql&logoColor=white)](https://mysql.com)
+[![Labs](https://img.shields.io/badge/Labs-40+-22C55E?style=flat-square)](https://github.com/M9nx/LABx_Docs)
+[![License](https://img.shields.io/badge/License-Educational-blue?style=flat-square)](LICENSE)
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Labs-40+-22C55E?style=flat-square" alt="40+ Labs">
-  <img src="https://img.shields.io/badge/PHP-8.0+-777BB4?style=flat-square&logo=php" alt="PHP 8.0+">
-  <img src="https://img.shields.io/badge/MySQL-5.7+-4479A1?style=flat-square&logo=mysql&logoColor=white" alt="MySQL 5.7+">
-  <img src="https://img.shields.io/badge/License-Educational-blue?style=flat-square" alt="Educational License">
-</p>
-
-<p align="center">
-  <a href="#-quick-start">Quick Start</a> •
-  <a href="#-features">Features</a> •
-  <a href="#-lab-categories">Categories</a> •
-  <a href="#-documentation">Docs</a> •
-  <a href="#-contributing">Contributing</a>
-</p>
+A self-hosted vulnerable web application platform featuring 40+ labs across OWASP Top 10 categories. Each lab contains intentional security flaws with comprehensive documentation, exploitation guides, and automatic progress tracking.
 
 ---
 
-## 📖 About
+## Table of Contents
 
-**LABx_Docs** is a self-hosted web security training platform featuring **40+ vulnerable labs** across multiple OWASP categories. Each lab is a complete PHP application with intentional vulnerabilities, comprehensive documentation, step-by-step walkthroughs, and automatic progress tracking.
-
-> 🎓 **Perfect for:** Security researchers, penetration testers, CTF enthusiasts, web developers learning secure coding, and anyone preparing for security certifications.
-
-### 🎯 What You'll Learn
-
-| Category | Skills |
-|----------|--------|
-| **Access Control** | IDOR exploitation, privilege escalation, authorization bypass, role manipulation |
-| **Insecure Deserialization** | PHP object injection, gadget chains, PHAR exploits, cookie tampering |
-| **API Security** | BOLA, broken authentication, mass assignment, rate limiting bypass |
-| **Authentication** | Brute force, password reset poisoning, 2FA bypass, session attacks |
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Architecture](#architecture)
+- [Lab Categories](#lab-categories)
+- [Progress Tracking](#progress-tracking)
+- [Configuration](#configuration)
+- [Tools](#tools)
+- [Contributing](#contributing)
+- [Security Notice](#security-notice)
 
 ---
 
-## ✨ Features
+## Requirements
 
-<table>
-<tr>
-<td width="50%">
+| Component | Version | Notes |
+|-----------|---------|-------|
+| PHP | 8.0+ | mysqli extension required |
+| MySQL | 5.7+ | MariaDB 10.3+ compatible |
+| Web Server | Apache 2.4+ | mod_rewrite enabled |
+| Browser | Modern | Chrome 90+, Firefox 88+, Edge 90+ |
 
-### 🧪 Vulnerable Labs
-- **40+ hands-on labs** across 4 categories
-- Real-world scenarios based on HackerOne reports
-- Difficulty levels: Apprentice → Practitioner → Expert
-- Each lab is an isolated, complete application
-
-</td>
-<td width="50%">
-
-### 📊 Progress Tracking
-- Automatic completion detection
-- Visual progress dashboards
-- Category-based statistics
-- Reset individual labs anytime
-
-</td>
-</tr>
-<tr>
-<td width="50%">
-
-### 📚 Documentation
-- Detailed vulnerability explanations
-- Step-by-step exploitation guides
-- Prevention and mitigation strategies
-- Code-level analysis of flaws
-
-</td>
-<td width="50%">
-
-### ⚡ Easy Setup
-- One-click database initialization
-- No hardcoded credentials
-- Session-based configuration
-- Works with XAMPP/WAMP/MAMP
-
-</td>
-</tr>
-</table>
+**Tested Environments:** XAMPP 8.2, WAMP 3.3, MAMP 6.8, Docker LAMP stacks
 
 ---
 
-## 🚀 Quick Start
+## Installation
 
-### Prerequisites
-
-| Requirement | Version | Notes |
-|-------------|---------|-------|
-| PHP | 8.0+ | With mysqli extension |
-| MySQL | 5.7+ | Or MariaDB 10.3+ |
-| Web Server | Apache/Nginx | XAMPP recommended |
-| Browser | Modern | Chrome, Firefox, Edge |
-
-### Installation
+### Standard Installation
 
 ```bash
-# Clone the repository
+# Clone repository
 git clone https://github.com/M9nx/LABx_Docs.git
 
-# Move to web server directory (XAMPP example)
-mv LABx_Docs /c/xampp/htdocs/
+# Move to web root
+# Windows (XAMPP)
+move LABx_Docs C:\xampp\htdocs\
 
-# Or for Linux
+# Linux
 sudo mv LABx_Docs /var/www/html/
+
+# macOS (MAMP)
+mv LABx_Docs /Applications/MAMP/htdocs/
 ```
 
-### First-Time Setup
+### Post-Installation
 
-1. **Start your web server** (Apache + MySQL)
+1. Start Apache and MySQL services
+2. Navigate to `http://localhost/LABx_Docs/`
+3. Configure database credentials (host, user, password)
+4. Click **Test & Save** to verify connection
+5. Open **Setup Databases** from sidebar
+6. Initialize all lab databases with **Setup All**
 
-2. **Access the platform**
-   ```
-   http://localhost/LABx_Docs/
-   ```
-
-3. **Configure database credentials**
-   - Enter your MySQL host, username, and password
-   - Click "Test & Save"
-
-4. **Initialize databases**
-   - Go to "Setup Databases" in sidebar
-   - Click "Setup All" to create all lab databases
-
-5. **Start hacking!**
-   - Choose a category
-   - Select a lab
-   - Read the documentation
-   - Exploit the vulnerability
-   - Get the flag!
-
-> 📘 **Complete Setup Guide:** [m9nx.me/posts/labx_docs---complete-setup-guide](https://m9nx.me/posts/labx_docs---complete-setup-guide/)
+**Full Setup Guide:** [m9nx.me/posts/labx_docs---complete-setup-guide](https://m9nx.me/posts/labx_docs---complete-setup-guide/)
 
 ---
 
-## 📂 Project Architecture
+## Architecture
 
 ```
 LABx_Docs/
+├── index.php                    # Dashboard + DB configuration UI
+├── db-config.php                # Credential management API
+├── README.md                    # Documentation
 │
-├── 📄 index.php                 # Main dashboard & DB configuration
-├── 📄 db-config.php             # Centralized database management
-├── 📄 README.md                 # This documentation
+├── src/                         # Shared components
+│   ├── sidebar.php              # Navigation component
+│   ├── sidebar.css              # Sidebar styles
+│   ├── setup.php                # Database initialization wizard
+│   └── progress.php             # Cross-category progress tracker
 │
-├── 📁 src/                      # Shared components
-│   ├── sidebar.php              # Global navigation sidebar
-│   ├── sidebar.css              # Unified sidebar styles
-│   ├── setup.php                # Global database setup wizard
-│   └── progress.php             # Cross-category progress tracking
-│
-├── 📁 AC/                       # Access Control (30 Labs)
+├── AC/                          # Access Control (30 labs)
 │   ├── index.php                # Category dashboard
-│   ├── progress.php             # AC progress helper
-│   └── Lab-01/ to Lab-30/       # Individual labs
+│   ├── progress.php             # Progress helper functions
+│   ├── PROGRESS_TRACKING.md     # Progress documentation
+│   └── Lab-01/ ... Lab-30/      # Individual lab directories
 │
-├── 📁 Insecure-Deserialization/ # Deserialization (10 Labs)
-│   ├── index.php                # Category dashboard
-│   ├── progress.php             # ID progress helper
-│   └── Lab-01/ to Lab-10/       # Individual labs
+├── Insecure-Deserialization/    # Deserialization (10 labs)
+│   ├── index.php
+│   ├── progress.php
+│   └── Lab-01/ ... Lab-10/
 │
-├── 📁 API/                      # API Security (Coming Soon)
-│   ├── index.php                # Category dashboard
-│   └── progress.php             # API progress helper
+├── API/                         # API Security (planned)
+│   ├── index.php
+│   └── progress.php
 │
-└── 📁 Authentication/           # Authentication (Coming Soon)
-    ├── index.php                # Category dashboard
-    └── progress.php             # Auth progress helper
+└── Authentication/              # Authentication (planned)
+    ├── index.php
+    └── progress.php
 ```
 
-### Lab Structure
-
-Each lab follows a consistent structure:
+### Lab Directory Structure
 
 ```
 Lab-XX/
-├── 📄 index.php              # Lab entry point & scenario
-├── 📄 lab-description.php    # Challenge description & hints
-├── 📄 docs.php               # Full technical documentation
-├── 📄 config.php             # Database configuration
-├── 📄 setup_db.php           # Database initialization
-├── 📄 database_setup.sql     # SQL schema
-├── 📄 login.php              # Authentication (if applicable)
-├── 📄 success.php            # Flag verification & completion
-└── 📄 [vulnerability-specific files]
+├── index.php              # Entry point, scenario description
+├── lab-description.php    # Challenge objectives, hints
+├── docs.php               # Technical documentation, walkthrough
+├── config.php             # Database connection configuration
+├── setup_db.php           # Database initialization script
+├── database_setup.sql     # SQL schema and seed data
+├── login.php              # Authentication (when applicable)
+├── logout.php             # Session termination
+├── success.php            # Completion verification, flag display
+├── LAB_DOCUMENTATION.md   # Markdown documentation
+├── README.md              # Lab-specific README
+└── [vulnerability files]  # Additional files per vulnerability type
 ```
 
 ---
 
-## 📚 Lab Categories
+## Lab Categories
 
-### 🔐 Access Control — 30 Labs
+### Access Control — 30 Labs
 
-Master authorization vulnerabilities from beginner IDOR to advanced GraphQL exploitation.
+Authorization and access control vulnerabilities including IDOR, privilege escalation, and role manipulation.
 
-<details>
-<summary><strong>View All 30 Labs</strong></summary>
+| Lab | Title | Difficulty | Vulnerability Type |
+|:---:|-------|:----------:|-------------------|
+| 01 | Unprotected Admin Functionality | Apprentice | Robots.txt Disclosure |
+| 02 | Unpredictable Admin URL | Apprentice | JavaScript Source Disclosure |
+| 03 | User Role Manipulation | Apprentice | Cookie Manipulation |
+| 04 | IDOR Account Takeover | Practitioner | Insecure Direct Object Reference |
+| 05 | User ID via Request Parameter | Practitioner | IDOR |
+| 06 | Unpredictable User IDs | Practitioner | IDOR with GUID |
+| 07 | Data Leakage in Redirect | Practitioner | IDOR with Information Leak |
+| 08 | Password Disclosure | Practitioner | IDOR with Source Exposure |
+| 09 | Classic IDOR | Practitioner | Direct Object Reference |
+| 10 | URL-Based Access Control Bypass | Practitioner | X-Original-URL Header |
+| 11 | Method-Based Access Control | Practitioner | HTTP Method Override |
+| 12 | Multi-Step Process Bypass | Practitioner | Workflow Access Control |
+| 13 | Referer-Based Access Control | Practitioner | Header Manipulation |
+| 14 | Mass Assignment IDOR | Practitioner | Mass Assignment |
+| 15 | Email Change IDOR | Practitioner | Account Takeover via IDOR |
+| 16 | Sequential ID Enumeration | Practitioner | Predictable Identifiers |
+| 17 | Horizontal Privilege Escalation | Practitioner | Horizontal IDOR |
+| 18 | Parameter Pollution IDOR | Practitioner | HTTP Parameter Pollution |
+| 19 | API Endpoint IDOR | Practitioner | API IDOR |
+| 20 | Encoded/Hashed ID IDOR | Practitioner | Encoded Object References |
+| 21 | JWT Token Manipulation | Practitioner | JWT + IDOR |
+| 22 | Indirect Object Reference | Practitioner | Indirect IDOR |
+| 23 | Role Parameter Escalation | Practitioner | Vertical Escalation |
+| 24 | Vertical Privilege Escalation | Practitioner | Privilege Escalation |
+| 25 | File Upload Access Control | Practitioner | File-based IDOR |
+| 26 | Path Traversal Bypass | Practitioner | Path Traversal + AC |
+| 27 | HackerOne: PII Disclosure | Practitioner | Real-world Case Study |
+| 28 | HackerOne: Account Deletion | Practitioner | Real-world Case Study |
+| 29 | HackerOne: Mass Assignment | Practitioner | Real-world Case Study |
+| 30 | GraphQL Mutation IDOR | Expert | GraphQL IDOR |
 
-| # | Lab Title | Difficulty | Type |
-|:-:|-----------|:----------:|------|
-| 1 | Unprotected Admin Functionality | 🟢 Apprentice | Robots Disclosure |
-| 2 | Unprotected Admin Panel with Unpredictable URL | 🟢 Apprentice | JS Source Disclosure |
-| 3 | Bypassing Admin Panel via User Role Manipulation | 🟢 Apprentice | Cookie Manipulation |
-| 4 | IDOR Leading to Account Takeover | 🟡 Practitioner | IDOR |
-| 5 | User ID Controlled by Request Parameter | 🟡 Practitioner | IDOR |
-| 6 | User ID Controlled by Request Parameter with Unpredictable IDs | 🟡 Practitioner | IDOR + GUID |
-| 7 | User ID Controlled by Request Parameter with Data Leakage | 🟡 Practitioner | IDOR + Redirect |
-| 8 | User ID Controlled by Request Parameter with Password Disclosure | 🟡 Practitioner | IDOR + Source |
-| 9 | Insecure Direct Object Reference (IDOR) | 🟡 Practitioner | Classic IDOR |
-| 10 | URL-Based Access Control Bypass | 🟡 Practitioner | X-Original-URL |
-| 11 | Method-Based Access Control Bypass | 🟡 Practitioner | HTTP Method |
-| 12 | Multi-Step Process with Flawed Access Control | 🟡 Practitioner | Workflow Bypass |
-| 13 | Referer-Based Access Control | 🟡 Practitioner | Header Bypass |
-| 14 | IDOR via Mass Assignment | 🟡 Practitioner | Mass Assignment |
-| 15 | IDOR Leads to Account Takeover via Email Change | 🟡 Practitioner | Email IDOR |
-| 16 | IDOR via Predictable Sequential IDs | 🟡 Practitioner | Sequential IDOR |
-| 17 | IDOR with Horizontal Privilege Escalation | 🟡 Practitioner | Horizontal IDOR |
-| 18 | IDOR via Parameter Pollution | 🟡 Practitioner | HPP + IDOR |
-| 19 | IDOR in API Endpoint Leading to Data Breach | 🟡 Practitioner | API IDOR |
-| 20 | IDOR via Encoded/Hashed IDs | 🟡 Practitioner | Encoded IDOR |
-| 21 | IDOR with JWT Token Manipulation | 🟡 Practitioner | JWT + IDOR |
-| 22 | IDOR via Indirect Object Reference | 🟡 Practitioner | Indirect IDOR |
-| 23 | Privilege Escalation via Role Parameter | 🟡 Practitioner | Role Escalation |
-| 24 | Vertical Privilege Escalation | 🟡 Practitioner | Vertical Escalation |
-| 25 | Broken Access Control in File Upload | 🟡 Practitioner | File IDOR |
-| 26 | Access Control Bypass via Path Traversal | 🟡 Practitioner | Path Traversal |
-| 27 | HackerOne: PII Disclosure via IDOR | 🟡 Practitioner | Real Case Study |
-| 28 | HackerOne: Account Deletion IDOR | 🟡 Practitioner | Real Case Study |
-| 29 | HackerOne: Mass Assignment to Admin | 🟡 Practitioner | Real Case Study |
-| 30 | IDOR via GraphQL Mutation | 🔴 Expert | GraphQL IDOR |
-
-</details>
-
-**Difficulty Breakdown:** 🟢 3 Apprentice • 🟡 26 Practitioner • 🔴 1 Expert
+**Distribution:** 3 Apprentice, 26 Practitioner, 1 Expert
 
 ---
 
-### 📦 Insecure Deserialization — 10 Labs
+### Insecure Deserialization — 10 Labs
 
-Exploit PHP serialization flaws from basic cookie tampering to PHAR polyglots.
+PHP object serialization vulnerabilities from basic cookie tampering to advanced gadget chains.
 
-<details>
-<summary><strong>View All 10 Labs</strong></summary>
+| Lab | Title | Difficulty | Vulnerability Type |
+|:---:|-------|:----------:|-------------------|
+| 01 | Modifying Serialized Objects | Apprentice | Cookie Tampering |
+| 02 | Serialized Data Types | Apprentice | PHP Type Juggling |
+| 03 | Application Functionality Abuse | Practitioner | Logic Exploitation |
+| 04 | Arbitrary Object Injection | Practitioner | PHP Object Injection |
+| 05 | Pre-Built Gadget Chain (PHP) | Practitioner | Gadget Chain |
+| 06 | Documented Gadget Chain (Ruby) | Practitioner | Gadget Chain |
+| 07 | Custom Gadget Chain (PHP) | Expert | Custom Gadget |
+| 08 | Custom Gadget Chain (Java) | Expert | Custom Gadget |
+| 09 | PHAR Deserialization | Expert | PHAR Polyglot |
+| 10 | Cookie-Based Deserialization | Apprentice | Session Tampering |
 
-| # | Lab Title | Difficulty | Type |
-|:-:|-----------|:----------:|------|
-| 1 | Modifying Serialized Objects | 🟢 Apprentice | Cookie Tampering |
-| 2 | Modifying Serialized Data Types | 🟢 Apprentice | Type Juggling |
-| 3 | Using Application Functionality to Exploit | 🟡 Practitioner | Logic Abuse |
-| 4 | Arbitrary Object Injection in PHP | 🟡 Practitioner | Object Injection |
-| 5 | PHP Pre-Built Gadget Chain | 🟡 Practitioner | Gadget Chain |
-| 6 | Ruby Documented Gadget Chain | 🟡 Practitioner | Gadget Chain |
-| 7 | Custom PHP Gadget Chain | 🔴 Expert | Custom Gadget |
-| 8 | Custom Java Gadget Chain | 🔴 Expert | Custom Gadget |
-| 9 | PHAR Deserialization | 🔴 Expert | PHAR Exploit |
-| 10 | Deserialization via Cookie Tampering | 🟢 Apprentice | Cookie Tampering |
-
-</details>
-
-**Difficulty Breakdown:** 🟢 3 Apprentice • 🟡 4 Practitioner • 🔴 3 Expert
+**Distribution:** 3 Apprentice, 4 Practitioner, 3 Expert
 
 ---
 
-### 🔌 API Security — Coming Soon
+### API Security — Planned
 
-| Focus Areas |
-|-------------|
-| Broken Object Level Authorization (BOLA) |
-| Broken Authentication |
-| Excessive Data Exposure |
-| Rate Limiting Bypass |
-| Mass Assignment via API |
-
----
-
-### 🔑 Authentication — Coming Soon
-
-| Focus Areas |
-|-------------|
-| Brute Force Attacks |
-| Password Reset Poisoning |
-| 2FA/MFA Bypass |
-| Session Management Flaws |
-| JWT Implementation Bugs |
+| Focus Area | Description |
+|------------|-------------|
+| BOLA | Broken Object Level Authorization |
+| Authentication | API authentication bypass |
+| Data Exposure | Excessive data in API responses |
+| Rate Limiting | Bypass rate limiting controls |
+| Mass Assignment | API parameter injection |
 
 ---
 
-## 🛠️ Recommended Tools
+### Authentication — Planned
 
-| Tool | Purpose | Download |
-|------|---------|----------|
-| **Burp Suite Community** | HTTP proxy, request manipulation | [portswigger.net](https://portswigger.net/burp/communitydownload) |
-| **Firefox Developer Edition** | Browser with enhanced DevTools | [mozilla.org](https://www.mozilla.org/firefox/developer/) |
-| **Postman** | API testing and exploration | [postman.com](https://www.postman.com/downloads/) |
-| **VS Code** | Source code analysis | [code.visualstudio.com](https://code.visualstudio.com/) |
-| **sqlmap** | SQL injection automation | [sqlmap.org](https://sqlmap.org/) |
-| **jwt.io** | JWT debugging and manipulation | [jwt.io](https://jwt.io/) |
-
----
-
-## 📈 Progress System
-
-### How It Works
-
-1. **Solve the lab** by achieving the objective (e.g., delete user, escalate privileges)
-2. **Reach success.php** which validates completion
-3. **Progress is saved** automatically to your database
-4. **View statistics** on dashboards and progress pages
-
-### Database Structure
-
-Each category has its own progress database:
-- `ac_progress` — Access Control
-- `id_progress` — Insecure Deserialization
-- `api_progress` — API Security
-- `auth_progress` — Authentication
-
-### Reset Progress
-
-- **Individual lab:** Click "Reset" on the progress page
-- **Full category:** Use setup page to reinitialize
-- **Everything:** Clear all progress databases
+| Focus Area | Description |
+|------------|-------------|
+| Brute Force | Credential stuffing, login bypass |
+| Password Reset | Reset token poisoning, host injection |
+| 2FA/MFA Bypass | Two-factor authentication flaws |
+| Session Management | Session fixation, hijacking |
+| JWT Vulnerabilities | Algorithm confusion, weak secrets |
 
 ---
 
-## 🔧 Configuration
+## Progress Tracking
+
+### Implementation
+
+Progress tracking uses category-specific MySQL databases:
+
+| Category | Database | Table |
+|----------|----------|-------|
+| Access Control | `ac_progress` | `solved_labs` |
+| Insecure Deserialization | `id_progress` | `solved_labs` |
+| API Security | `api_progress` | `solved_labs` |
+| Authentication | `auth_progress` | `solved_labs` |
+
+### Schema
+
+```sql
+CREATE TABLE solved_labs (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    lab_number INT NOT NULL UNIQUE,
+    solved_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+### Progress API
+
+```php
+// Include progress helper
+require_once('../progress.php');
+
+// Check if lab is solved
+$solved = isLabSolved(5);  // Returns boolean
+
+// Mark lab as complete
+markLabSolved(5);  // Inserts into solved_labs
+
+// Get all solved labs
+$solved = getSolvedLabs();  // Returns array of lab numbers
+```
+
+### Workflow
+
+1. User completes lab objective (e.g., delete user, escalate privileges)
+2. `success.php` validates completion conditions
+3. `markLabSolved()` records progress
+4. Dashboard reflects updated statistics
+
+---
+
+## Configuration
 
 ### Database Credentials
 
-Credentials are stored in PHP sessions (not files):
+Credentials are session-stored, not file-based:
 
 ```php
-// Access current credentials
+// db-config.php API
 require_once 'db-config.php';
+
+// Get credentials
 $creds = getDbCredentials();
-// Returns: ['host', 'user', 'pass', 'configured']
+// Returns: ['host' => 'localhost', 'user' => 'root', 'pass' => '', 'configured' => true]
+
+// Test connection
+$result = testDbConnection($host, $user, $pass);
+// Returns: ['success' => true/false, 'message' => '...']
 ```
 
-### Custom Database Host
+### AJAX Endpoints
 
-For Docker or remote MySQL:
-1. Visit homepage
-2. Update Host field (e.g., `mysql`, `192.168.1.100`)
-3. Test & Save
+`db-config.php` accepts POST requests:
 
-### Adding New Labs
+```javascript
+// Test connection
+fetch('db-config.php', {
+    method: 'POST',
+    body: new URLSearchParams({
+        action: 'test',
+        host: 'localhost',
+        user: 'root',
+        pass: ''
+    })
+});
 
-1. Create folder: `CategoryName/Lab-XX/`
-2. Copy template files from existing lab
-3. Update `database_setup.sql` with schema
-4. Register in category's `index.php`
-5. Update setup.php arrays
+// Check status
+fetch('db-config.php', {
+    method: 'POST',
+    body: new URLSearchParams({ action: 'status' })
+});
+
+// Clear credentials
+fetch('db-config.php', {
+    method: 'POST',
+    body: new URLSearchParams({ action: 'clear' })
+});
+```
+
+### Docker Configuration
+
+For containerized MySQL, update the host setting:
+
+```
+Host: mysql          # Docker service name
+Host: 172.17.0.2     # Container IP
+Host: host.docker.internal  # Docker Desktop
+```
 
 ---
 
-## 🤝 Contributing
+## Tools
 
-Contributions are welcome! Here's how you can help:
+### Recommended
 
-### Report Issues
-- Found a bug? [Open an issue](https://github.com/M9nx/LABx_Docs/issues)
-- Lab not working? Include error messages and steps to reproduce
+| Tool | Purpose | Link |
+|------|---------|------|
+| Burp Suite Community | HTTP interception, request modification | [portswigger.net](https://portswigger.net/burp/communitydownload) |
+| Firefox Developer Edition | Enhanced DevTools, cookie manipulation | [mozilla.org](https://www.mozilla.org/firefox/developer/) |
+| Postman | API testing, request crafting | [postman.com](https://www.postman.com/downloads/) |
+| VS Code | Source code analysis | [code.visualstudio.com](https://code.visualstudio.com/) |
 
-### Submit Labs
-1. Fork the repository
-2. Create a new lab following existing structure
-3. Include comprehensive documentation
-4. Submit a pull request
+### Utilities
+
+| Tool | Purpose | Link |
+|------|---------|------|
+| CyberChef | Encoding/decoding, data transformation | [gchq.github.io/CyberChef](https://gchq.github.io/CyberChef/) |
+| jwt.io | JWT debugging, token manipulation | [jwt.io](https://jwt.io/) |
+| sqlmap | SQL injection automation | [sqlmap.org](https://sqlmap.org/) |
+| ffuf | Web fuzzing, directory bruteforce | [github.com/ffuf/ffuf](https://github.com/ffuf/ffuf) |
+
+---
+
+## Contributing
+
+### Issue Reporting
+
+1. Check existing issues for duplicates
+2. Include PHP version, MySQL version, OS
+3. Provide reproduction steps
+4. Attach relevant error logs
+
+### Lab Submissions
+
+```bash
+# Fork and clone
+git clone https://github.com/YOUR_USERNAME/LABx_Docs.git
+
+# Create lab directory
+mkdir AC/Lab-XX
+
+# Required files
+- index.php
+- lab-description.php
+- docs.php
+- config.php
+- setup_db.php
+- database_setup.sql
+- success.php
+- README.md
+
+# Submit pull request with:
+- Vulnerability description
+- Exploitation steps
+- Prevention guidance
+```
 
 ### Documentation
-- Fix typos or unclear instructions
-- Add exploitation tips
-- Translate to other languages
+
+- Fix errors, typos, unclear instructions
+- Add exploitation techniques
+- Improve code documentation
 
 ---
 
-## ⚠️ Security Notice
+## Security Notice
 
-<table>
-<tr>
-<td>
+**This platform contains intentionally vulnerable code.**
 
-### ⛔ DO NOT
+| Prohibited | Permitted |
+|------------|-----------|
+| Production deployment | Local development only |
+| Internet exposure | Isolated networks |
+| Unauthorized testing | Educational purposes |
+| Real user data | Test/dummy data only |
 
-- Deploy to production servers
-- Expose to the internet
-- Use for unauthorized testing
-- Store real user data
-
-</td>
-<td>
-
-### ✅ DO
-
-- Run locally only
-- Use for learning purposes
-- Practice in isolated environments
-- Follow responsible disclosure
-
-</td>
-</tr>
-</table>
-
-> **This platform contains intentionally vulnerable code.** It is designed exclusively for educational purposes in controlled environments. The authors are not responsible for misuse.
+The authors assume no responsibility for misuse. Use exclusively in controlled, isolated environments for security education and research.
 
 ---
 
-## 📄 License
+## References
 
-This project is for **educational use only**. Not intended for production deployment.
-
----
-
-## 🙏 Acknowledgments
-
-- [PortSwigger Web Security Academy](https://portswigger.net/web-security) — Inspiration for lab format
-- [OWASP](https://owasp.org/) — Vulnerability classifications
-- [HackerOne](https://hackerone.com/) — Real-world case studies
-- Security community — Continuous learning and sharing
+- [OWASP Top 10](https://owasp.org/Top10/)
+- [PortSwigger Web Security Academy](https://portswigger.net/web-security)
+- [CWE/SANS Top 25](https://cwe.mitre.org/top25/)
+- [HackerOne Hacktivity](https://hackerone.com/hacktivity)
 
 ---
 
-<p align="center">
-  <strong>LABx_Docs v2.0</strong><br>
-  <em>40+ Labs • 4 Categories • Unlimited Learning</em>
-</p>
+## License
 
-<p align="center">
-  Made with ❤️ for the security community
-</p>
+Educational use only. Not for production deployment.
 
-<p align="center">
-  <a href="https://github.com/M9nx/LABx_Docs">⭐ Star on GitHub</a> •
-  <a href="https://m9nx.me">🌐 Author's Blog</a>
-</p>
+---
+
+**LABx_Docs v2.0** — 40+ Labs | 4 Categories | Hands-on Security Training
+
+[GitHub](https://github.com/M9nx/LABx_Docs) | [Author](https://m9nx.me)
